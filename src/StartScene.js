@@ -36,7 +36,7 @@ var StartLayer = cc.Layer.extend({
 				function () {
 					cc.log("Menu is clicked!");
 //					cc.director.replaceScene(cc.TransitionFade(1.2, new PlayScene()));
-					cc.director.replaceScene( cc.TransitionPageTurn(1, new PlayScene(), false) );//浏览器不支持
+					cc.director.replaceScene( cc.TransitionPageTurn(1, new RaceAskScene(), false) );//浏览器不支持
 				}, this);
 
 		startItem.attr({
