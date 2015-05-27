@@ -14,5 +14,6 @@
         "src/resource.js",
         "src/start.js",
         "src/MainScene.js"
+
     ]
 }

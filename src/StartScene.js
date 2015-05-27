@@ -18,6 +18,17 @@ var StartLayer = cc.Layer.extend({
 		});
 		this.addChild(this.bgSprite, 0);
 
+ 		//add Game name
+        var text = new ccui.Text("Racing Game", "AmericanTypewriter", 30);
+        text.setPosition(cc.p(size.width / 2,size.height-100));
+        this.addChild(text);
+
+ 		//add Game Image
+        var imageView = new ccui.ImageView("res/ccicon.png");
+        imageView.x =size.width / 2;
+        imageView.y = size.height / 2;
+        this.addChild(imageView);
+
 		//add start menu
 		var startItem = new cc.MenuItemImage(
 				res.Start_N_png,
@@ -30,7 +41,7 @@ var StartLayer = cc.Layer.extend({
 
 		startItem.attr({
 			x: size.width/2,
-			y: size.height/2,
+			y: 100,
 			anchorX: 0.5,
 			anchorY: 0.5
 		});
