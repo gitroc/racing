@@ -20,5 +20,9 @@ var CounterSprite = cc.Sprite.extend({
     onExit:function () {
         cc.log("CounterSprite onExit");
         this._super();
+    },
+
+    onInit:function () {
+
     }
 });
