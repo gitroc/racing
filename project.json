@@ -15,6 +15,7 @@
         "src/StartScene.js",
         "src/MainScene.js",
         "src/PlayScene.js",
-        "src/RaceAskScene.js"
+        "src/RaceAskScene.js",
+        "src/SelectCarScene.js"
     ]
 }

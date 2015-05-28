@@ -19,7 +19,7 @@ var AskLayer = cc.Layer.extend({
         backButton.setTitleText("随便说说");
         backButton.x = size.width / 2.0-50;
         backButton.y = size.height / 2.0-50;
-        backButton.addTouchEventListener(this.touchEvent ,this);
+//        backButton.addTouchEventListener(this.touchEvent ,this);
         this.addChild(backButton);
 
         var nextButton = new ccui.Button();
@@ -40,6 +40,8 @@ var AskLayer = cc.Layer.extend({
 //                    this._topDisplayLabel.setString("Touch Move");
                     break;
                 case ccui.Widget.TOUCH_ENDED:
+                cc.log("Button is clicked!");
+                cc.director.replaceScene( cc.TransitionPageTurn(1, new SelectCarScene(), false) );
 //                    this._topDisplayLabel.setString("Touch Up");
                     break;
                 case ccui.Widget.TOUCH_CANCELED:
