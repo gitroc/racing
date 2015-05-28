@@ -20,5 +20,10 @@ var BarrierSprite = cc.Sprite.extend({
     onExit:function () {
         cc.log("BarrierSprite onExit");
         this._super();
+    }，
+
+    //障碍物精灵刷新
+    onUpdate:function () {
+
     }
 });
