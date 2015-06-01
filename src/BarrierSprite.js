@@ -15,15 +15,16 @@ var BarrierSprite = cc.Sprite.extend({
     onEnter:function () {
         cc.log("BarrierSprite onEnter");
         this._super();
+
+//        this.onUpdate();
     },
 
     onExit:function () {
         cc.log("BarrierSprite onExit");
         this._super();
-    }，
+    },
 
     //障碍物精灵刷新
     onUpdate:function () {
-
     }
 });

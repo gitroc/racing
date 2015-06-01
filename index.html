@@ -23,5 +23,47 @@
 <canvas id="gameCanvas" width="320" height="480"></canvas>
 <script src="frameworks/cocos2d-html5/CCBoot.js"></script>
 <script cocos src="main.js"></script>
+<script type="text/javascript" src="WeixinApi.js"></script>
+<script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?91f4361e83cf34ffe3b6dd0471ee205a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+
+        window.wxData = {
+            "appId": "", // 服务号可以填写appId
+            "imgUrl":'http://app9.download.anzhuoshangdian.com/cat/icon.png',
+            "link":'http://app9.download.anzhuoshangdian.com/cat/',
+            "desc":"最近微信刷屏的游戏，喵的太贱了，快来感受下吧",
+            "title":"最近微信刷屏的游戏，喵的太贱了，快来感受下吧"
+        };
+        window.wxFriend = {
+            "appId": "", // 服务号可以填写appId
+            "imgUrl":'http://app9.download.anzhuoshangdian.com/cat/icon.png',
+            "link":'http://app9.download.anzhuoshangdian.com/cat/',
+            "desc":'最近微信刷屏的游戏，喵的太贱了，快来感受下吧',
+            "title":"最近微信刷屏的游戏《来自喵星的你》，喵的太贱了，快来感受下吧"
+        };
+        WeixinApi.ready(function(Api) {
+            var wxCallbacks = {
+                ready : function() {
+                },
+                cancel : function(resp) {
+                },
+                fail : function(resp) {
+                },
+                confirm : function(resp) {
+                },
+                all : function(resp) {
+                }
+            };
+            Api.shareToFriend(wxFriend, wxCallbacks);
+            Api.shareToTimeline(wxData, wxCallbacks);
+            Api.shareToWeibo(wxData, wxCallbacks);
+        });
+    </script>
 </body>
 </html>

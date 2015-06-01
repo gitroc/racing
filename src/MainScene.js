@@ -34,6 +34,8 @@ var MainLayer = cc.Layer.extend({
 
         this.schedule(this.updateMileageSprite, 1, 16*1024, 1);
 
+//        this.schedule(this.updateBarrierSprite, 1, 16*1024, 1);
+        this.updateBarrierSprite();
         return true;
     },
 
@@ -42,6 +44,7 @@ var MainLayer = cc.Layer.extend({
         this.addBackGround();
         this.initCounterSprite();
         this.initMileageSprite();
+//        this.initBarrierSprite();
     },
 
     //初始化计数精灵
@@ -60,6 +63,32 @@ var MainLayer = cc.Layer.extend({
         this.mileageLabel.x = size.width / 2 - 20;
         this.mileageLabel.y = size.height - 40;
         this.addChild(this.mileageLabel, 5);
+    },
+
+    initBarrierSprite:function () {
+        var size = cc.winSize;
+        var grossini = new cc.Sprite("res/car02.png");
+        this.addChild(grossini, 0, 2);
+        grossini.x = size.width/2 * cc.random0To1();
+        grossini.y = size.height - 20;
+
+        grossini.runAction(cc.sequence(
+            cc.fadeIn(1.1),
+            cc.scaleTo(0.5, 2),
+            cc.moveBy(1, cc.p(0, -50)),
+            cc.callFunc(this.onBugMe, this))
+        );
+    },
+
+    onBugMe:function (node) {
+        node.stopAllActions(); //After this stop next action not working, if remove this stop everything is working
+//        node.runAction(cc.scaleTo(2, 2));
+
+//        node.runAction(cc.rotateBy(1.5, 360));
+        node.runAction(cc.sequence(
+            cc.delayTime(1.4),
+            cc.fadeOut(1.1))
+        );
     },
 
     //添加背景图片
@@ -104,6 +133,31 @@ var MainLayer = cc.Layer.extend({
     //刷新违规精灵
     updateFaultSprite:function () {
 
+    },
+
+    //刷新障碍物精灵
+    updateBarrierSprite:function () {
+        var size = cc.winSize;
+
+        var barrier = new BarrierSprite("res/car05.png");
+
+        barrier.attr({
+            x: 100,
+            y: size.height/2 - 70
+        });
+
+        this.addChild(barrier, 5);
+
+        var actionTo = cc.scaleTo(2, 0.5);
+        var actionBy = cc.scaleBy(0.1, 1);
+        var actionBy2 = cc.scaleBy(2, 0.25, 4.5);
+
+        barrier.runAction(actionBy);
+
+        var emitter = new cc.ParticleFireworks();
+        emitter.setTotalParticles(250);
+        emitter.texture = cc.textureCache.addImage("res/fire.png");
+        this.addChild(emitter);
     }
 });
 
