@@ -12,24 +12,61 @@ var AskLayer = cc.Layer.extend({
 		promptText.setPosition(cc.p(size.width/2.0,size.height/2.0));
         this.addChild(promptText);
 
-        //add TextButton
-        var backButton = new ccui.Button();
-		backButton.setTouchEnabled(true);
-        backButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
-        backButton.setTitleText("随便说说");
-        backButton.x = size.width / 4.0;
-        backButton.y = size.height / 4.0;
-        backButton.addTouchEventListener(this.bTouchEvent ,this);
-        this.addChild(backButton);
+//        //add TextButton
+//        var backButton = new ccui.Button();
+//		backButton.setTouchEnabled(true);
+//        backButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
+//        backButton.setTitleText("随便说说");
+//        backButton.x = size.width / 4.0;
+//        backButton.y = size.height / 4.0;
+//        backButton.addTouchEventListener(this.bTouchEvent ,this);
+//        this.addChild(backButton);
+//
+//        var nextButton = new ccui.Button();
+//        nextButton.setTouchEnabled(true);
+//        nextButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
+//        nextButton.setTitleText("为梦狂飙");
+//        nextButton.x = size.width /4.0*3;
+//        nextButton.y = size.height / 4.0;
+//        nextButton.addTouchEventListener(this.touchEvent ,this);
+//        this.addChild(nextButton);
 
-        var nextButton = new ccui.Button();
-        nextButton.setTouchEnabled(true);
-        nextButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
-        nextButton.setTitleText("为梦狂飙");
-        nextButton.x = size.width /4.0*3;
-        nextButton.y = size.height / 4.0;
-        nextButton.addTouchEventListener(this.touchEvent ,this);
-        this.addChild(nextButton);
+
+		var backItem = new cc.MenuItemImage(
+        	"res/backtotopnormal.png",
+        	"res/backtotoppressed.png",
+        	function () {
+        		cc.log("Back is clicked!");
+            	cc.director.replaceScene( cc.TransitionPageTurn(1, new StartScene(), false) );
+        	}, this);
+
+     	backItem.attr({
+        	x: size.width / 4.0,
+        	y:size.height / 4.0,
+        	anchorX: 0.5,
+        	anchorY: 0.5
+     	});
+
+		var nextItem = new cc.MenuItemImage(
+        	"res/backtotopnormal.png",
+        	"res/backtotoppressed.png",
+        	function () {
+        		cc.log("Next is clicked!");
+            	cc.director.replaceScene( cc.TransitionPageTurn(1, new SelectCarScene(), false) );
+        	}, this);
+
+     	nextItem.attr({
+        	x: size.width /4.0*3,
+        	y: size.height / 4.0,
+        	anchorX: 0.5,
+        	anchorY: 0.5
+     	});
+    	var menu = new cc.Menu(backItem,nextItem);
+     	menu.x = 0;
+    	menu.y = 0;
+    	this.addChild(menu, 1);
+
+		return true;
 	},
 	bTouchEvent: function (sender, type) {
         switch (type) {

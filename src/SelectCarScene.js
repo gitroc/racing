@@ -5,6 +5,7 @@ var CarLayer = cc.Layer.extend({
     carIndex:null,
     carText:null,
     carSprite:null,
+    carItem:null,
     ctor:function(){
         this._super();
         var size = cc.winSize;
@@ -24,33 +25,96 @@ var CarLayer = cc.Layer.extend({
         carText.setPosition(cc.p(size.width/2.0,size.height/8.0*7));
         this.addChild(carText);
 
-        //Left
-        var leftButton = new ccui.Button();
-        leftButton.setTouchEnabled(true);
-        leftButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
-        leftButton.setTitleText("LEFT");
-        leftButton.x = size.width/6.0;
-        leftButton.y = size.height / 2.0;
-        leftButton.addTouchEventListener(this.lTouchEvent ,this);
-        this.addChild(leftButton);
-
-         //Right
-        var rightButton = new ccui.Button();
-        rightButton.setTouchEnabled(true);
-        rightButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
-        rightButton.setTitleText("RIGHT");
-        rightButton.x = size.width/6.0*5;
-        rightButton.y = size.height / 2.0;
-        rightButton.addTouchEventListener(this.touchEvent ,this);
-        this.addChild(rightButton);
+//        //Left
+//        var leftButton = new ccui.Button();
+//        leftButton.setTouchEnabled(true);
+//        leftButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
+//        leftButton.setTitleText("LEFT");
+//        leftButton.x = size.width/6.0;
+//        leftButton.y = size.height / 2.0;
+//        leftButton.addTouchEventListener(this.lTouchEvent ,this);
+//        this.addChild(leftButton);
+//
+//         //Right
+//        var rightButton = new ccui.Button();
+//        rightButton.setTouchEnabled(true);
+//        rightButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
+//        rightButton.setTitleText("RIGHT");
+//        rightButton.x = size.width/6.0*5;
+//        rightButton.y = size.height / 2.0;
+//        rightButton.addTouchEventListener(this.touchEvent ,this);
+//        this.addChild(rightButton);
 
         //Car Pictures
-        carSprite = new cc.Sprite("res/car02.png");
-        carSprite.attr({
-            x: size.width / 2,
-            y: size.height / 2,
-        });
-        this.addChild(carSprite);
+//        carSprite = new cc.Sprite("res/car02.png");
+//        carSprite.attr({
+//            x: size.width / 2,
+//            y: size.height / 2,
+//        });
+//        this.addChild(carSprite);
+
+        var leftItem = new cc.MenuItemImage(
+        	"res/backtotopnormal.png",
+        	"res/backtotoppressed.png",
+        	function () {
+                cc.log("left"+this.carIndex);
+                if(this.carIndex>0){
+                    this.carIndex--;
+                }else{
+                    this.carIndex = this.carBrands.length - 1;
+                }
+                cc.log("left"+this.carIndex);
+                this.selectCar(this.carIndex);
+            }, this);
+
+     	leftItem.attr({
+        	x: size.width/6.0,
+        	y:size.height / 2.0,
+        	anchorX: 0.5,
+        	anchorY: 0.5
+     	});
+
+		var rightItem = new cc.MenuItemImage(
+        	"res/backtotopnormal.png",
+        	"res/backtotoppressed.png",
+        	function () {
+                if(this.carIndex<this.carBrands.length-1){
+                    this.carIndex++;
+                }else{
+                    this.carIndex = 0;
+                }
+                cc.log("right"+this.carIndex);
+                this.selectCar(this.carIndex);
+        	}, this);
+
+     	rightItem.attr({
+        	x: size.width/6.0*5,
+        	y: size.height /2.0,
+        	anchorX: 0.5,
+        	anchorY: 0.5
+     	});
+
+     	carItem = new cc.MenuItemImage(
+                	"res/car02.png",
+                	"res/car02.png",
+                	function () {
+                        cc.log("car"+this.carIndex);
+                        cc.director.replaceScene( cc.TransitionPageTurn(1, new LoadingBarScene(), false) );
+                    }, this);
+
+             	carItem.attr({
+                	x: size.width / 2,
+                	y:size.height / 2,
+                	anchorX: 0.5,
+                	anchorY: 0.5
+             	});
+    	var menu = new cc.Menu(leftItem,rightItem,carItem);
+     	menu.x = 0;
+    	menu.y = 0;
+    	this.addChild(menu, 1);
+
+
+
 
         //Game Instruction
         var title = new ccui.Text("游戏规则", "AmericanTypewriter", 20);
@@ -96,7 +160,10 @@ var CarLayer = cc.Layer.extend({
         var carUrl = this.carUrls[num];
         var newtexture = cc.textureCache.addImage("res/"+carUrl);
         carText.setString(carName);
-        carSprite.setTexture(newtexture);
+//        carSprite.setTexture(newtexture);
+
+        frame1 = new cc.SpriteFrame(newtexture,cc.rect(0,0,cc.winSize.width/2.0,cc.winSize.height/2.0));
+        carItem.setNormalSpriteFrame(frame1);
     },
     getCarIndex:function(){
         return carIndex;
