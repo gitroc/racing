@@ -14,14 +14,14 @@
 var CounterSprite = cc.Sprite.extend({
     time:null,
     onEnter:function () {
-        cc.log("CounterSprite onEnter");
+//        cc.log("CounterSprite onEnter");
         this._super();
 
         this.onUpdate();
     },
 
     onExit:function () {
-        cc.log("CounterSprite onExit");
+//        cc.log("CounterSprite onExit");
         this._super();
     },
 

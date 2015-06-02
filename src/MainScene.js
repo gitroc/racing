@@ -10,8 +10,17 @@
  Date: 2015-05-27
 
  ****************************************************************************/
+var BackGround_SPRITE = 0;
+var Barrier_SPRITE = 1;
+var Car_SPRITE = 2;
 
 var MainLayer = cc.Layer.extend({
+    //背景精灵
+    bgSprite:null,
+
+    //汽车精灵
+    carSprite:null,
+
     //倒计时
     timeout:300,
     timeoutLabel:null,
@@ -22,33 +31,36 @@ var MainLayer = cc.Layer.extend({
     kilometer:0,
     mileageLabel:null,
 
-    //障碍物
+    //障碍物精灵
+    barrierSprites:null,
+    currentBarrierSprite:null,
     barrierNumber:0,
 
     ctor:function () {
         this._super();
 
-        this.initMain();
+        this.addSprite();
 
         this.schedule(this.updateCounterSprite, 1, 16*1024, 1);
 
         this.schedule(this.updateMileageSprite, 1, 16*1024, 1);
 
-//        this.schedule(this.updateBarrierSprite, 1, 16*1024, 1);
-        this.updateBarrierSprite();
+        this.schedule(this.addBarrierSprite, 3, 16*1024, 1);
+
         return true;
     },
 
     //初始化游戏场景
-    initMain:function () {
+    addSprite:function () {
         this.addBackGround();
-        this.initCounterSprite();
-        this.initMileageSprite();
-//        this.initBarrierSprite();
+        this.addCar();
+        
+        this.addCounterSprite();
+        this.addMileageSprite();
     },
 
     //初始化计数精灵
-    initCounterSprite:function () {
+    addCounterSprite:function () {
         var size = cc.winSize;
         this.timeoutLabel = cc.LabelTTF.create(this.timeout, "Arial", 20);
         this.timeoutLabel.x = 60;
@@ -57,7 +69,7 @@ var MainLayer = cc.Layer.extend({
     },
 
     //初始化里程精灵
-    initMileageSprite:function () {
+    addMileageSprite:function () {
         var size = cc.winSize;
         this.mileageLabel = cc.LabelTTF.create(this.kilometer  + " km", "Arial", 20);
         this.mileageLabel.x = size.width / 2 - 20;
@@ -65,19 +77,45 @@ var MainLayer = cc.Layer.extend({
         this.addChild(this.mileageLabel, 5);
     },
 
-    initBarrierSprite:function () {
+    //添加障碍物精灵
+    addBarrierSprite:function () {
         var size = cc.winSize;
-        var grossini = new cc.Sprite("res/car02.png");
-        this.addChild(grossini, 0, 2);
-        grossini.x = size.width/2 * cc.random0To1();
-        grossini.y = size.height - 20;
 
-        grossini.runAction(cc.sequence(
-            cc.fadeIn(1.1),
-            cc.scaleTo(0.5, 2),
-            cc.moveBy(1, cc.p(0, -50)),
-            cc.callFunc(this.onBugMe, this))
-        );
+        this.barrierSprites = [];
+
+        this.currentBarrierSprite = new BarrierSprite(res.Barrier_png);
+        var x = this.currentBarrierSprite.width/2 + (size.width / 2) * cc.random0To1();
+        var y = size.height - this.currentBarrierSprite.height;
+        this.currentBarrierSprite.attr({
+            x: x,
+            y: y
+        });
+
+        this.barrierSprites.push(this.currentBarrierSprite);
+
+        this.addChild(this.currentBarrierSprite, Barrier_SPRITE);
+
+        var fall = cc.MoveTo(4, cc.p(this.currentBarrierSprite.x, -this.currentBarrierSprite.height));
+        this.currentBarrierSprite.runAction(fall);
+
+        this.carCrash();
+
+//        this.removeBarrierSprite();
+    },
+
+    //
+    removeBarrierSprite:function () {
+        for (var i = 0; i < this.barrierSprites.length; i++) {
+            cc.log("removeBarrierSprite");
+            var sprite = this.getChildByTag(Barrier_SPRITE);
+            if(sprite.y == this.barrierSprites[i].y) {
+                cc.log("==============remove:"+i);
+                this.barrierSprites[i].removeFromParent();
+                this.barrierSprites[i] = undefined;
+                this.barrierSprites.splice(i, 1);
+                i = i - 1;
+            }
+        }
     },
 
     onBugMe:function (node) {
@@ -98,8 +136,30 @@ var MainLayer = cc.Layer.extend({
         this.bgSprite.attr({
             x: size.width / 2,
             y: size.height / 2,
+            anchorX: 0.5,
+            anchorY: 0.5
         });
-        this.addChild(this.bgSprite, 0);
+        this.addChild(this.bgSprite, BackGround_SPRITE);
+
+        var emitter = new cc.ParticleFireworks();
+        emitter.setTotalParticles(250);
+        emitter.texture = cc.textureCache.addImage(res.Fire_png);
+        this.addChild(emitter);
+    },
+
+    //添加汽车
+    addCar:function () {
+        var size = cc.winSize;
+        this.carSprite = new CarSprite(res.Car_png);
+
+        var y = this.carSprite.height / 2;
+        this.carSprite.attr({
+            x: size.width / 2,
+            y: y,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+        this.addChild(this.carSprite, Car_SPRITE);
     },
 
     //刷新倒计时精灵
@@ -135,29 +195,45 @@ var MainLayer = cc.Layer.extend({
 
     },
 
-    //刷新障碍物精灵
-    updateBarrierSprite:function () {
-        var size = cc.winSize;
+    carCrash:function() {
+        for (var i = 0; i < this.barrierSprites.length; i++) {
+//            var carRect = this.carSprite.getBoundingBox();
+//            var barrierRect = this.barrierSprites[i].getBoundingBox();
+//            cc.log("carRect = ", carRect);
+//            cc.log("barrierRect = ", barrierRect);
 
-        var barrier = new BarrierSprite("res/car05.png");
+//            var distance = cc.pDistance(this.carSprite.getPosition(), this.barrierSprites[i].getPosition());
+//            var radius = this.carSprite.radius + this.barrierSprites[i].radius;
+//            cc.log("distance:" + distance + "; radius:" + radius);
+//            if(distance < radiusSum){
+//                //发生碰撞
+//                cc.log("carCrash");
+//            }
+//            if(cc.rectIntersectsRect(carRect, barrierRect)){
+//                  //发生碰撞事件
+//                  cc.log("carCrash");
+//                  barrierSprites[i].runAction(cc.sequence(
+//                      cc.delayTime(1.4),
+//                      cc.fadeOut(1.1))
+//                  );
+//            }
+            var boxBarrier = this.barrierSprites[i].getBoundingBox();
+            var bottom = cc.p(boxBarrier.x + boxBarrier.width / 2, boxBarrier.y);
+            var right = cc.p(boxBarrier.x + boxBarrier.width, boxBarrier.y + boxBarrier.height / 2);
+            var left = cc.p(boxBarrier.x, boxBarrier.y + boxBarrier.height / 2);
+            var top = cc.p(boxBarrier.x + boxBarrier.width / 2, boxBarrier.y + boxBarrier.height);
 
-        barrier.attr({
-            x: 100,
-            y: size.height/2 - 70
-        });
+            cc.log("bottom", bottom);
+            cc.log("right", right);
+            cc.log("left", left);
+            cc.log("top", top);
 
-        this.addChild(barrier, 5);
-
-        var actionTo = cc.scaleTo(2, 0.5);
-        var actionBy = cc.scaleBy(0.1, 1);
-        var actionBy2 = cc.scaleBy(2, 0.25, 4.5);
-
-        barrier.runAction(actionBy);
-
-        var emitter = new cc.ParticleFireworks();
-        emitter.setTotalParticles(250);
-        emitter.texture = cc.textureCache.addImage("res/fire.png");
-        this.addChild(emitter);
+            var boxCar = this.carSprite.getBoundingBox();
+            if(cc.rectContainsPoint(boxCar, left)||cc.rectContainsPoint(boxCar, right)||cc.rectContainsPoint(boxCar, top)||cc.rectContainsPoint(boxCar, bottom)){
+              //发生碰撞
+              cc.log("carCrash");
+            }
+        }
     }
 });
 

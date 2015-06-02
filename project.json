@@ -12,9 +12,14 @@
 
     "jsList" : [
         "src/resource.js",
+        "src/MainScene.js",
         "src/StartScene.js",
         "src/RaceAskScene.js",
         "src/SelectCarScene.js",
-        "src/LoadingBarScene.js"
+        "src/LoadingBarScene.js",
+        "src/CounterSprite.js",
+        "src/BarrierSprite.js",
+        "src/MileageSprite.js",
+        "src/CarSprite.js"
     ]
 }

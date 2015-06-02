@@ -13,14 +13,14 @@
 
 var MileageSprite = cc.Sprite.extend({
     onEnter:function () {
-        cc.log("MileageSprite onEnter");
+//        cc.log("MileageSprite onEnter");
         this._super();
 
         this.onUpdate();
     },
 
     onExit:function () {
-        cc.log("MileageSprite onExit");
+//        cc.log("MileageSprite onExit");
         this._super();
     },
 
