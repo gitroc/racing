@@ -1,87 +1,58 @@
 //赛前询问场景
+/**
+* Created by Daiyan on 15-06-03
+*/
 var AskLayer = cc.Layer.extend({
+	_sptBg:null,
 	ctor:function(){
 		this._super();
-		var size = cc.winSize;
+		this._sptBg = new cc.Sprite(res.BackGround_png);
+			this._sptBg.attr({
+				anchorX : 0.5,
+				anchorY : 0.5,
+				x: GC.w_2,
+				y: GC.h_2
+			});
+		this.addChild(this._sptBg);
+		this.addTouchLayer();
+	},
+	addTouchLayer:function(){
 		//add Slogan
-		var sloganText = new ccui.Text("选择爱车，狂飙梦想", "AmericanTypewriter", 30);
-		sloganText.setPosition(cc.p(size.width/2.0,size.height/2.0+150));
-		this.addChild(sloganText);
+		cc.MenuItemFont.setFontName("Arial");
+		cc.MenuItemFont.setFontSize(30);
+		var title = new cc.MenuItemFont("选择爱车，狂飙梦想");
+		title.setEnabled(false);
 		//add prompt1
-		var promptText = new ccui.Text("Are You Ready?", "AmericanTypewriter", 30);
-		promptText.setPosition(cc.p(size.width/2.0,size.height/2.0));
-        this.addChild(promptText);
-
-//        //add TextButton
-//        var backButton = new ccui.Button();
-//		backButton.setTouchEnabled(true);
-//        backButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
-//        backButton.setTitleText("随便说说");
-//        backButton.x = size.width / 4.0;
-//        backButton.y = size.height / 4.0;
-//        backButton.addTouchEventListener(this.bTouchEvent ,this);
-//        this.addChild(backButton);
-//
-//        var nextButton = new ccui.Button();
-//        nextButton.setTouchEnabled(true);
-//        nextButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
-//        nextButton.setTitleText("为梦狂飙");
-//        nextButton.x = size.width /4.0*3;
-//        nextButton.y = size.height / 4.0;
-//        nextButton.addTouchEventListener(this.touchEvent ,this);
-//        this.addChild(nextButton);
-
+		cc.MenuItemFont.setFontName("Arial");
+		cc.MenuItemFont.setFontSize(30);
+		var prompt = new cc.MenuItemFont("Are You Ready?");
+		prompt.setEnabled(false);
 
 		var backItem = new cc.MenuItemImage(
-        	"res/backtotopnormal.png",
-        	"res/backtotoppressed.png",
-        	function () {
-        		cc.log("Back is clicked!");
-            	cc.director.replaceScene( cc.TransitionPageTurn(1, new StartScene(), false) );
-        	}, this);
-
-     	backItem.attr({
-        	x: size.width / 4.0,
-        	y:size.height / 4.0,
-        	anchorX: 0.5,
-        	anchorY: 0.5
-     	});
+			"res/backtotopnormal.png",
+			"res/backtotoppressed.png",
+			function () {
+				cc.log("Back is clicked!");
+				cc.director.runScene(new cc.TransitionFade(1.2, new StartScene()));
+			}, this);
 
 		var nextItem = new cc.MenuItemImage(
-        	"res/backtotopnormal.png",
-        	"res/backtotoppressed.png",
-        	function () {
-        		cc.log("Next is clicked!");
-            	cc.director.replaceScene( cc.TransitionPageTurn(1, new SelectCarScene(), false) );
-        	}, this);
+			"res/backtotopnormal.png",
+			"res/backtotoppressed.png",
+			function () {
+				cc.log("Next is clicked!");
+				cc.director.runScene(new cc.TransitionFade(1.2, new SelectCarScene()));
+			}, this);
 
-     	nextItem.attr({
-        	x: size.width /4.0*3,
-        	y: size.height / 4.0,
-        	anchorX: 0.5,
-        	anchorY: 0.5
-     	});
-    	var menu = new cc.Menu(backItem,nextItem);
-     	menu.x = 0;
-    	menu.y = 0;
-    	this.addChild(menu, 1);
+		var menu = new cc.Menu(title,prompt,backItem,nextItem);
+		menu.alignItemsInColumns(1,1,2);
+		menu.x = GC.w_2;
+		menu.y =GC.h_2;
+		this.addChild(menu, 1);
 
-		return true;
-	},
-	bTouchEvent: function (sender, type) {
-        switch (type) {
-            case ccui.Widget.TOUCH_ENDED:
-            cc.log("Button is clicked!");
-            cc.director.replaceScene( cc.TransitionPageTurn(1, new StartScene(), false) );
-        }
-    },
-	touchEvent: function (sender, type) {
-        switch (type) {
-            case ccui.Widget.TOUCH_ENDED:
-            cc.log("Button is clicked!");
-            cc.director.replaceScene( cc.TransitionPageTurn(1, new SelectCarScene(), false) );
-        }
-    }
+		title.y +=100;
+		prompt.y+=50;
+	}
 });
 var RaceAskScene = cc.Scene.extend({
 	onEnter:function () {

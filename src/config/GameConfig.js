@@ -1,0 +1,14 @@
+/**
+* Created by Daiyan on 15-06-03
+*/
+var GC = GC || {};
+
+GC.winSize = cc.size(480, 800);
+
+GC.h = GC.winSize.height;
+
+GC.w = GC.winSize.width;
+
+GC.w_2 = GC.winSize.width / 2 ;
+
+GC.h_2 = GC.winSize.height / 2;
