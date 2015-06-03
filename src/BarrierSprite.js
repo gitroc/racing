@@ -11,12 +11,12 @@
 
  ****************************************************************************/
 
-var BarrierSprite = cc.Sprite.extend({
+var BarrierSprite = cc.PhysicsSprite.extend({
     onEnter:function () {
         cc.log("BarrierSprite onEnter");
         this._super();
 
-//        this.onUpdate();
+        this.addListener();
     },
 
     onExit:function () {
@@ -26,5 +26,14 @@ var BarrierSprite = cc.Sprite.extend({
 
     //障碍物精灵刷新
     onUpdate:function () {
+    },
+
+    //添加碰撞事件监听
+    addListener:function() {
+
+    },
+    //障碍物碰撞检测
+    carCrash:function() {
+
     }
 });
