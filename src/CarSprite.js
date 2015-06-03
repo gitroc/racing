@@ -11,13 +11,11 @@
 
  ****************************************************************************/
 
-var CarSprite = cc.Sprite.extend({
+var CarSprite = cc.PhysicsSprite.extend({
     touchListener:null,
     onEnter:function () {
         cc.log("CarSprite onEnter");
         this._super();
-
-        this.initCar();
 
         this.addListener();
     },
@@ -28,11 +26,7 @@ var CarSprite = cc.Sprite.extend({
         this.removeListener();
     },
 
-    initCar:function() {
-        cc.log("Car CarSprite init");
-        var size = cc.winSize;
-    },
-
+    //添加移动事件监听
     addListener:function() {
         if( 'touches' in cc.sys.capabilities ) {
             this.touchListener = cc.eventManager.addListener(cc.EventListener.create({
@@ -64,22 +58,24 @@ var CarSprite = cc.Sprite.extend({
     moveCar:function(target, position) {
         var size = cc.winSize;
         target.stopAllActions();
-
-        var xLeft   = position.x + target.x;
-        var yBottom = position.y + target.y;
-        var xRight  = position.x - target.x;
-        var yTop    = position.y - target.y;
-        cc.log("xLeft = ", xLeft);
-        cc.log("yBottom = ", yBottom);
-        cc.log("xRight = ", xRight);
-        cc.log("yTop = ", yTop);
-
-        if (xLeft > 0 && xRight < size.width) {
-            if (yBottom > 0 && yTop < size.height / 2) {
-                cc.log("car move!");
-                target.runAction(cc.moveTo(1, position));
-            }
-        }
+        cc.log("position.x = ", position.x);
+        cc.log("position.y = ", position.y);
+        cc.log("target.x", target.x);
+        cc.log("target.y", target.y);
+//        target.runAction(cc.moveTo(1, cc.p(position.x, target.y)));
+        target.runAction(cc.scaleTo(2, 2));
+//        target.runAction(cc.rotateBy(1.5, 360));
+//        var o = position.x - target.x;
+//        var a = position.y - target.y;
+//        var at = Math.atan(o / a) * 57.29577951;  // radians to degrees
+//
+//        if (a < 0) {
+//            if (o < 0)
+//                at = 180 + Math.abs(at);
+//            else
+//                at = 180 - Math.abs(at);
+//        }
+//
+//        target.runAction(cc.rotateTo(1, at));
     }
-
 });

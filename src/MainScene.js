@@ -10,11 +10,18 @@
  Date: 2015-05-27
 
  ****************************************************************************/
+
+var SPRITE_WIDTH = 64;
+var SPRITE_HEIGHT = 64;
+
 var BackGround_SPRITE = 0;
 var Barrier_SPRITE = 1;
 var Car_SPRITE = 2;
 
 var MainLayer = cc.Layer.extend({
+
+    space:null,
+
     //背景精灵
     bgSprite:null,
 
@@ -33,21 +40,73 @@ var MainLayer = cc.Layer.extend({
 
     //障碍物精灵
     barrierSprites:null,
-    currentBarrierSprite:null,
-    barrierNumber:0,
+    barrierRemove:0,
 
     ctor:function () {
         this._super();
 
-        this.addSprite();
+        this.initPhysics();
 
-        this.schedule(this.updateCounterSprite, 1, 16*1024, 1);
-
-        this.schedule(this.updateMileageSprite, 1, 16*1024, 1);
-
-        this.schedule(this.addBarrierSprite, 3, 16*1024, 1);
+        this.scheduleUpdate();
 
         return true;
+    },
+
+    onEnter: function () {
+        this._super();
+         cc.log("onEnter");
+//         cc.eventManager.addListener({
+//             event: cc.EventListener.TOUCH_ONE_BY_ONE,
+//             onTouchBegan: this.onTouchBegan
+//         }, this);
+        this.addSprite();
+//        this.schedule(this.updateBarrierSprite, 3, 16*1024, 1);
+
+    },
+
+    onTouchBegan: function (touch, event) {
+        cc.log("onTouchBegan");
+        var target = event.getCurrentTarget();
+        var location = touch.getLocation();
+//        target.addPhysicsSprite(res.Car_png, location);
+        return false;
+    },
+
+    onExit: function () {
+        this._super();
+        cc.log("onExit");
+//        cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
+    },
+
+    update: function (dt) {
+        var timeStep = 0.03;
+        this.space.step(timeStep);
+    },
+
+    initPhysics:function() {
+        var winSize = cc.director.getWinSize();
+
+        this.space = new cp.Space();
+//        this.setupDebugNode();
+
+        // 设置重力
+        this.space.gravity = cp.v(0, -50);
+        var staticBody = this.space.staticBody;
+
+        // 设置空间边界
+        var walls = [
+            new cp.SegmentShape(staticBody, cp.v(0, 0), cp.v(winSize.width, 0), 0),
+            new cp.SegmentShape(staticBody, cp.v(0, winSize.height), cp.v(winSize.width, winSize.height), 0),
+            new cp.SegmentShape(staticBody, cp.v(0, 0), cp.v(0, winSize.height), 0),
+            new cp.SegmentShape(staticBody, cp.v(winSize.width, 0), cp.v(winSize.width, winSize.height), 0)
+        ];
+
+        for (var i = 0; i < walls.length; i++) {
+            var shape = walls[i];
+            shape.setElasticity(1);
+            shape.setFriction(1);
+            this.space.addStaticShape(shape);
+        }
     },
 
     //初始化游戏场景
@@ -57,6 +116,16 @@ var MainLayer = cc.Layer.extend({
         
         this.addCounterSprite();
         this.addMileageSprite();
+        this.addBarrierSprite();
+    },
+
+    updateSprite:function () {
+        var size = cc.winSize;
+
+        var x = (size.width / 2) * cc.random0To1();
+        var y = size.height - 40;
+
+        this.addPhysicsSprite(res.Barrier_png, cp.v(x, y));
     },
 
     //初始化计数精灵
@@ -79,37 +148,69 @@ var MainLayer = cc.Layer.extend({
 
     //添加障碍物精灵
     addBarrierSprite:function () {
+        this.barrierSprites = [];
+    },
+
+    //刷新障碍物精灵
+    updateBarrierSprite:function () {
         var size = cc.winSize;
 
-        this.barrierSprites = [];
+        var barrierSprite = new BarrierSprite(res.Barrier_png);
+        this.barrierRemove = barrierSprite.height;
+        var x = barrierSprite.width/2 + (size.width / 2) * cc.random0To1();
+        var y = size.height - barrierSprite.height;
 
-        this.currentBarrierSprite = new BarrierSprite(res.Barrier_png);
-        var x = this.currentBarrierSprite.width/2 + (size.width / 2) * cc.random0To1();
-        var y = size.height - this.currentBarrierSprite.height;
-        this.currentBarrierSprite.attr({
+        barrierSprite.attr({
             x: x,
             y: y
         });
 
-        this.barrierSprites.push(this.currentBarrierSprite);
+        var body = new cp.Body(1, cp.momentForBox(1, barrierSprite.width, barrierSprite.height));
+        body.setPos(cc.p(x, y));
+        this.space.addBody(body);
 
-        this.addChild(this.currentBarrierSprite, Barrier_SPRITE);
+        var shape = new cp.BoxShape(body, barrierSprite.width, barrierSprite.height);
+        shape.setElasticity(0.5);
+        shape.setFriction(0.5);
+        this.space.addShape(shape);
 
-        var fall = cc.MoveTo(4, cc.p(this.currentBarrierSprite.x, -this.currentBarrierSprite.height));
-        this.currentBarrierSprite.runAction(fall);
+        this.barrierSprites.push(barrierSprite);
+        barrierSprite.index = this.barrierSprites.length;
 
-        this.carCrash();
+        barrierSprite.setBody(body);
+        this.addChild(barrierSprite, Barrier_SPRITE);
+
+        var fall = cc.MoveTo.create(4, cc.p(barrierSprite.x, -this.barrierRemove));
+        barrierSprite.runAction(fall);
+
+//        this.carCrash();
 
 //        this.removeBarrierSprite();
     },
 
-    //
+    removeBarrierSpriteByCrush : function(dx) {
+
+        if(isNaN(dx) || dx > this.barrierSprites.length){
+            return false;
+        }
+
+        for(var i = 0, n = 0; i < this.barrierSprites.length; i++)
+        {
+            if(this.barrierSprites[i] != this[dx])
+            {
+                cc.log("--------------");
+                this.barrierSprites[n++] = this.barrierSprites[i]
+            }
+        }
+        this.SushiSprites.length-=1
+    },
+
+    //障碍物精灵自动消失
     removeBarrierSprite:function () {
         for (var i = 0; i < this.barrierSprites.length; i++) {
-            cc.log("removeBarrierSprite");
-            var sprite = this.getChildByTag(Barrier_SPRITE);
-            if(sprite.y == this.barrierSprites[i].y) {
-                cc.log("==============remove:"+i);
+            cc.log("this.barrierSprites[i].y = ", this.barrierSprites[i].y);
+            if(-this.barrierRemove == this.barrierSprites[i].y) {
+                cc.log("======removeBarrierSprite: " + i);
                 this.barrierSprites[i].removeFromParent();
                 this.barrierSprites[i] = undefined;
                 this.barrierSprites.splice(i, 1);
@@ -152,13 +253,27 @@ var MainLayer = cc.Layer.extend({
         var size = cc.winSize;
         this.carSprite = new CarSprite(res.Car_png);
 
+        var x = size.width / 2;
         var y = this.carSprite.height / 2;
+
         this.carSprite.attr({
-            x: size.width / 2,
+            x: x,
             y: y,
             anchorX: 0.5,
             anchorY: 0.5
         });
+
+        var body = new cp.Body(1, cp.momentForBox(1, this.carSprite.width, this.carSprite.height));
+        body.setPos(cc.p(x, y));
+        this.space.addBody(body);
+
+        var shape = new cp.BoxShape(body, this.carSprite.width, this.carSprite.height);
+        shape.setElasticity(0.5);
+        shape.setFriction(0.5);
+        this.space.addShape(shape);
+
+        this.carSprite.setBody(body);
+//        this.carSprite.runAction(cc.scaleTo(0, 0.25));
         this.addChild(this.carSprite, Car_SPRITE);
     },
 
