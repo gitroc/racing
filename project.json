@@ -21,6 +21,7 @@
         "src/BarrierSprite.js",
         "src/MileageSprite.js",
         "src/CarSprite.js",
-        "src/PlayScene.js"
+        "src/PlayScene.js",
+        "src/ShuffSence.js"
     ]
 }
