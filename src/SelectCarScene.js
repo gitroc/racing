@@ -1,11 +1,15 @@
 //赛车选择场景
+/**
+* Created by Daiyan on 15-06-03
+*/
 var CarLayer = cc.Layer.extend({
     carBrands:[],
     carUrls:[],
     carIndex:null,
-    carText:null,
-    carSprite:null,
     carItem:null,
+    car:null,
+    _name:null,
+    _intro:null,
     ctor:function(){
         this._super();
         var size = cc.winSize;
@@ -15,43 +19,19 @@ var CarLayer = cc.Layer.extend({
         //Add Background
         this.bgSprite = new cc.Sprite(res.BackGround_png);
 		this.bgSprite.attr({
-			x: size.width / 2,
-			y: size.height / 2,
+			x: GC.w_2,
+			y: GC.h_2,
 		});
 		this.addChild(this.bgSprite, 0);
 
         //Car Brand
-        carText = new ccui.Text("兰博基尼", "AmericanTypewriter", 30);
-        carText.setPosition(cc.p(size.width/2.0,size.height/8.0*7));
-        this.addChild(carText);
-
-//        //Left
-//        var leftButton = new ccui.Button();
-//        leftButton.setTouchEnabled(true);
-//        leftButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
-//        leftButton.setTitleText("LEFT");
-//        leftButton.x = size.width/6.0;
-//        leftButton.y = size.height / 2.0;
-//        leftButton.addTouchEventListener(this.lTouchEvent ,this);
-//        this.addChild(leftButton);
-//
-//         //Right
-//        var rightButton = new ccui.Button();
-//        rightButton.setTouchEnabled(true);
-//        rightButton.loadTextures("res/backtotopnormal.png", "res/backtotoppressed.png", "");
-//        rightButton.setTitleText("RIGHT");
-//        rightButton.x = size.width/6.0*5;
-//        rightButton.y = size.height / 2.0;
-//        rightButton.addTouchEventListener(this.touchEvent ,this);
-//        this.addChild(rightButton);
-
-        //Car Pictures
-//        carSprite = new cc.Sprite("res/car02.png");
-//        carSprite.attr({
-//            x: size.width / 2,
-//            y: size.height / 2,
-//        });
-//        this.addChild(carSprite);
+        this._name = new cc.LabelTTF("兰博基尼", "Arial", 30);
+        this._name.attr({
+            x: GC.w_2,
+            y: GC.h/8.0*7,
+            color : cc.color(255, 0, 0)
+        });
+        this.addChild(this._name, 1000);
 
         var leftItem = new cc.MenuItemImage(
         	"res/backtotopnormal.png",
@@ -68,8 +48,8 @@ var CarLayer = cc.Layer.extend({
             }, this);
 
      	leftItem.attr({
-        	x: size.width/6.0,
-        	y:size.height / 2.0,
+        	x:  GC.w/6.0,
+        	y: GC.h_2,
         	anchorX: 0.5,
         	anchorY: 0.5
      	});
@@ -88,45 +68,60 @@ var CarLayer = cc.Layer.extend({
         	}, this);
 
      	rightItem.attr({
-        	x: size.width/6.0*5,
-        	y: size.height /2.0,
+        	x:  GC.w/6.0*5,
+        	y:  GC.h_2,
         	anchorX: 0.5,
         	anchorY: 0.5
      	});
 
-     	carItem = new cc.MenuItemImage(
-                	"res/car02.png",
-                	"res/car02.png",
-                	function () {
-                        cc.log("car"+this.carIndex);
-                        cc.director.replaceScene( cc.TransitionPageTurn(1, new LoadingBarScene(), false) );
-                    }, this);
+     	this.car = new cc.Sprite("res/car02.png");
+     	this.car.attr({
+     	    x: GC.w_2,
+            y: GC.h_2,
+            anchorX: 0.5,
+            anchorY: 0.5
+     	});
+     	this.addChild(this.car);
 
-             	carItem.attr({
-                	x: size.width / 2,
-                	y:size.height / 2,
-                	anchorX: 0.5,
-                	anchorY: 0.5
-             	});
-    	var menu = new cc.Menu(leftItem,rightItem,carItem);
+    	var menu = new cc.Menu(leftItem,rightItem);
      	menu.x = 0;
     	menu.y = 0;
     	this.addChild(menu, 1);
 
-
-
-
         //Game Instruction
-        var title = new ccui.Text("游戏规则", "AmericanTypewriter", 20);
-        title.setPosition(cc.p(size.width/2.0,100));
-        this.addChild(title);
-        var instructText =new ccui.Text("1.在5分钟内行驶够10公里，且未闯红灯、未违反交通违规，2.每人每日可最多邀请5个朋友帮忙接力驾驶，奖励规则同上3.每人每日可最多驾驶3次，以最高成绩计入个人驾驶成绩单，邀请朋友进行驾驶后，将不能再次进行游戏", "AmericanTypewriter", 12);
-        instructText.ignoreContentAdaptWithSize(false);
-        instructText.setContentSize(cc.size(size.width, 150));
-        instructText.setTextHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
-        instructText.setPosition(cc.p(size.width/2.0,10));
-        this.addChild(instructText);
+        this._intro = new cc.LabelTTF("游戏规则", "Arial", 20);
+        this._intro.attr({
+            x: GC.w_2,
+            y: 150,
+            color : cc.color(255, 0, 0)
+        });
+        this.addChild(this._intro, 1000);
+
+        var instructText = new cc.LabelTTF("1.在5分钟内行驶够10公里，且未闯红灯、未违反交通违规\n"+
+        "2.每人每日可最多邀请5个朋友帮忙接力驾驶，奖励规则同上\n"+
+        "3.每人每日可最多驾驶3次，以最高成绩计入个人驾驶成绩单，\n"+
+        "邀请朋友进行驾驶后，将不能再次进行游戏", "Arial", 15);
+        instructText.attr({
+            x: GC.w_2,
+            y: 50,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+        instructText.setHorizontalAlignment(cc.TEXT_ALIGNMENT_LEFT);
+        this.addChild(instructText, 1000);
+
+        var listener1 = cc.EventListener.create({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches: true,                       // 设置是否吞没事件，在 onTouchBegan 方法返回 true 时吞掉事件，不再向下传递。
+            onTouchBegan: function (touch, event) {
+                cc.director.runScene(new cc.TransitionFade(1.2, new LoadingBarScene()));
+                return false;
+            }
+        });
+
+        cc.eventManager.addListener(listener1, this.car);
     },
+
     lTouchEvent:function(sender,type){
         switch (type) {
             case ccui.Widget.TOUCH_ENDED:
@@ -159,11 +154,8 @@ var CarLayer = cc.Layer.extend({
         var carName = this.carBrands[num];
         var carUrl = this.carUrls[num];
         var newtexture = cc.textureCache.addImage("res/"+carUrl);
-        carText.setString(carName);
-//        carSprite.setTexture(newtexture);
-
-        frame1 = new cc.SpriteFrame(newtexture,cc.rect(0,0,cc.winSize.width/2.0,cc.winSize.height/2.0));
-        carItem.setNormalSpriteFrame(frame1);
+        this._name.setString(carName);
+        this.car.setTexture(newtexture);
     },
     getCarIndex:function(){
         return carIndex;
