@@ -9,6 +9,7 @@ var StartLayer = cc.Layer.extend({
 		this._super();
 		this.addBackgroundLayer();
 		this.addTouchLayer();
+		this.playMusic();//播放背景音乐
 	},
 	addBackgroundLayer:function(){
     	this._sptBg = new cc.Sprite(res.BackGround_png);
@@ -51,7 +52,16 @@ var StartLayer = cc.Layer.extend({
     	menu.x = GC.w_2;
     	menu.y = 200;
     	this.addChild(menu, 1);
-    }
+    },
+    playMusic : function(){
+    //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
+		if (GC.SOUND_ON){
+			if (cc.audioEngine.isMusicPlaying()){
+				return;
+			}
+			cc.audioEngine.playMusic("res/music/mainMusic.mp3", false);
+		}
+	}
 });
 
 var StartScene = cc.Scene.extend({

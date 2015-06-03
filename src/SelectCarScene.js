@@ -7,6 +7,7 @@ var CarLayer = cc.Layer.extend({
     carUrls:[],
     carIndex:null,
     carItem:null,
+    car:null,
     _name:null,
     _intro:null,
     ctor:function(){
@@ -18,8 +19,8 @@ var CarLayer = cc.Layer.extend({
         //Add Background
         this.bgSprite = new cc.Sprite(res.BackGround_png);
 		this.bgSprite.attr({
-			x: size.width / 2,
-			y: size.height / 2,
+			x: GC.w_2,
+			y: GC.h_2,
 		});
 		this.addChild(this.bgSprite, 0);
 
@@ -73,21 +74,16 @@ var CarLayer = cc.Layer.extend({
         	anchorY: 0.5
      	});
 
-     	carItem = new cc.MenuItemImage(
-            "res/car02.png",
-            "res/car02.png",
-            function () {
-                cc.log("car"+this.carIndex);
-                cc.director.replaceScene( cc.TransitionPageTurn(1, new LoadingBarScene(), false) );
-            }, this);
-
-        carItem.attr({
-            x:  GC.w_2,
+     	this.car = new cc.Sprite("res/car02.png");
+     	this.car.attr({
+     	    x: GC.w_2,
             y: GC.h_2,
             anchorX: 0.5,
             anchorY: 0.5
-        });
-    	var menu = new cc.Menu(leftItem,rightItem,carItem);
+     	});
+     	this.addChild(this.car);
+
+    	var menu = new cc.Menu(leftItem,rightItem);
      	menu.x = 0;
     	menu.y = 0;
     	this.addChild(menu, 1);
@@ -113,7 +109,19 @@ var CarLayer = cc.Layer.extend({
         });
         instructText.setHorizontalAlignment(cc.TEXT_ALIGNMENT_LEFT);
         this.addChild(instructText, 1000);
+
+        var listener1 = cc.EventListener.create({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches: true,                       // 设置是否吞没事件，在 onTouchBegan 方法返回 true 时吞掉事件，不再向下传递。
+            onTouchBegan: function (touch, event) {
+                cc.director.runScene(new cc.TransitionFade(1.2, new LoadingBarScene()));
+                return false;
+            }
+        });
+
+        cc.eventManager.addListener(listener1, this.car);
     },
+
     lTouchEvent:function(sender,type){
         switch (type) {
             case ccui.Widget.TOUCH_ENDED:
@@ -147,8 +155,7 @@ var CarLayer = cc.Layer.extend({
         var carUrl = this.carUrls[num];
         var newtexture = cc.textureCache.addImage("res/"+carUrl);
         this._name.setString(carName);
-        frame1 = new cc.SpriteFrame(newtexture,cc.rect(0,0, GC.w_2, GC.h_2));
-        carItem.setNormalSpriteFrame(frame1);
+        this.car.setTexture(newtexture);
     },
     getCarIndex:function(){
         return carIndex;
