@@ -25,6 +25,5 @@
         "src/MileageSprite.js",
         "src/CarSprite.js",
         "src/PlayScene.js"
-
     ]
 }

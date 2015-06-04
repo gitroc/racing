@@ -6,6 +6,7 @@ var res = {
     Start_N_png : "res/start_N.png",
     Start_S_png : "res/start_S.png",
     Ground_png : "res/bg.png",
+    Prospect_png : "res/prospect.png",
     Line01_png : "res/01.png",
     Line02_png : "res/02.png",
     Line03_png : "res/03.png",

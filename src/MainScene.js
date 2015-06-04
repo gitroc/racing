@@ -24,6 +24,7 @@ var MainLayer = cc.Layer.extend({
 
     //背景精灵
     bgSprite:null,
+    prospect:null,
 
     //汽车精灵
     carSprite:null,
@@ -45,11 +46,21 @@ var MainLayer = cc.Layer.extend({
     ctor:function () {
         this._super();
 
-        this.initPhysics();
+//        this.initPhysics();
 
-        this.scheduleUpdate();
+        this.addSprite();
+
+        this.steupView();
 
         return true;
+    },
+
+    steupView:function () {
+        var size = cc.winSize;
+
+        this.prospect = new cc.Sprite(res.Prospect_png);
+        this.prospect.setPosition(cc.p(size.width/2, size.height/2));
+        this.addChild(this.prospect);
     },
 
     onEnter: function () {
@@ -59,9 +70,9 @@ var MainLayer = cc.Layer.extend({
 //             event: cc.EventListener.TOUCH_ONE_BY_ONE,
 //             onTouchBegan: this.onTouchBegan
 //         }, this);
-        this.addSprite();
-//        this.schedule(this.updateBarrierSprite, 3, 16*1024, 1);
 
+        this.schedule(this.updateBarrierSprite, 1, 16*1024, 1);
+        this.scheduleUpdate();
     },
 
     onTouchBegan: function (touch, event) {
@@ -79,8 +90,21 @@ var MainLayer = cc.Layer.extend({
     },
 
     update: function (dt) {
-        var timeStep = 0.03;
-        this.space.step(timeStep);
+//        var timeStep = 0.03;
+//        this.space.step(timeStep);
+
+        this.updateLine(dt);
+//        this.eventHander();
+    },
+
+    updateLine:function (dt) {
+        var size = cc.winSize;
+
+        if (this.prospect.getPositionY() <= size.height/2 - 15) {
+            this.prospect.setPosition(cc.p(size.width/2, size.height/2));
+        }else{
+            this.prospect.setPosition(cc.pAdd(this.prospect.getPosition(), cc.p(0,-1)));
+        }
     },
 
     initPhysics:function() {
@@ -162,55 +186,68 @@ var MainLayer = cc.Layer.extend({
 
         barrierSprite.attr({
             x: x,
-            y: y
+            y: y,
+            anchorX: 0.5,
+            anchorY: 0.5
         });
 
-        var body = new cp.Body(1, cp.momentForBox(1, barrierSprite.width, barrierSprite.height));
-        body.setPos(cc.p(x, y));
-        this.space.addBody(body);
-
-        var shape = new cp.BoxShape(body, barrierSprite.width, barrierSprite.height);
-        shape.setElasticity(0.5);
-        shape.setFriction(0.5);
-        this.space.addShape(shape);
+//        var body = new cp.Body(1, cp.momentForBox(1, barrierSprite.width, barrierSprite.height));
+//        body.setPos(cc.p(x, y));
+//        this.space.addBody(body);
+//
+//        var shape = new cp.BoxShape(body, barrierSprite.width, barrierSprite.height);
+//        shape.setElasticity(0.5);
+//        shape.setFriction(0.5);
+//        this.space.addShape(shape);
 
         this.barrierSprites.push(barrierSprite);
         barrierSprite.index = this.barrierSprites.length;
 
-        barrierSprite.setBody(body);
+//        barrierSprite.setBody(body);
         this.addChild(barrierSprite, Barrier_SPRITE);
 
-        var fall = cc.MoveTo.create(4, cc.p(barrierSprite.x, -this.barrierRemove));
-        barrierSprite.runAction(fall);
+        barrierSprite.runAction(
+            cc.sequence(new cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
+                new cc.CallFunc(function () {
+                    cc.log("CallFunc");
+                    var event = new cc.EventCustom("barrier_crush");
+                    cc.eventManager.dispatchEvent(event);
+                })
+            )
+        );
 
-//        this.carCrash();
-
-//        this.removeBarrierSprite();
+        this.removeBarrierSprite();
     },
 
-    removeBarrierSpriteByCrush : function(dx) {
+    sendBarrierEvent:function () {
+        var event = new cc.EventCustom("barrier_crush");
+        cc.eventManager.dispatchEvent(event);
+    },
 
+    removeBarrierSpriteByCrush:function(dx) {
         if(isNaN(dx) || dx > this.barrierSprites.length){
             return false;
         }
 
-        for(var i = 0, n = 0; i < this.barrierSprites.length; i++)
-        {
+        for(var i = 0, n = 0; i < this.barrierSprites.length; i++) {
             if(this.barrierSprites[i] != this[dx])
             {
                 cc.log("--------------");
                 this.barrierSprites[n++] = this.barrierSprites[i]
             }
         }
-        this.SushiSprites.length-=1
+
+        if (this.barrierSprites.length >= 1) {
+            this.barrierSprites.length -= 1;
+        }
     },
 
     //障碍物精灵自动消失
     removeBarrierSprite:function () {
         for (var i = 0; i < this.barrierSprites.length; i++) {
-            cc.log("this.barrierSprites[i].y = ", this.barrierSprites[i].y);
+//            cc.log("this.barrierSprites[i].y = ", this.barrierSprites[i].y);
             if(-this.barrierRemove == this.barrierSprites[i].y) {
-                cc.log("======removeBarrierSprite: " + i);
+//                cc.log("======removeBarrierSprite: " + i);
                 this.barrierSprites[i].removeFromParent();
                 this.barrierSprites[i] = undefined;
                 this.barrierSprites.splice(i, 1);
@@ -242,10 +279,10 @@ var MainLayer = cc.Layer.extend({
         });
         this.addChild(this.bgSprite, BackGround_SPRITE);
 
-        var emitter = new cc.ParticleFireworks();
-        emitter.setTotalParticles(250);
-        emitter.texture = cc.textureCache.addImage(res.Fire_png);
-        this.addChild(emitter);
+//        var emitter = new cc.ParticleFireworks();
+//        emitter.setTotalParticles(250);
+//        emitter.texture = cc.textureCache.addImage(res.Fire_png);
+//        this.addChild(emitter);
     },
 
     //添加汽车
@@ -263,16 +300,16 @@ var MainLayer = cc.Layer.extend({
             anchorY: 0.5
         });
 
-        var body = new cp.Body(1, cp.momentForBox(1, this.carSprite.width, this.carSprite.height));
-        body.setPos(cc.p(x, y));
-        this.space.addBody(body);
-
-        var shape = new cp.BoxShape(body, this.carSprite.width, this.carSprite.height);
-        shape.setElasticity(0.5);
-        shape.setFriction(0.5);
-        this.space.addShape(shape);
-
-        this.carSprite.setBody(body);
+//        var body = new cp.Body(1, cp.momentForBox(1, this.carSprite.width, this.carSprite.height));
+//        body.setPos(cc.p(x, y));
+//        this.space.addBody(body);
+//
+//        var shape = new cp.BoxShape(body, this.carSprite.width, this.carSprite.height);
+//        shape.setElasticity(0.5);
+//        shape.setFriction(0.5);
+//        this.space.addShape(shape);
+//
+//        this.carSprite.setBody(body);
 //        this.carSprite.runAction(cc.scaleTo(0, 0.25));
         this.addChild(this.carSprite, Car_SPRITE);
     },
@@ -312,41 +349,23 @@ var MainLayer = cc.Layer.extend({
 
     carCrash:function() {
         for (var i = 0; i < this.barrierSprites.length; i++) {
-//            var carRect = this.carSprite.getBoundingBox();
-//            var barrierRect = this.barrierSprites[i].getBoundingBox();
-//            cc.log("carRect = ", carRect);
-//            cc.log("barrierRect = ", barrierRect);
+            var carRect = this.carSprite.getBoundingBox();
+            var barrierRect = this.barrierSprites[i].getBoundingBox();
+            cc.log("carRect.y = ", carRect.y);
+            cc.log("carRect.height = ", carRect.height);
+            cc.log("barrierRect.y = ", barrierRect.y);
+            cc.log("barrierRect.height = ", barrierRect.height);
 
-//            var distance = cc.pDistance(this.carSprite.getPosition(), this.barrierSprites[i].getPosition());
-//            var radius = this.carSprite.radius + this.barrierSprites[i].radius;
-//            cc.log("distance:" + distance + "; radius:" + radius);
-//            if(distance < radiusSum){
-//                //发生碰撞
-//                cc.log("carCrash");
-//            }
-//            if(cc.rectIntersectsRect(carRect, barrierRect)){
-//                  //发生碰撞事件
-//                  cc.log("carCrash");
-//                  barrierSprites[i].runAction(cc.sequence(
-//                      cc.delayTime(1.4),
-//                      cc.fadeOut(1.1))
-//                  );
-//            }
-            var boxBarrier = this.barrierSprites[i].getBoundingBox();
-            var bottom = cc.p(boxBarrier.x + boxBarrier.width / 2, boxBarrier.y);
-            var right = cc.p(boxBarrier.x + boxBarrier.width, boxBarrier.y + boxBarrier.height / 2);
-            var left = cc.p(boxBarrier.x, boxBarrier.y + boxBarrier.height / 2);
-            var top = cc.p(boxBarrier.x + boxBarrier.width / 2, boxBarrier.y + boxBarrier.height);
+            if(cc.rectIntersectsRect(carRect, barrierRect)){
+                  //发生碰撞事件
+                cc.log("carCrash");
+                this.barrierSprites[i].runAction(cc.sequence(
+                    cc.rotateBy(0.5, 360),
+                    cc.fadeOut(0.5))
+                );
+                this.removeBarrierSpriteByCrush(i);
 
-            cc.log("bottom", bottom);
-            cc.log("right", right);
-            cc.log("left", left);
-            cc.log("top", top);
-
-            var boxCar = this.carSprite.getBoundingBox();
-            if(cc.rectContainsPoint(boxCar, left)||cc.rectContainsPoint(boxCar, right)||cc.rectContainsPoint(boxCar, top)||cc.rectContainsPoint(boxCar, bottom)){
-              //发生碰撞
-              cc.log("carCrash");
+                return true;
             }
         }
     }
