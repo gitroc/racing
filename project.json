@@ -14,16 +14,18 @@
         "src/resource.js",
         "src/config/GameConfig.js",
         "src/DemoScene.js",
-        "src/DemoSprite.js",
         "src/MainScene.js",
         "src/StartScene.js",
         "src/RaceAskScene.js",
         "src/SelectCarScene.js",
         "src/LoadingBarScene.js",
-        "src/CounterSprite.js",
-        "src/BarrierSprite.js",
-        "src/MileageSprite.js",
-        "src/CarSprite.js",
-        "src/PlayScene.js"
+        "src/PlayScene.js",
+
+        "src/sprite/DemoSprite.js",
+        "src/sprite/CounterSprite.js",
+        "src/sprite/BarrierSprite.js",
+        "src/sprite/MileageSprite.js",
+        "src/sprite/CarSprite.js"
+
     ]
 }

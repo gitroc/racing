@@ -3,7 +3,7 @@
 */
 var GC = GC || {};
 
-GC.winSize = cc.size(480, 800);
+GC.winSize = cc.size(640, 1136);
 
 GC.h = GC.winSize.height;
 
