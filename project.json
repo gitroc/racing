@@ -13,6 +13,8 @@
     "jsList" : [
         "src/resource.js",
         "src/config/GameConfig.js",
+        "src/DemoScene.js",
+        "src/DemoSprite.js",
         "src/MainScene.js",
         "src/StartScene.js",
         "src/RaceAskScene.js",
@@ -23,5 +25,6 @@
         "src/MileageSprite.js",
         "src/CarSprite.js",
         "src/PlayScene.js"
+
     ]
 }
