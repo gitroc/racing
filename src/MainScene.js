@@ -207,8 +207,8 @@ var MainLayer = cc.Layer.extend({
         this.addChild(barrierSprite, Barrier_SPRITE);
 
         barrierSprite.runAction(
-            cc.sequence(cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
-                cc.CallFunc(function () {
+            cc.sequence(new cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
+                new cc.CallFunc(function () {
                     cc.log("CallFunc");
                     var event = new cc.EventCustom("barrier_crush");
                     cc.eventManager.dispatchEvent(event);

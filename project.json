@@ -23,6 +23,6 @@
         "src/MileageSprite.js",
         "src/CarSprite.js",
         "src/PlayScene.js",
-        "src/ShuffSence.js"
+        "src/WeixinApi.js"
     ]
 }
