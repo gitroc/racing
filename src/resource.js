@@ -12,7 +12,7 @@ var res = {
     Line02_png : "res/02.png",
     Line03_png : "res/03.png",
     Line04_png : "res/04.png",
-    Line05_png : "res/05.png",
+    Line05_png : "res/05.png"
 };
 
 var g_resources = [];

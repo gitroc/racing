@@ -23,7 +23,7 @@ var CarTypeSprite = cc.Sprite.extend({
    				if ( cc.rectContainsPoint(target.getBoundingBox(),pos)) {
    //					target.removeTouchEventListener();
    					cc.log("响应精灵点中pos.x="+pos.x+",pos.y="+pos.y);
-					cc.director.runScene(new cc.TransitionFade(1.2, new LoadingBarScene()));
+					cc.director.runScene(new cc.TransitionFade(1.2, new DemoScene()));
    					return true;
    				}
    				return false;
