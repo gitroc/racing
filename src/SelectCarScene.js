@@ -74,7 +74,7 @@ var CarLayer = cc.Layer.extend({
         	anchorY: 0.5
      	});
 
-     	this.car = new cc.Sprite("res/car02.png");
+     	this.car = new CarTypeSprite("res/car02.png");
      	this.car.attr({
      	    x: GC.w_2,
             y: GC.h_2,
@@ -110,16 +110,6 @@ var CarLayer = cc.Layer.extend({
         instructText.setHorizontalAlignment(cc.TEXT_ALIGNMENT_LEFT);
         this.addChild(instructText, 1000);
 
-        var listener1 = cc.EventListener.create({
-            event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            swallowTouches: true,                       // 设置是否吞没事件，在 onTouchBegan 方法返回 true 时吞掉事件，不再向下传递。
-            onTouchBegan: function (touch, event) {
-                cc.director.runScene(new cc.TransitionFade(1.2, new LoadingBarScene()));
-                return false;
-            }
-        });
-
-        cc.eventManager.addListener(listener1, this.car);
     },
 
     lTouchEvent:function(sender,type){

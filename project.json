@@ -21,11 +21,13 @@
         "src/LoadingBarScene.js",
         "src/PlayScene.js",
 
+        "src/sprite/CarTypeSprite.js",
         "src/sprite/DemoSprite.js",
         "src/sprite/CounterSprite.js",
         "src/sprite/BarrierSprite.js",
         "src/sprite/MileageSprite.js",
         "src/sprite/CarSprite.js"
+
 
     ]
 }
