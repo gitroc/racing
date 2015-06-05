@@ -25,6 +25,7 @@
         "src/sprite/CounterSprite.js",
         "src/sprite/BarrierSprite.js",
         "src/sprite/MileageSprite.js",
+        "src/sprite/BgSprite.js",
         "src/sprite/CarSprite.js"
 
     ]

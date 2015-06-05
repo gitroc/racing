@@ -50,7 +50,7 @@ var MainLayer = cc.Layer.extend({
 
         this.addSprite();
 
-        this.steupView();
+//        this.steupView();
 
         return true;
     },
@@ -71,7 +71,7 @@ var MainLayer = cc.Layer.extend({
 //             onTouchBegan: this.onTouchBegan
 //         }, this);
 
-        this.schedule(this.updateBarrierSprite, 1, 16*1024, 1);
+//        this.schedule(this.updateBarrierSprite, 1, 16*1024, 1);
         this.scheduleUpdate();
     },
 
@@ -93,7 +93,7 @@ var MainLayer = cc.Layer.extend({
 //        var timeStep = 0.03;
 //        this.space.step(timeStep);
 
-        this.updateLine(dt);
+//        this.updateLine(dt);
 //        this.eventHander();
     },
 
@@ -209,7 +209,7 @@ var MainLayer = cc.Layer.extend({
         barrierSprite.runAction(
             cc.sequence(new cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
                 new cc.CallFunc(function () {
-                    cc.log("CallFunc");
+//                    cc.log("CallFunc");
                     var event = new cc.EventCustom("barrier_crush");
                     cc.eventManager.dispatchEvent(event);
                 })
@@ -270,10 +270,13 @@ var MainLayer = cc.Layer.extend({
     //添加背景图片
     addBackGround:function () {
         var size = cc.winSize;
-        this.bgSprite = new cc.Sprite(res.BackGround_png);
+
+        cc.spriteFrameCache.addSpriteFrames(res.BackGround_plist);
+
+        this.bgSprite = new BgSprite();
         this.bgSprite.attr({
-            x: size.width / 2,
-            y: size.height / 2,
+            x: GC.w_2,
+            y: GC.h_2,
             anchorX: 0.5,
             anchorY: 0.5
         });
@@ -292,7 +295,7 @@ var MainLayer = cc.Layer.extend({
 
         var x = size.width / 2;
         var y = this.carSprite.height / 2;
-
+        this.carSprite.scale = 0.5;
         this.carSprite.attr({
             x: x,
             y: y,

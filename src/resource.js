@@ -1,5 +1,6 @@
 var res = {
     BackGround_png : "res/bg.png",
+    BackGround_plist : "res/background.plist",
     Car_png : "res/car02.png",
     Barrier_png : "res/car05.png",
     Fire_png : "res/fire.png",
