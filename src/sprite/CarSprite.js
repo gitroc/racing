@@ -64,102 +64,104 @@ var CarSprite = cc.Sprite.extend({
                     target.carCrash(target);
                 }
             }, this);
-        } else if ('accelerometer' in cc.sys.capabilities) {
-            cc.inputManager.setAccelerometerEnabled(true);
-            cc.inputManager.setAccelerometerInterval(1/60);
-            this.AccelerometerListener = cc.eventManager.addListener({
-                event: cc.EventListener.ACCELERATION,
-                callback: function(acc, event){
-                    var target = event.getCurrentTarget();
-                    target.slideCar(target, acc);
-                    target.carCrash(target);
-                }
-            }, this);
         }
+//        else if ('accelerometer' in cc.sys.capabilities) {
+//            cc.inputManager.setAccelerometerEnabled(true);
+//            cc.inputManager.setAccelerometerInterval(1/60);
+//            this.AccelerometerListener = cc.eventManager.addListener({
+//                event: cc.EventListener.ACCELERATION,
+//                callback: function(acc, event){
+//                    var target = event.getCurrentTarget();
+//                    target.slideCar(target, acc);
+//                    target.carCrash(target);
+//                }
+//            }, this);
+//        }
     },
 
     removeListener:function() {
         cc.eventManager.removeListener(this.touchListener);
 
-        if (this.AccelerometerListener != null) {
-            cc.inputManager.setAccelerometerEnabled(false);
-            cc.eventManager.removeListener(this.AccelerometerListener);
-        }
+//        if (this.AccelerometerListener != null) {
+//            cc.inputManager.setAccelerometerEnabled(false);
+//            cc.eventManager.removeListener(this.AccelerometerListener);
+//        }
     },
 
     //触屏移动汽车精灵
     moveCar:function (target, position) {
-        var size = cc.winSize;
-
-        var center =  size.width / 2;
-        var left = center / 3;
-        var right = size.width - left;
-
         var currentX = 0;
 
         target.stopAllActions();
 
+        cc.log("target.x = ", target.x);
         if (position.x < target.x) {// 向左
-            if (target.x == right) {
-                currentX = center;
-            } else if (target.x == center){
-                currentX = left;
+            if (target.x == GC.Car_RIGHT) {
+                cc.log("left Car_CENTER = ", GC.Car_CENTER);
+                currentX = GC.Car_CENTER;
+            } else if (target.x == GC.Car_CENTER){
+                cc.log("left Car_LEFT = ", GC.Car_LEFT);
+                currentX = GC.Car_LEFT;
             } else {
-                currentX = left;
+                currentX = GC.Car_LEFT;
             }
         } else if (position.x > target.x) {//向右
-            if (target.x == left) {
-                currentX = center;
-            } else if (target.x == center){
-                currentX = right;
+            if (target.x == GC.Car_LEFT) {
+                cc.log("right Car_CENTER = ", GC.Car_CENTER);
+                currentX = GC.Car_CENTER;
+            } else if (target.x == GC.Car_CENTER){
+                cc.log("right Car_RIGHT = ", GC.Car_RIGHT);
+                currentX = GC.Car_RIGHT;
             } else {
-                currentX = right;
+                currentX = GC.Car_RIGHT;
             }
         } else {
+            cc.log("dot not move");
             currentX = target.x;
         }
 
+        cc.log("currentX = ", currentX);
         var pos = new cc.p(currentX, target.y);
 
         target.runAction(cc.moveTo(1, pos));
     },
 
     //重力滑动汽车精灵
-    slideCar:function (target, acc) {
-        var size = cc.winSize;
-
-        var center =  size.width / 2;
-        var left = center / 3;
-        var right = size.width - left;
-
-        var currentX = 0;
-
-        target.stopAllActions();
-
-        if (acc.x > 0) { //向左
-            cc.log("left acc.x", acc.x);
-            if (target.x == right) {
-                currentX = center;
-            } else if (target.x == center){
-                currentX = left;
-            } else {
-                currentX = left;
-            }
-        } else { //向右
-            cc.log("right acc.x", acc.x);
-            if (target.x == left) {
-                currentX = center;
-            } else if (target.x == center){
-                currentX = right;
-            } else {
-                currentX = right;
-            }
-        }
-
-        var pos = new cc.p(currentX, target.y);
-
-        target.runAction(cc.moveTo(1, pos));
-    },
+//    slideCar:function (target, acc) {
+//        var size = cc.winSize;
+//
+//        var center =  size.width / 2;
+//        var left = center / 3;
+//        var right = size.width - left;
+//
+//        var currentX = 0;
+//
+//        target.stopAllActions();
+//
+//        if (acc.x > 0) { //向左
+//            cc.log("left acc.x", acc.x);
+//            if (target.x == right) {
+//                currentX = center;
+//            } else if (target.x == center){
+//                currentX = left;
+//            } else {
+//                currentX = left;
+//            }
+//        } else { //向右
+//            cc.log("right acc.x", acc.x);
+//            if (target.x == left) {
+//                currentX = center;
+//            } else if (target.x == center){
+//                currentX = right;
+//            } else {
+//                currentX = right;
+//            }
+//        }
+//
+//        var pos = new cc.p(currentX, target.y);
+//
+//        target.runAction(cc.moveTo(1, pos));
+//    },
 
     carCrash:function(target) {
         for (var i = 0; i < this.getParent().barrierSprites.length; i++) {

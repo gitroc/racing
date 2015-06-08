@@ -10,23 +10,28 @@
  Date: 2015-05-27
 
  ****************************************************************************/
-
-var SPRITE_WIDTH = 64;
-var SPRITE_HEIGHT = 64;
-
 var BackGround_SPRITE = 0;
-var Barrier_SPRITE = 1;
+var Road_SPRITE = 1;
 var Car_SPRITE = 2;
+var Barrier_SPRITE = 3;
+var Tree_SPRITE = 1;
 
 var MainLayer = cc.Layer.extend({
 
     space:null,
+
+    //路精灵
+    roadSprite:null,
+
+    //树精灵
+    treeSprite:null,
 
     //背景精灵
     bgSprite:null,
     prospect:null,
 
     //汽车精灵
+    _drawNode: null,
     carSprite:null,
 
     //倒计时
@@ -71,7 +76,7 @@ var MainLayer = cc.Layer.extend({
 //             onTouchBegan: this.onTouchBegan
 //         }, this);
 
-//        this.schedule(this.updateBarrierSprite, 1, 16*1024, 1);
+        this.schedule(this.updateBarrierSprite, 1, 16*1024, 1);
         this.scheduleUpdate();
     },
 
@@ -136,11 +141,177 @@ var MainLayer = cc.Layer.extend({
     //初始化游戏场景
     addSprite:function () {
         this.addBackGround();
+        this.addRoad();
+        this.addTree();
         this.addCar();
         
         this.addCounterSprite();
         this.addMileageSprite();
         this.addBarrierSprite();
+    },
+
+    //添加背景图片
+    addBackGround:function () {
+        var size = cc.winSize;
+
+        this.bgSprite = new cc.Sprite(res.BackGround_png);
+        this.bgSprite.attr({
+            x: GC.w_2,
+            y: GC.h_2,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+        this.addChild(this.bgSprite, BackGround_SPRITE);
+
+//        var emitter = new cc.ParticleFireworks();
+//        emitter.setTotalParticles(250);
+//        emitter.texture = cc.textureCache.addImage(res.Fire_png);
+//        this.addChild(emitter);
+    },
+
+    //添加汽车
+    addCar:function () {
+        var size = cc.winSize;
+        this.carSprite = new CarSprite(res.Car_png);
+
+        var x = GC.Car_CENTER;
+        var y = this.carSprite.height / 2;
+//        this.carSprite.scale = 0.5;
+        this.carSprite.attr({
+            x: x,
+            y: y,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+
+        this.addChild(this.carSprite, Car_SPRITE);
+
+//        var actionTo = cc.jumpTo(2, cc.p(300, 300), 50, 4);
+//        var actionBy = cc.jumpBy(2, cc.p(300, 0), 50, 4);
+//        var actionUp = cc.jumpBy(2, cc.p(0, 0), 80, 4);
+//        var actionByBack = actionBy.reverse();
+//
+//        var delay = cc.delayTime(0.25);
+
+//        this.carSprite.runAction(actionTo);
+//        this.carSprite.runAction(cc.sequence(actionBy, delay, actionByBack));
+
+//        var action = cc.sequence(actionUp, delay.clone()).repeatForever();
+        // 3 and only 3 control points should be used for Bezier actions.
+//        var controlPoints = [ cc.p(0, 374),
+//                                cc.p(300, -374),
+//                                cc.p(300, 100) ];
+//
+//        var bezierForward = cc.bezierBy(2, controlPoints);
+//        var rep = cc.sequence(bezierForward, delay, bezierForward.reverse(), delay.clone()).repeatForever();
+//        var controlPoints1 = [ cc.p(428, 279), cc.p(100, 100), cc.p(100, 100)];
+//        var controlPoints2 = [ cc.p(100, 100), cc.p(428, 279), cc.p(428, 279)];
+//
+//        var bz1 = cc.bezierTo(1.5, controlPoints1);
+//        var bz2 = cc.bezierTo(1.5, controlPoints2);
+//        var trace = cc.callFunc(this.onTrace, this);
+//        var delay = cc.delayTime(0.25);
+//
+//        var rep = cc.sequence(bz1, bz2, trace,delay).repeatForever();
+//        this.carSprite.runAction(rep);
+//        var array = [
+//            cc.p(0, 0),
+//            cc.p(size.width / 2 - 30, 0),
+//            cc.p(size.width / 2 - 30, size.height - 80),
+//            cc.p(0, size.height - 80),
+//            cc.p(0, 0)
+//        ];
+//
+//        var action1 = cc.cardinalSplineBy(2, array, 0);
+//                var reverse1 = action1.reverse();
+//                var seq = cc.sequence(action1, delay, reverse1, delay.clone() );
+//        var x = 320;
+//        var y = 256;
+//        var array = [
+//            cc.p(x, y),
+//            cc.p(x - 32, 80),
+//            cc.p(x - 64, 160),
+//            cc.p(x - 96, 240),
+//            cc.p(x - 128, 320),
+//            cc.p(x - 160, 360),
+//            cc.p(x - 192, 400),
+//            cc.p(x - 224, 480),
+//            cc.p(x - 256, 560),
+//            cc.p(x - 288, 640),
+//        ];
+//
+//        var action1 = cc.catmullRomBy(3, array);
+//        var reverse1 = action1.reverse();
+//        var seq1 = cc.sequence(action1, delay, reverse1);
+//                this.carSprite.runAction(seq1);
+
+//        this._drawNode = new cc.DrawNode();
+//        this._drawNode.x = x;
+//        this._drawNode.y = y;
+//        this._drawNode.setDrawColor(cc.color(255,255,255,255));
+//        this.addChild(this._drawNode);
+
+//        var delay = cc.delayTime(0.25);
+//        var action1 = cc.catmullRomBy(3, array);
+//        var reverse1 = action1.reverse();
+//        var seq1 = cc.sequence(action1, delay, reverse1);
+//
+//        this.carSprite.runAction(seq1);
+
+//        this._drawNode.drawCatmullRom(array,50, 1);
+
+//        var body = new cp.Body(1, cp.momentForBox(1, this.carSprite.width, this.carSprite.height));
+//        body.setPos(cc.p(x, y));
+//        this.space.addBody(body);
+//
+//        var shape = new cp.BoxShape(body, this.carSprite.width, this.carSprite.height);
+//        shape.setElasticity(0.5);
+//        shape.setFriction(0.5);
+//        this.space.addShape(shape);
+//
+//        this.carSprite.setBody(body);
+//        this.carSprite.runAction(cc.scaleTo(0, 0.25));
+
+    },
+
+    addRoad:function () {
+        cc.spriteFrameCache.addSpriteFrames(res.Road_plist);
+
+        this.roadSprite = new RoadSprite();
+        this.roadSprite.attr({
+            x: GC.w_2,
+            y: GC.h_2,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+        this.addChild(this.roadSprite, Road_SPRITE);
+    },
+
+    addTree:function () {
+        this.treeSprite = new TreeSprite(res.Tree01_png);
+        this.treeSprite.attr({
+            x: GC.Tree_X,
+            y: GC.Tree_Y,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            scale : 0.5
+        });
+        this.addChild(this.treeSprite, Tree_SPRITE);
+
+        this.treeSprite.runAction(
+            cc.sequence(
+                    new cc.CallFunc(function () {
+                    var event = new cc.EventCustom("start_run");
+                    cc.eventManager.dispatchEvent(event);
+                })
+            )
+        );
+    },
+
+    addMountain:function () {
+    },
+
+    addRock:function () {
     },
 
     updateSprite:function () {
@@ -181,14 +352,15 @@ var MainLayer = cc.Layer.extend({
 
         var barrierSprite = new BarrierSprite(res.Barrier_png);
         this.barrierRemove = barrierSprite.height;
-        var x = barrierSprite.width/2 + (size.width / 2) * cc.random0To1();
-        var y = size.height - barrierSprite.height;
+        var x = barrierSprite.width/2 + GC.w * cc.random0To1();
+        var y = GC.h_2 + 160;
 
         barrierSprite.attr({
             x: x,
             y: y,
             anchorX: 0.5,
-            anchorY: 0.5
+            anchorY: 0.5,
+            scale : 0.5
         });
 
 //        var body = new cp.Body(1, cp.momentForBox(1, barrierSprite.width, barrierSprite.height));
@@ -207,7 +379,8 @@ var MainLayer = cc.Layer.extend({
         this.addChild(barrierSprite, Barrier_SPRITE);
 
         barrierSprite.runAction(
-            cc.sequence(new cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
+            cc.spawn(new cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
+                new cc.scaleTo(4, 1.5),
                 new cc.CallFunc(function () {
 //                    cc.log("CallFunc");
                     var event = new cc.EventCustom("barrier_crush");
@@ -267,55 +440,6 @@ var MainLayer = cc.Layer.extend({
         );
     },
 
-    //添加背景图片
-    addBackGround:function () {
-        var size = cc.winSize;
-
-        cc.spriteFrameCache.addSpriteFrames(res.BackGround_plist);
-
-        this.bgSprite = new BgSprite();
-        this.bgSprite.attr({
-            x: GC.w_2,
-            y: GC.h_2,
-            anchorX: 0.5,
-            anchorY: 0.5
-        });
-        this.addChild(this.bgSprite, BackGround_SPRITE);
-
-//        var emitter = new cc.ParticleFireworks();
-//        emitter.setTotalParticles(250);
-//        emitter.texture = cc.textureCache.addImage(res.Fire_png);
-//        this.addChild(emitter);
-    },
-
-    //添加汽车
-    addCar:function () {
-        var size = cc.winSize;
-        this.carSprite = new CarSprite(res.Car_png);
-
-        var x = size.width / 2;
-        var y = this.carSprite.height / 2;
-        this.carSprite.scale = 0.5;
-        this.carSprite.attr({
-            x: x,
-            y: y,
-            anchorX: 0.5,
-            anchorY: 0.5
-        });
-
-//        var body = new cp.Body(1, cp.momentForBox(1, this.carSprite.width, this.carSprite.height));
-//        body.setPos(cc.p(x, y));
-//        this.space.addBody(body);
-//
-//        var shape = new cp.BoxShape(body, this.carSprite.width, this.carSprite.height);
-//        shape.setElasticity(0.5);
-//        shape.setFriction(0.5);
-//        this.space.addShape(shape);
-//
-//        this.carSprite.setBody(body);
-//        this.carSprite.runAction(cc.scaleTo(0, 0.25));
-        this.addChild(this.carSprite, Car_SPRITE);
-    },
 
     //刷新倒计时精灵
     updateCounterSprite:function () {

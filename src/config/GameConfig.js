@@ -14,3 +14,12 @@ GC.w_2 = GC.winSize.width / 2 ;
 GC.h_2 = GC.winSize.height / 2;
 
 GC.SOUND_ON = false;
+
+GC.Car_CENTER = GC.w_2;
+GC.Car_LEFT = 100;
+GC.Car_RIGHT = 500;
+
+GC.Car_Position_Error = 1;
+
+GC.Tree_X = GC.w_2;
+GC.Tree_Y = GC.h_2 + 160;
