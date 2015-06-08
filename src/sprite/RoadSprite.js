@@ -3,7 +3,7 @@
 
  http://www.autogames.com
 
- 背景精灵
+ 道路精灵
 
  Author: roc from android team.
 
@@ -11,18 +11,18 @@
 
  ****************************************************************************/
  var Bg_Png_Max = 4;
- var BgSprite = cc.Sprite.extend({
+ var RoadSprite = cc.Sprite.extend({
     bgAnimation:null,
     onEnter:function () {
         this._super();
-        cc.log("BgSprite onEnter");
+        cc.log("RoadSprite onEnter");
         this.bgAnimation = this.initBgAnimation();
 
         this.schedule(this.update, 0.2, 16*1024, 0.2);
     },
 
     onExit:function () {
-        cc.log("BgSprite onExit");
+        cc.log("RoadSprite onExit");
         this._super();
     },
 
