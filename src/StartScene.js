@@ -23,6 +23,7 @@ var StartLayer = cc.Layer.extend({
 
             //add Game name
         this._sptLogo = new cc.Sprite("res/logo.png");
+        this._sptLogo.scale = 0.5;//设置默认显示图片的大小
         this._sptLogo.attr({
              anchorX : 0.5,
              anchorY : 0,
@@ -30,13 +31,23 @@ var StartLayer = cc.Layer.extend({
              y: GC.h_2
         });
         this.addChild(this._sptLogo);
-    },
+
+        var actionTo = cc.scaleTo( 1,1.5);//(时间，倍数)
+		var actionBy = cc.scaleBy(2, 0.5);
+		var actionBy2 = cc.scaleBy(2, 0.25, 4.5);//(时间，X轴倍数，Y轴倍数)
+		this._sptLogo.runAction(actionTo);
+//		this._sptLogo.runAction(cc.sequence(actionBy2, cc.delayTime(0.25), actionBy2.reverse()));
+//		this._sptLogo.runAction(cc.sequence(actionBy, cc.delayTime(0.25), actionBy.reverse()));
+	},
     addTouchLayer:function(){
     	//设置MenuItemFont字体以及大小
     	cc.MenuItemFont.setFontName("Arial");
-    	cc.MenuItemFont.setFontSize(26);
+    	cc.MenuItemFont.setFontSize(30);
     	var title = new cc.MenuItemFont("Racing Game");
     	title.setEnabled(false);
+    	var actionMove = cc.moveTo(0.5,cc.p(0,100));//moveTo or moveBy
+		title.runAction(actionMove);
+
     	//add start menu
     	var startItem = new cc.MenuItemImage(
     		res.Start_N_png,
@@ -52,6 +63,8 @@ var StartLayer = cc.Layer.extend({
     	menu.x = GC.w_2;
     	menu.y = 200;
     	this.addChild(menu, 1);
+
+
     },
     playMusic : function(){
     //播放背景音乐，true代表循环无限次播放，false表示只播放一次。

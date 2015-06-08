@@ -19,9 +19,13 @@ var AskLayer = cc.Layer.extend({
 	addTouchLayer:function(){
 		//add Slogan
 		cc.MenuItemFont.setFontName("Arial");
-		cc.MenuItemFont.setFontSize(30);
+		cc.MenuItemFont.setFontSize(50);
 		var title = new cc.MenuItemFont("选择爱车，狂飙梦想");
 		title.setEnabled(false);
+		//循环缩放
+		var fadeIn = cc.fadeIn(1);
+		title.runAction(cc.sequence(fadeIn,fadeIn.reverse()).repeatForever());
+
 		//add prompt1
 		cc.MenuItemFont.setFontName("Arial");
 		cc.MenuItemFont.setFontSize(30);
@@ -47,7 +51,7 @@ var AskLayer = cc.Layer.extend({
 		var menu = new cc.Menu(title,prompt,backItem,nextItem);
 		menu.alignItemsInColumns(1,1,2);
 		menu.x = GC.w_2;
-		menu.y =GC.h_2;
+		menu.y =200;
 		this.addChild(menu, 1);
 
 		title.y +=100;

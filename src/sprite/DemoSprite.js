@@ -17,20 +17,17 @@ var DemoSprite = cc.Sprite.extend({
 				var pos = touch.getLocation();
 				var target = event.getCurrentTarget();
 				if ( cc.rectContainsPoint(target.getBoundingBox(),pos)) {
-//					target.removeTouchEventListener();
-					//响应精灵点中
-//					cc.log("pos.x="+pos.x+",pos.y="+pos.y);
-					target.stopAllActions();
-
+				    cc.log("demo--listener");
+				    target.stopAllActions();
                     var frames = [];
-                    for (var i = 1; i < 6; i++) {
-                        var str = "0"+i+".png";
+                    for (var i = 1; i < 5; i++) {
+                        var str = "bg0"+i+".png";
 //                        cc.log(str);
                         var frame = cc.spriteFrameCache.getSpriteFrame(str);
                         frames.push(frame);
                     }
 
-                    var animation = new cc.Animation(frames, 0.02);
+                    var animation = new cc.Animation(frames, 0.2);
                     var action = new cc.Animate(animation);
 					target.runAction(action);
 
