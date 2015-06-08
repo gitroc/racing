@@ -42,9 +42,12 @@ var StartLayer = cc.Layer.extend({
     addTouchLayer:function(){
     	//设置MenuItemFont字体以及大小
     	cc.MenuItemFont.setFontName("Arial");
-    	cc.MenuItemFont.setFontSize(26);
+    	cc.MenuItemFont.setFontSize(30);
     	var title = new cc.MenuItemFont("Racing Game");
     	title.setEnabled(false);
+    	var actionMove = cc.moveTo(0.5,cc.p(0,100));//moveTo or moveBy
+		title.runAction(actionMove);
+
     	//add start menu
     	var startItem = new cc.MenuItemImage(
     		res.Start_N_png,
@@ -60,6 +63,8 @@ var StartLayer = cc.Layer.extend({
     	menu.x = GC.w_2;
     	menu.y = 200;
     	this.addChild(menu, 1);
+
+
     },
     playMusic : function(){
     //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
