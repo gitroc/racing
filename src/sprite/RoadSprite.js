@@ -33,7 +33,7 @@
     initAnimation:function () {
         var frames = [];
         for (var i = 0; i < Road_Png_Max; i++) {
-            var str = "road0" + (i + 1) + ".png";
+            var str = "main_road_mid" + (i + 1) + ".png";
             var frame = cc.spriteFrameCache.getSpriteFrame(str);
             frames.push(frame);
         }

@@ -24,7 +24,9 @@ var MainLayer = cc.Layer.extend({
     roadSprite:null,
 
     //树精灵
-    treeSprite:null,
+    treeSprites:null,
+    treeOrg:null,
+    treeGoal:null,
 
     //背景精灵
     bgSprite:null,
@@ -51,11 +53,7 @@ var MainLayer = cc.Layer.extend({
     ctor:function () {
         this._super();
 
-//        this.initPhysics();
-
         this.addSprite();
-
-//        this.steupView();
 
         return true;
     },
@@ -76,7 +74,7 @@ var MainLayer = cc.Layer.extend({
 //             onTouchBegan: this.onTouchBegan
 //         }, this);
 
-        this.schedule(this.updateBarrierSprite, 1, 16*1024, 1);
+        this.schedule(this.updateTree, 1, 16*1024, 1);
         this.scheduleUpdate();
     },
 
@@ -112,32 +110,6 @@ var MainLayer = cc.Layer.extend({
         }
     },
 
-    initPhysics:function() {
-        var winSize = cc.director.getWinSize();
-
-        this.space = new cp.Space();
-//        this.setupDebugNode();
-
-        // 设置重力
-        this.space.gravity = cp.v(0, -50);
-        var staticBody = this.space.staticBody;
-
-        // 设置空间边界
-        var walls = [
-            new cp.SegmentShape(staticBody, cp.v(0, 0), cp.v(winSize.width, 0), 0),
-            new cp.SegmentShape(staticBody, cp.v(0, winSize.height), cp.v(winSize.width, winSize.height), 0),
-            new cp.SegmentShape(staticBody, cp.v(0, 0), cp.v(0, winSize.height), 0),
-            new cp.SegmentShape(staticBody, cp.v(winSize.width, 0), cp.v(winSize.width, winSize.height), 0)
-        ];
-
-        for (var i = 0; i < walls.length; i++) {
-            var shape = walls[i];
-            shape.setElasticity(1);
-            shape.setFriction(1);
-            this.space.addStaticShape(shape);
-        }
-    },
-
     //初始化游戏场景
     addSprite:function () {
         this.addBackGround();
@@ -154,7 +126,7 @@ var MainLayer = cc.Layer.extend({
     addBackGround:function () {
         var size = cc.winSize;
 
-        this.bgSprite = new cc.Sprite(res.BackGround_png);
+        this.bgSprite = new cc.Sprite(res.BackGround_png, cc.rect(100, 0, GC.w, GC.h));
         this.bgSprite.attr({
             x: GC.w_2,
             y: GC.h_2,
@@ -174,103 +146,14 @@ var MainLayer = cc.Layer.extend({
         var size = cc.winSize;
         this.carSprite = new CarSprite(res.Car_png);
 
-        var x = GC.Car_CENTER;
-        var y = this.carSprite.height / 2;
-//        this.carSprite.scale = 0.5;
         this.carSprite.attr({
-            x: x,
-            y: y,
+            x: GC.Car_Center_X - GC.Center_Offset,
+            y: GC.Car_Center_Y,
             anchorX: 0.5,
             anchorY: 0.5
         });
 
         this.addChild(this.carSprite, Car_SPRITE);
-
-//        var actionTo = cc.jumpTo(2, cc.p(300, 300), 50, 4);
-//        var actionBy = cc.jumpBy(2, cc.p(300, 0), 50, 4);
-//        var actionUp = cc.jumpBy(2, cc.p(0, 0), 80, 4);
-//        var actionByBack = actionBy.reverse();
-//
-//        var delay = cc.delayTime(0.25);
-
-//        this.carSprite.runAction(actionTo);
-//        this.carSprite.runAction(cc.sequence(actionBy, delay, actionByBack));
-
-//        var action = cc.sequence(actionUp, delay.clone()).repeatForever();
-        // 3 and only 3 control points should be used for Bezier actions.
-//        var controlPoints = [ cc.p(0, 374),
-//                                cc.p(300, -374),
-//                                cc.p(300, 100) ];
-//
-//        var bezierForward = cc.bezierBy(2, controlPoints);
-//        var rep = cc.sequence(bezierForward, delay, bezierForward.reverse(), delay.clone()).repeatForever();
-//        var controlPoints1 = [ cc.p(428, 279), cc.p(100, 100), cc.p(100, 100)];
-//        var controlPoints2 = [ cc.p(100, 100), cc.p(428, 279), cc.p(428, 279)];
-//
-//        var bz1 = cc.bezierTo(1.5, controlPoints1);
-//        var bz2 = cc.bezierTo(1.5, controlPoints2);
-//        var trace = cc.callFunc(this.onTrace, this);
-//        var delay = cc.delayTime(0.25);
-//
-//        var rep = cc.sequence(bz1, bz2, trace,delay).repeatForever();
-//        this.carSprite.runAction(rep);
-//        var array = [
-//            cc.p(0, 0),
-//            cc.p(size.width / 2 - 30, 0),
-//            cc.p(size.width / 2 - 30, size.height - 80),
-//            cc.p(0, size.height - 80),
-//            cc.p(0, 0)
-//        ];
-//
-//        var action1 = cc.cardinalSplineBy(2, array, 0);
-//                var reverse1 = action1.reverse();
-//                var seq = cc.sequence(action1, delay, reverse1, delay.clone() );
-//        var x = 320;
-//        var y = 256;
-//        var array = [
-//            cc.p(x, y),
-//            cc.p(x - 32, 80),
-//            cc.p(x - 64, 160),
-//            cc.p(x - 96, 240),
-//            cc.p(x - 128, 320),
-//            cc.p(x - 160, 360),
-//            cc.p(x - 192, 400),
-//            cc.p(x - 224, 480),
-//            cc.p(x - 256, 560),
-//            cc.p(x - 288, 640),
-//        ];
-//
-//        var action1 = cc.catmullRomBy(3, array);
-//        var reverse1 = action1.reverse();
-//        var seq1 = cc.sequence(action1, delay, reverse1);
-//                this.carSprite.runAction(seq1);
-
-//        this._drawNode = new cc.DrawNode();
-//        this._drawNode.x = x;
-//        this._drawNode.y = y;
-//        this._drawNode.setDrawColor(cc.color(255,255,255,255));
-//        this.addChild(this._drawNode);
-
-//        var delay = cc.delayTime(0.25);
-//        var action1 = cc.catmullRomBy(3, array);
-//        var reverse1 = action1.reverse();
-//        var seq1 = cc.sequence(action1, delay, reverse1);
-//
-//        this.carSprite.runAction(seq1);
-
-//        this._drawNode.drawCatmullRom(array,50, 1);
-
-//        var body = new cp.Body(1, cp.momentForBox(1, this.carSprite.width, this.carSprite.height));
-//        body.setPos(cc.p(x, y));
-//        this.space.addBody(body);
-//
-//        var shape = new cp.BoxShape(body, this.carSprite.width, this.carSprite.height);
-//        shape.setElasticity(0.5);
-//        shape.setFriction(0.5);
-//        this.space.addShape(shape);
-//
-//        this.carSprite.setBody(body);
-//        this.carSprite.runAction(cc.scaleTo(0, 0.25));
 
     },
 
@@ -288,24 +171,75 @@ var MainLayer = cc.Layer.extend({
     },
 
     addTree:function () {
-        this.treeSprite = new TreeSprite(res.Tree01_png);
-        this.treeSprite.attr({
-            x: GC.Tree_X,
-            y: GC.Tree_Y,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            scale : 0.5
-        });
-        this.addChild(this.treeSprite, Tree_SPRITE);
+        this.treeSprites = [];
 
-        this.treeSprite.runAction(
-            cc.sequence(
-                    new cc.CallFunc(function () {
-                    var event = new cc.EventCustom("start_run");
-                    cc.eventManager.dispatchEvent(event);
-                })
-            )
-        );
+        cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
+
+        this.treeOrg = [
+            cc.p(GC.Tree_01_X, GC.Tree_01_Y),
+            cc.p(GC.Tree_02_X, GC.Tree_02_Y),
+            cc.p(GC.Tree_03_X, GC.Tree_03_Y),
+            cc.p(GC.Tree_04_X, GC.Tree_04_Y),
+            cc.p(GC.Tree_05_X, GC.Tree_05_Y)
+        ];
+
+//        this.updateTree();
+    },
+
+    getScale:function (pos_y) {
+//        var scale = GC.Standard_scale - (pos_y - GC.Standard_Y40) / (GC.h -  GC.Standard_Y40);
+        var scale = (GC.Standard_Y40 - pos_y) / (GC.Standard_Y40 - GC.Standard_Y100) * 0.6 + GC.Standard_scale;
+        return scale.toFixed(1);
+    },
+
+    updateTree:function () {
+        for (var i = 0; i < this.treeOrg.length; i++) {
+            var str = "main_bg_object_tree" + (i + 1) + ".png";
+            var sprite = cc.spriteFrameCache.getSpriteFrame(str);
+            var tree = new cc.Sprite(sprite);
+            var x = this.treeOrg[i].x - GC.Center_Offset;
+            var y = this.treeOrg[i].y;
+            var scale = 0.2;//this.getScale(this.treeOrg[i].y);
+
+            tree.attr({
+                x:x,
+                y:y,
+                anchorX: 0.5,
+                anchorY: 0.5,
+                scale:scale
+            });
+
+            this.addChild(tree, Tree_SPRITE);
+
+            var track = [
+                cc.p(x, y),
+                this.getTreeGoal(cc.p(x, y)),
+            ];
+
+            this.moveTree(tree, 1, track, 2);
+        }
+    },
+
+    getTreeGoal:function (Org) {
+        var radian = GC.Angle / 180 * Math.PI;
+
+        var goalX = 0;
+        var goalY = 0;
+
+        if (Org.x > GC.Screen_Middle) {
+            goalX = GC.Main_Scene_w + 420;
+            goalY = Org.y - (GC.Main_Scene_w - Org.x) * Math.tan(radian)
+        } else {
+            goalX = -420;
+            goalY = Org.y - Math.tan(radian) * Org.x;
+        }
+
+        return cc.p(goalX, Math.round(goalY));
+    },
+
+    moveTree:function (sprite, time, track, scale) {
+        var action = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
+        sprite.runAction(action);
     },
 
     addMountain:function () {
@@ -350,7 +284,7 @@ var MainLayer = cc.Layer.extend({
     updateBarrierSprite:function () {
         var size = cc.winSize;
 
-        var barrierSprite = new BarrierSprite(res.Barrier_png);
+        var barrierSprite = new BarrierSprite("res/main/main_bg_object_tree1.png");
         this.barrierRemove = barrierSprite.height;
         var x = barrierSprite.width/2 + GC.w * cc.random0To1();
         var y = GC.h_2 + 160;
@@ -360,7 +294,7 @@ var MainLayer = cc.Layer.extend({
             y: y,
             anchorX: 0.5,
             anchorY: 0.5,
-            scale : 0.5
+            scale : 0.2
         });
 
 //        var body = new cp.Body(1, cp.momentForBox(1, barrierSprite.width, barrierSprite.height));
