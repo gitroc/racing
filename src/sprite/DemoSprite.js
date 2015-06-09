@@ -21,7 +21,7 @@ var DemoSprite = cc.Sprite.extend({
 				    target.stopAllActions();
                     var frames = [];
                     for (var i = 1; i < 5; i++) {
-                        var str = "bg0"+i+".png";
+                        var str = "road0"+i+".png";
 //                        cc.log(str);
                         var frame = cc.spriteFrameCache.getSpriteFrame(str);
                         frames.push(frame);
