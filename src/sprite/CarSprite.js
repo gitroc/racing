@@ -74,33 +74,27 @@ var CarSprite = cc.Sprite.extend({
 
         target.stopAllActions();
 
-        cc.log("target.x = ", target.x);
-        if (position.x < target.x) {// 向左
-            if (target.x > GC.Car_Center_X) {
-                cc.log("left Car_Center_X = ", GC.Car_Center_X);
+        var targetX = Math.round(target.x);
+        if (position.x < targetX) {// 向左
+            if (targetX > GC.Car_Center_X) {
                 carGoalX = GC.Car_Center_X;
-            } else if (target.x > GC.Car_Left_X){
-                cc.log("left Car_Left_X = ", GC.Car_Left_X);
+            } else if (targetX > GC.Car_Left_X){
                 carGoalX = GC.Car_Left_X;
             } else {
                 carGoalX = GC.Car_Left_X;
             }
-        } else if (position.x > target.x) {//向右
-            if (target.x < GC.Car_Center_X) {
-                cc.log("right Car_Center_X = ", GC.Car_Center_X);
+        } else if (position.x > targetX) {//向右
+            if (targetX < GC.Car_Center_X) {
                 carGoalX = GC.Car_Center_X;
-            } else if (target.x < GC.Car_Right_X){
-                cc.log("right Car_Right_X = ", GC.Car_Right_X);
+            } else if (targetX < GC.Car_Right_X){
                 carGoalX = GC.Car_Right_X;
             } else {
                 carGoalX = GC.Car_Right_X;
             }
         } else {
-            cc.log("dot not move");
-            carGoalX = target.x;
+            carGoalX = targetX;
         }
 
-        cc.log("carGoalX = ", carGoalX);
         var pos = new cc.p(carGoalX, target.y);
 
         target.runAction(cc.moveTo(1, pos));

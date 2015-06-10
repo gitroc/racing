@@ -147,7 +147,7 @@ var MainLayer = cc.Layer.extend({
         this.carSprite = new CarSprite(res.Car_png);
 
         this.carSprite.attr({
-            x: GC.Car_Center_X - GC.Center_Offset,
+            x: GC.Car_Center_X,
             y: GC.Car_Center_Y,
             anchorX: 0.5,
             anchorY: 0.5
