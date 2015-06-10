@@ -19,10 +19,13 @@ GC.SOUND_ON = false;
 GC.Main_Scene_w = 840;
 GC.Main_Scene_h = 1136;
 
+GC.Road_Png_Max = 4;
+GC.Tree_Png_Max = 5;
+
 GC.Angle = 45;
 GC.Screen_Middle = GC.Main_Scene_w / 2;
 
-GC.Center_Offset = 150;
+GC.Center_Offset = 100;
 GC.Right_Offset = 100;
 
 GC.Standard_scale = 0.4;
@@ -40,19 +43,31 @@ GC.Car_Left_Y = 175;
 GC.Car_Right_X = 500;
 GC.Car_Right_Y = 175;
 
-GC.Tree_01_X = 290;
-GC.Tree_01_Y = 720;
+GC.Tree_Show_Left_scale = 0.1;
+GC.Tree_Show_Right_scale = 0.2;
+GC.Tree_Show_Left_X = 250;
+GC.Tree_Show_Left_Y = 700;
+GC.Tree_Show_Right_X = 570;
+GC.Tree_Show_Right_Y = 700;
 
-GC.Tree_02_X = 135;
+GC.Tree_01_Scale = 0.4;
+GC.Tree_01_X = 260;
+GC.Tree_01_Y = 700;
+
+GC.Tree_02_Scale = 0.8;
+GC.Tree_02_X = 125;
 GC.Tree_02_Y = 625;
 
-GC.Tree_03_X = 590;
-GC.Tree_03_Y = 730;
+GC.Tree_03_Scale = 0.3;
+GC.Tree_03_X = 560;
+GC.Tree_03_Y = 700;
 
-GC.Tree_04_X = 640;
-GC.Tree_04_Y = 695;
+GC.Tree_04_Scale = 0.9;
+GC.Tree_04_X = 710;
+GC.Tree_04_Y = 710;
 
-GC.Tree_05_X = 710;
+GC.Tree_05_Scale = 0.7;
+GC.Tree_05_X = 740;
 GC.Tree_05_Y = 580;
 
 GC.Rock_01_X = 290;

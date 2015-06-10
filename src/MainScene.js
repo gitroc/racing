@@ -25,6 +25,7 @@ var MainLayer = cc.Layer.extend({
 
     //树精灵
     treeSprites:null,
+    treeScale:null,
     treeOrg:null,
     treeGoal:null,
 
@@ -74,7 +75,7 @@ var MainLayer = cc.Layer.extend({
 //             onTouchBegan: this.onTouchBegan
 //         }, this);
 
-        this.schedule(this.updateTree, 1, 16*1024, 1);
+//        this.schedule(this.updateTree, 1, 16*1024, 1);
         this.scheduleUpdate();
     },
 
@@ -183,41 +184,43 @@ var MainLayer = cc.Layer.extend({
             cc.p(GC.Tree_05_X, GC.Tree_05_Y)
         ];
 
-//        this.updateTree();
-    },
+        this.treeScale = [
+            GC.Tree_01_Scale,
+            GC.Tree_02_Scale,
+            GC.Tree_03_Scale,
+            GC.Tree_04_Scale,
+            GC.Tree_05_Scale
+        ];
 
-    getScale:function (pos_y) {
-//        var scale = GC.Standard_scale - (pos_y - GC.Standard_Y40) / (GC.h -  GC.Standard_Y40);
-        var scale = (GC.Standard_Y40 - pos_y) / (GC.Standard_Y40 - GC.Standard_Y100) * 0.6 + GC.Standard_scale;
-        return scale.toFixed(1);
-    },
-
-    updateTree:function () {
         for (var i = 0; i < this.treeOrg.length; i++) {
             var str = "main_bg_object_tree" + (i + 1) + ".png";
             var sprite = cc.spriteFrameCache.getSpriteFrame(str);
-            var tree = new cc.Sprite(sprite);
-            var x = this.treeOrg[i].x - GC.Center_Offset;
-            var y = this.treeOrg[i].y;
-            var scale = 0.2;//this.getScale(this.treeOrg[i].y);
+            var tree = new TreeSprite(sprite);
 
-            tree.attr({
-                x:x,
-                y:y,
-                anchorX: 0.5,
-                anchorY: 0.5,
-                scale:scale
-            });
-
-            this.addChild(tree, Tree_SPRITE);
-
-            var track = [
-                cc.p(x, y),
-                this.getTreeGoal(cc.p(x, y)),
-            ];
-
-            this.moveTree(tree, 1, track, 2);
+            this.addTreeSprite(tree, i);
         }
+    },
+
+    addTreeSprite:function (tree, index) {
+        var x = this.treeOrg[index].x - GC.Center_Offset;
+        var y = this.treeOrg[index].y;
+
+        tree.attr({
+            x:x,
+            y:y,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            scale:this.treeScale[index]
+        });
+
+        this.addChild(tree, Tree_SPRITE);
+
+        var track = [
+            cc.p(x, y),
+            this.getTreeGoal(cc.p(x, y)),
+        ];
+
+        this.moveTree(tree, 3, track, 2);
     },
 
     getTreeGoal:function (Org) {
@@ -238,7 +241,9 @@ var MainLayer = cc.Layer.extend({
     },
 
     moveTree:function (sprite, time, track, scale) {
-        var action = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
+        var action = cc.spawn(cc.catmullRomTo(time, track),
+                        cc.scaleTo(time, scale)
+                     );
         sprite.runAction(action);
     },
 
