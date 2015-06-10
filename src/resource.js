@@ -2,6 +2,7 @@ var res = {
     BackGround_png : "res/main/main_bg_pic.png",
     Road_plist : "res/main/main_road_mid.plist",
     Tree_plist : "res/main/main_bg_object_tree.plist",
+    Stone_plist : "res/main/main_bg_object_stone.plist",
     Car_png : "res/main/main_car_back.png",
     Barrier_png : "res/car05.png",
     Fire_png : "res/fire.png",

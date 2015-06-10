@@ -10,12 +10,6 @@
  Date: 2015-05-27
 
  ****************************************************************************/
-var BackGround_SPRITE = 0;
-var Road_SPRITE = 1;
-var Car_SPRITE = 2;
-var Barrier_SPRITE = 3;
-var Tree_SPRITE = 1;
-
 var MainLayer = cc.Layer.extend({
 
     space:null,
@@ -24,10 +18,14 @@ var MainLayer = cc.Layer.extend({
     roadSprite:null,
 
     //树精灵
-    treeSprites:null,
     treeScale:null,
     treeOrg:null,
     treeGoal:null,
+
+    //石头精灵
+    stoneScale:null,
+    stoneOrg:null,
+    stoneGoal:null,
 
     //背景精灵
     bgSprite:null,
@@ -115,6 +113,7 @@ var MainLayer = cc.Layer.extend({
     addSprite:function () {
         this.addBackGround();
         this.addRoad();
+        this.addStone();
         this.addTree();
         this.addCar();
         
@@ -134,7 +133,7 @@ var MainLayer = cc.Layer.extend({
             anchorX: 0.5,
             anchorY: 0.5
         });
-        this.addChild(this.bgSprite, BackGround_SPRITE);
+        this.addChild(this.bgSprite, GC.BackGround_Sprite);
 
 //        var emitter = new cc.ParticleFireworks();
 //        emitter.setTotalParticles(250);
@@ -154,7 +153,7 @@ var MainLayer = cc.Layer.extend({
             anchorY: 0.5
         });
 
-        this.addChild(this.carSprite, Car_SPRITE);
+        this.addChild(this.carSprite, GC.Car_Sprite);
 
     },
 
@@ -168,12 +167,10 @@ var MainLayer = cc.Layer.extend({
             anchorX: 0.5,
             anchorY: 0.5
         });
-        this.addChild(this.roadSprite, Road_SPRITE);
+        this.addChild(this.roadSprite, GC.Road_Sprite);
     },
 
     addTree:function () {
-        this.treeSprites = [];
-
         cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
 
         this.treeOrg = [
@@ -213,7 +210,7 @@ var MainLayer = cc.Layer.extend({
             scale:this.treeScale[index]
         });
 
-        this.addChild(tree, Tree_SPRITE);
+        this.addChild(tree, GC.Tree_Sprite);
 
         var track = [
             cc.p(x, y),
@@ -250,7 +247,76 @@ var MainLayer = cc.Layer.extend({
     addMountain:function () {
     },
 
-    addRock:function () {
+    addStone:function () {
+        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
+
+        this.stoneOrg = [
+            cc.p(GC.Stone_01_X, GC.Stone_01_Y),
+            cc.p(GC.Stone_02_X, GC.Stone_02_Y),
+            cc.p(GC.Stone_03_X, GC.Stone_03_Y),
+            cc.p(GC.Stone_04_X, GC.Stone_04_Y)
+        ];
+
+        this.stoneScale = [
+            GC.Stone_01_Scale,
+            GC.Stone_02_Scale,
+            GC.Stone_03_Scale,
+            GC.Stone_04_Scale
+        ];
+
+        for (var i = 0; i < this.stoneOrg.length; i++) {
+            var str = "main_bg_object_stone" + (i + 1) + ".png";
+            var sprite = cc.spriteFrameCache.getSpriteFrame(str);
+            var stone = new StoneSprite(sprite);
+
+            this.addStoneSprite(stone, i);
+        }
+    },
+
+    addStoneSprite:function (stone, index) {
+        var x = this.stoneOrg[index].x - GC.Center_Offset;
+        var y = this.stoneOrg[index].y;
+
+        stone.attr({
+            x:x,
+            y:y,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            scale:this.stoneScale[index]
+        });
+
+        this.addChild(stone, GC.Stone_Sprite);
+
+        var track = [
+            cc.p(x, y),
+            this.getStoneGoal(cc.p(x, y)),
+        ];
+
+        this.moveStone(stone, 3, track, 2);
+    },
+
+    moveStone:function (sprite, time, track, scale) {
+        var action = cc.spawn(cc.catmullRomTo(time, track),
+                        cc.scaleTo(time, scale)
+                     );
+        sprite.runAction(action);
+    },
+
+    getStoneGoal:function (Org) {
+        var radian = GC.Angle / 180 * Math.PI;
+
+        var goalX = 0;
+        var goalY = 0;
+
+        if (Org.x > GC.Screen_Middle) {
+            goalX = GC.Main_Scene_w + 420;
+            goalY = Org.y - (GC.Main_Scene_w - Org.x) * Math.tan(radian)
+        } else {
+            goalX = -420;
+            goalY = Org.y - Math.tan(radian) * Org.x;
+        }
+
+        return cc.p(goalX, Math.round(goalY));
     },
 
     updateSprite:function () {
@@ -315,7 +381,7 @@ var MainLayer = cc.Layer.extend({
         barrierSprite.index = this.barrierSprites.length;
 
 //        barrierSprite.setBody(body);
-        this.addChild(barrierSprite, Barrier_SPRITE);
+        this.addChild(barrierSprite, GC.Barrier_Sprite);
 
         barrierSprite.runAction(
             cc.spawn(new cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
