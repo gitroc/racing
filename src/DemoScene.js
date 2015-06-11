@@ -1,6 +1,8 @@
 var DemoLayer = cc.Layer.extend({
     disappearAction:null,
     treeSprite:null,
+    time : null,
+    timeSprite : null,
     ctor:function(){
         this._super();
         cc.spriteFrameCache.addSpriteFrames(res.Road_plist);
@@ -15,6 +17,20 @@ var DemoLayer = cc.Layer.extend({
 
         this.addChild(demoSprite);
 
+
+        this.timeSprite = new cc.Sprite("res/image/stone04.png");
+        this.timeSprite.attr({
+            x:GC.w_2,
+            y:GC.h_2,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(this.timeSprite);
+        time = 0;
+
+        //添加倒计时
+        this.schedule(this.timer,1,4,1);
+
 //        this.treeSprite = new TreeSprite(res.Tree01_png);
 //        this.treeSprite.attr({
 //            x: GC.w_2,
@@ -25,7 +41,27 @@ var DemoLayer = cc.Layer.extend({
 //        });
 //        this.addChild(this.treeSprite, Tree_SPRITE);
 
-        this.rote();
+//        this.rote();
+    },
+    timer:function(){
+        var actionTo = cc.scaleTo( 1,2);//(时间，倍数)
+        var array = ["stone01.png","stone02.png","stone03.png","stone04.png"];
+        this.timeSprite.scale=1;
+        if(time<4){
+            var pic = cc.textureCache.addImage("res/image/"+array[time]);
+            this.timeSprite.setTexture(pic);
+            if(time == 3){//只是数字进行缩放
+                this.timeSprite.scale= 2;
+            }else{
+                this.timeSprite.runAction(actionTo);
+            }
+            time+=1;
+        }else{
+            time = 0;
+            this.unschedule(this.timer);
+            this.timeSprite.removeFromParent();
+        }
+
     },
     //轨迹
     rote:function(){
@@ -59,6 +95,12 @@ var DemoLayer = cc.Layer.extend({
 
        cc.log("leftY"+leftY+"--rightY"+rightY);
        cc.log("四舍五入："+Math.round(leftY));
+    },
+
+    time:function(){
+
+
+        var action = cc.fadeOut(1);
     }
 
 });
