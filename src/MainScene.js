@@ -12,9 +12,10 @@
  ****************************************************************************/
 var MainLayer = cc.Layer.extend({
 
-    space:null,
+    screenOffset:0,
 
     //路精灵
+    currentRoad:null,
     roadSprite:null,
 
     //树精灵
@@ -28,11 +29,11 @@ var MainLayer = cc.Layer.extend({
     stoneGoal:null,
 
     //背景精灵
+    currentBg:0,
     bgSprite:null,
     prospect:null,
 
     //汽车精灵
-    _drawNode: null,
     carSprite:null,
 
     //倒计时
@@ -57,58 +58,6 @@ var MainLayer = cc.Layer.extend({
         return true;
     },
 
-    steupView:function () {
-        var size = cc.winSize;
-
-        this.prospect = new cc.Sprite(res.Prospect_png);
-        this.prospect.setPosition(cc.p(size.width/2, size.height/2));
-        this.addChild(this.prospect);
-    },
-
-    onEnter: function () {
-        this._super();
-         cc.log("onEnter");
-//         cc.eventManager.addListener({
-//             event: cc.EventListener.TOUCH_ONE_BY_ONE,
-//             onTouchBegan: this.onTouchBegan
-//         }, this);
-
-//        this.schedule(this.updateTree, 1, 16*1024, 1);
-        this.scheduleUpdate();
-    },
-
-    onTouchBegan: function (touch, event) {
-        cc.log("onTouchBegan");
-        var target = event.getCurrentTarget();
-        var location = touch.getLocation();
-//        target.addPhysicsSprite(res.Car_png, location);
-        return false;
-    },
-
-    onExit: function () {
-        this._super();
-        cc.log("onExit");
-//        cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
-    },
-
-    update: function (dt) {
-//        var timeStep = 0.03;
-//        this.space.step(timeStep);
-
-//        this.updateLine(dt);
-//        this.eventHander();
-    },
-
-    updateLine:function (dt) {
-        var size = cc.winSize;
-
-        if (this.prospect.getPositionY() <= size.height/2 - 15) {
-            this.prospect.setPosition(cc.p(size.width/2, size.height/2));
-        }else{
-            this.prospect.setPosition(cc.pAdd(this.prospect.getPosition(), cc.p(0,-1)));
-        }
-    },
-
     //初始化游戏场景
     addSprite:function () {
         this.addBackGround();
@@ -116,7 +65,7 @@ var MainLayer = cc.Layer.extend({
         this.addStone();
         this.addTree();
         this.addCar();
-        
+//
         this.addCounterSprite();
         this.addMileageSprite();
         this.addBarrierSprite();
@@ -125,14 +74,16 @@ var MainLayer = cc.Layer.extend({
     //添加背景图片
     addBackGround:function () {
         var size = cc.winSize;
-
-        this.bgSprite = new cc.Sprite(res.BackGround_png, cc.rect(100, 0, GC.w, GC.h));
+        this.screenOffset = -GC.Screen_Offset;
+        this.currentBg = 0;
+        this.bgSprite = new BgSprite(res.BackGround_png, cc.rect(GC.Bg_Center_X, GC.Bg_Center_Y, GC.w, GC.h));
         this.bgSprite.attr({
             x: GC.w_2,
             y: GC.h_2,
             anchorX: 0.5,
             anchorY: 0.5
         });
+
         this.addChild(this.bgSprite, GC.BackGround_Sprite);
 
 //        var emitter = new cc.ParticleFireworks();
@@ -143,7 +94,8 @@ var MainLayer = cc.Layer.extend({
 
     //添加汽车
     addCar:function () {
-        var size = cc.winSize;
+        cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
+
         this.carSprite = new CarSprite(res.Car_png);
 
         this.carSprite.attr({
@@ -159,7 +111,7 @@ var MainLayer = cc.Layer.extend({
 
     addRoad:function () {
         cc.spriteFrameCache.addSpriteFrames(res.Road_plist);
-
+        this.currentRoad = 0;
         this.roadSprite = new RoadSprite();
         this.roadSprite.attr({
             x: GC.w_2,
@@ -368,26 +320,15 @@ var MainLayer = cc.Layer.extend({
             scale : 0.2
         });
 
-//        var body = new cp.Body(1, cp.momentForBox(1, barrierSprite.width, barrierSprite.height));
-//        body.setPos(cc.p(x, y));
-//        this.space.addBody(body);
-//
-//        var shape = new cp.BoxShape(body, barrierSprite.width, barrierSprite.height);
-//        shape.setElasticity(0.5);
-//        shape.setFriction(0.5);
-//        this.space.addShape(shape);
-
         this.barrierSprites.push(barrierSprite);
         barrierSprite.index = this.barrierSprites.length;
 
-//        barrierSprite.setBody(body);
         this.addChild(barrierSprite, GC.Barrier_Sprite);
 
         barrierSprite.runAction(
             cc.spawn(new cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
                 new cc.scaleTo(4, 1.5),
                 new cc.CallFunc(function () {
-//                    cc.log("CallFunc");
                     var event = new cc.EventCustom("barrier_crush");
                     cc.eventManager.dispatchEvent(event);
                 })
@@ -433,18 +374,6 @@ var MainLayer = cc.Layer.extend({
             }
         }
     },
-
-    onBugMe:function (node) {
-        node.stopAllActions(); //After this stop next action not working, if remove this stop everything is working
-//        node.runAction(cc.scaleTo(2, 2));
-
-//        node.runAction(cc.rotateBy(1.5, 360));
-        node.runAction(cc.sequence(
-            cc.delayTime(1.4),
-            cc.fadeOut(1.1))
-        );
-    },
-
 
     //刷新倒计时精灵
     updateCounterSprite:function () {

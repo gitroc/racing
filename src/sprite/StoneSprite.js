@@ -13,7 +13,6 @@
 
 var StoneSprite = cc.Sprite.extend({
     stoneFrames:null,
-    sprite:null,
 
     onEnter:function () {
         this._super();
@@ -48,22 +47,22 @@ var StoneSprite = cc.Sprite.extend({
     //埋石头
     buriedStone:function () {
         var value = cc.random0To1();
-        this.sprite = new cc.Sprite(this.getStoneFrame());
+        var sprite = new cc.Sprite(this.getStoneFrame());
 
         var x = 0;
         var y = 0;
         var scale = 0;
         if (value > 0.5) {
-            x = GC.Stone_Show_Right_X - GC.Center_Offset;
+            x = GC.Stone_Show_Right_X + this.getParent().screenOffset;
             y = GC.Stone_Show_Right_Y;
             scale = GC.Stone_Show_Left_scale;
         } else {
-            x = GC.Stone_Show_Left_X - GC.Center_Offset;
+            x = GC.Stone_Show_Left_X + this.getParent().screenOffset;
             y = GC.Stone_Show_Left_Y;
             scale = GC.Stone_Show_Right_scale;
         }
 
-        this.sprite.attr({
+        sprite.attr({
             x:x,
             y:y,
             anchorX: 0.5,
@@ -71,14 +70,14 @@ var StoneSprite = cc.Sprite.extend({
             scale:scale
         });
 
-        this.getParent().addChild(this.sprite);
+        this.getParent().addChild(sprite, GC.Stone_Sprite);
 
         var track = [
             cc.p(x, y),
             this.getStoneGoal(cc.p(x, y)),
         ];
 
-        this.moveSprite(3, track, 2);
+        this.moveSprite(sprite, 3, track, 2);
     },
 
     getStoneGoal:function (Org) {
@@ -98,8 +97,12 @@ var StoneSprite = cc.Sprite.extend({
         return cc.p(goalX, Math.round(goalY));
     },
 
-    moveSprite:function (time, track, scale) {
+    moveSprite:function (sprite, time, track, scale) {
         var action = cc.spawn(new cc.catmullRomTo(time, track), new cc.scaleTo(time, scale));
-        this.sprite.runAction(action);
+        sprite.runAction(action);
     },
+
+    stoneOffset:function () {
+        
+    }
 });

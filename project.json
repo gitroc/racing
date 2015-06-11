@@ -8,7 +8,7 @@
     "renderMode" : 0,
     "engineDir":"frameworks/cocos2d-html5",
 
-    "modules" : ["cocos2d","chipmunk"],
+    "modules" : ["cocos2d"],
 
     "jsList" : [
         "src/resource.js",
@@ -26,11 +26,9 @@
         "src/sprite/CounterSprite.js",
         "src/sprite/BarrierSprite.js",
         "src/sprite/MileageSprite.js",
+        "src/sprite/BgSprite.js",
         "src/sprite/RoadSprite.js",
         "src/sprite/CarSprite.js",
         "src/sprite/StoneSprite.js",
         "src/sprite/TreeSprite.js"
-
-
-    ]
-}
+    ]}

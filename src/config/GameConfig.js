@@ -33,22 +33,25 @@ GC.Stone_Png_Max = 4;
 GC.Angle = 45;
 GC.Screen_Middle = GC.Main_Scene_w / 2;
 
-GC.Center_Offset = 100;
-GC.Right_Offset = 100;
+GC.Screen_Offset = 100;
 
-GC.Standard_scale = 0.4;
-GC.Standard_Y40 = 690;
-GC.Standard_Y100 = 600;
+//背景截图说明
+GC.Bg_Left_X = 0;
+GC.Bg_Left_Y = 0;
 
-GC.Car_Error = 150;
+GC.Bg_Center_X = 100;
+GC.Bg_Center_Y = 0;
+
+GC.Bg_Right_X = 200;
+GC.Bg_Right_Y = 0;
 
 GC.Car_Center_X = 320;
 GC.Car_Center_Y = 175;
 
-GC.Car_Left_X = 100;
+GC.Car_Left_X = 190;
 GC.Car_Left_Y = 175;
 
-GC.Car_Right_X = 500;
+GC.Car_Right_X = 450;
 GC.Car_Right_Y = 175;
 
 GC.Tree_Show_Left_scale = 0.1;

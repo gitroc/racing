@@ -11,10 +11,14 @@
 
  ****************************************************************************/
 var CarSprite = cc.Sprite.extend({
+    carLeft:null,
+    carBack:null,
+    carRight:null,
     touchListener:null,
     onEnter:function () {
         this._super();
 
+        this.initCar();
         this.addListener();
     },
 
@@ -36,7 +40,6 @@ var CarSprite = cc.Sprite.extend({
         key:accelerometer
     *************************************************/
     addListener:function() {
-
         if('touches' in cc.sys.capabilities) { //支持触摸事件
             this.touchListener = cc.eventManager.addListener(
                 cc.EventListener.create({
@@ -47,7 +50,7 @@ var CarSprite = cc.Sprite.extend({
                         }
                         var target = event.getCurrentTarget();
                         target.moveCar(target, touches[0].getLocation());
-                        target.carCrash();
+//                        target.carCrash();
                     }
                 }),
                 this
@@ -58,7 +61,7 @@ var CarSprite = cc.Sprite.extend({
                 onMouseUp: function (event) {
                     var target = event.getCurrentTarget();
                     target.moveCar(target, event.getLocation());
-                    target.carCrash(target);
+//                    target.carCrash(target);
                 }
             }, this);
         }
@@ -68,36 +71,69 @@ var CarSprite = cc.Sprite.extend({
         cc.eventManager.removeListener(this.touchListener);
     },
 
+    initCar:function () {
+        if (this.carLeft == null) {
+            this.carLeft = cc.spriteFrameCache.getSpriteFrame("main_car_left.png");
+        }
+
+        if (this.carBack == null) {
+            this.carBack = cc.spriteFrameCache.getSpriteFrame("main_car_back.png");
+        }
+
+        if (this.carRight == null) {
+            this.carRight = cc.spriteFrameCache.getSpriteFrame("main_car_right.png");
+        }
+    },
+
     //触屏移动汽车精灵
     moveCar:function (target, position) {
         var carGoalX = 0;
+        var carGoalY = target.y;
 
         target.stopAllActions();
+
+        var carPng = null;
 
         var targetX = Math.round(target.x);
         if (position.x < targetX) {// 向左
             if (targetX > GC.Car_Center_X) {
                 carGoalX = GC.Car_Center_X;
+                carPng = this.carBack;
             } else if (targetX > GC.Car_Left_X){
                 carGoalX = GC.Car_Left_X;
+                carPng = this.carLeft;
             } else {
                 carGoalX = GC.Car_Left_X;
+                carPng = this.carLeft;
             }
         } else if (position.x > targetX) {//向右
             if (targetX < GC.Car_Center_X) {
                 carGoalX = GC.Car_Center_X;
+                carPng = this.carBack;
             } else if (targetX < GC.Car_Right_X){
                 carGoalX = GC.Car_Right_X;
+                carPng = this.carRight;
             } else {
                 carGoalX = GC.Car_Right_X;
+                carPng = this.carRight;
             }
         } else {
             carGoalX = targetX;
+            carPng = this.carBack;
         }
 
-        var pos = new cc.p(carGoalX, target.y);
+        var carSprite = new CarSprite(carPng);
 
-        target.runAction(cc.moveTo(1, pos));
+        carSprite.attr({
+            x: carGoalX,
+            y: carGoalY,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+
+        this.getParent().addChild(carSprite, GC.Car_Sprite);
+
+        target.removeFromParent();
     },
 
     carCrash:function(target) {
