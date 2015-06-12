@@ -13,6 +13,7 @@
 var LeftBg = -1;
 var MidBg = 0;
 var RightBg = 1;
+var centerX = 320;
 
 var BgSprite = cc.Sprite.extend({
     touchListener:null,
@@ -64,47 +65,33 @@ var BgSprite = cc.Sprite.extend({
         var positionX = Math.round(position.x);
         var targetX = Math.round(target.x);
 
-        if (positionX > targetX - 215 && positionX < targetX + 215) {
+//        cc.log("targetX:"+targetX+"|positionX:"+positionX);
+
+        //targetX =320/190/540
+        if(positionX>centerX - 120&&positionX<centerX+120){//避开车的范围
             return;
         }
-
-        if (positionX < targetX) { //向左移动
-            if (this.getParent().currentBg == RightBg) { //在最右边
-                //背景替换为中间
+        if(centerX == 450){//车在最右边
+            if(positionX<centerX){//向左移动
                 bgX = GC.Bg_Center_X;
                 bgY = GC.Bg_Center_Y;
-
-                this.getParent().currentBg = MidBg;
-            } else if (this.getParent().currentBg == MidBg){ //在中间
-                //背景替换为左半边
-                bgX = GC.Bg_Left_X;
-                bgY = GC.Bg_Left_Y;
-
-                this.getParent().currentBg = LeftBg;
-            } else {
-                //背景替换为左半边
-                bgX = GC.Bg_Left_X;
-                bgY = GC.Bg_Left_Y;
-
-                this.getParent().currentBg = LeftBg;
+                centerX =320;
             }
-        } else if (positionX > targetX) { //向右移动
-            if (this.getParent().currentBg == LeftBg) { //在最左边
-                //背景替换为中间
+        }else if(centerX == 320){//车在中间
+            if(positionX<320){//向左移动
+                bgX = GC.Bg_Left_X;
+                bgY = GC.Bg_Left_Y;
+                centerX = 190;
+            }else{//向右移动
+                centerX = 450;
+                bgX = GC.Bg_Right_X;
+                bgY = GC.Bg_Right_Y;
+            }
+        }else if(centerX ==190){//车在最左边
+            if(positionX>190){//向右移动
                 bgX = GC.Bg_Center_X;
                 bgY = GC.Bg_Center_Y;
-
-                this.getParent().currentBg = MidBg;
-            } else if (this.getParent().currentBg == MidBg){ //在中间
-                //背景替换为右半边
-                bgX = GC.Bg_Right_X;
-                bgY = GC.Bg_Right_Y;
-                this.getParent().currentBg = RightBg;
-            } else {
-                //背景替换为右半边
-                bgX = GC.Bg_Right_X;
-                bgY = GC.Bg_Right_Y;
-                this.getParent().currentBg = RightBg;
+                centerX = 320;
             }
         }
 

@@ -97,8 +97,9 @@ var CarSprite = cc.Sprite.extend({
         var positionX = Math.round(position.x);
         var targetX = Math.round(target.x);
         var carWidth = Math.round(target.width);
+//        cc.log("Car--targetX:"+targetX+"|targetY:"+targetY+"|positionX:"+positionX+"|carWidth:"+carWidth);
 
-        if (positionX >= (targetX - 215) && positionX < targetX + 215) {
+        if (positionX >= (targetX - 120) && positionX < targetX + 120) {
             return;
         }
 
@@ -106,9 +107,9 @@ var CarSprite = cc.Sprite.extend({
             if (targetX > GC.Car_Center_X) {
                 carGoalX = GC.Car_Center_X;
                 carPng = this.carBack;
-            } else if (targetX > GC.Car_Left_X){
-                carGoalX = GC.Car_Left_X;
-                carPng = this.carLeft;
+//            } else if (targetX > GC.Car_Left_X){
+//                carGoalX = GC.Car_Left_X;
+//                carPng = this.carLeft;
             } else {
                 carGoalX = GC.Car_Left_X;
                 carPng = this.carLeft;
@@ -117,9 +118,9 @@ var CarSprite = cc.Sprite.extend({
             if (targetX < GC.Car_Center_X) {
                 carGoalX = GC.Car_Center_X;
                 carPng = this.carBack;
-            } else if (targetX < GC.Car_Right_X){
-                carGoalX = GC.Car_Right_X;
-                carPng = this.carRight;
+//            } else if (targetX < GC.Car_Right_X){
+//                carGoalX = GC.Car_Right_X;
+//                carPng = this.carRight;
             } else {
                 carGoalX = GC.Car_Right_X;
                 carPng = this.carRight;
