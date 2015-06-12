@@ -61,8 +61,8 @@ var MainLayer = cc.Layer.extend({
     addSprite:function () {
         this.addBackGround();
 //        this.addRoad();
-//        this.addStone();
-        this.addTree();
+        this.addStone();
+//        this.addTree();
         this.addCar();
 //
         this.addCounterSprite();
@@ -142,10 +142,13 @@ var MainLayer = cc.Layer.extend({
         for (var i = 0; i < this.treeOrg.length; i++) {
             var str = "main_bg_object_tree" + (i + 1) + ".png";
             var sprite = cc.spriteFrameCache.getSpriteFrame(str);
-            var tree = new TreeSprite(sprite);
+            var tree = new cc.Sprite(sprite);
 
             this.addTreeSprite(tree, i);
         }
+
+        var treeAnimation = new TreeSprite();
+        this.addChild(treeAnimation, GC.Tree_Sprite);
     },
 
     addTreeSprite:function (tree, index) {
@@ -164,13 +167,13 @@ var MainLayer = cc.Layer.extend({
 
         var track = [
             cc.p(x, y),
-            this.getTreeGoal(cc.p(x, y)),
+            this.getSpriteGoal(cc.p(x, y)),
         ];
 
-        this.moveTree(tree, 3, track, 2);
+        this.moveSprite(tree, 6, track, 2);
     },
 
-    getTreeGoal:function (Org) {
+    getSpriteGoal:function (Org) {
         var radian = GC.Angle / 180 * Math.PI;
 
         var goalX = 0;
@@ -187,11 +190,18 @@ var MainLayer = cc.Layer.extend({
         return cc.p(goalX, Math.round(goalY));
     },
 
-    moveTree:function (sprite, time, track, scale) {
-        var action = cc.spawn(cc.catmullRomTo(time, track),
-                        cc.scaleTo(time, scale)
-                     );
-        sprite.runAction(action);
+    moveSprite:function (sprite, time, track, scale) {
+        var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
+
+        var seq = cc.sequence(
+            spawn,
+            cc.fadeOut(0.5),
+            cc.callFunc(function () {
+                sprite.removeFromParent();
+            })
+        );
+
+        sprite.runAction(seq);
     },
 
     addMountain:function () {
@@ -217,10 +227,13 @@ var MainLayer = cc.Layer.extend({
         for (var i = 0; i < this.stoneOrg.length; i++) {
             var str = "main_bg_object_stone" + (i + 1) + ".png";
             var sprite = cc.spriteFrameCache.getSpriteFrame(str);
-            var stone = new StoneSprite(sprite);
+            var stone = new cc.Sprite(sprite);
 
             this.addStoneSprite(stone, i);
         }
+
+        var stoneAnimation = new StoneSprite();
+        this.addChild(stoneAnimation, GC.Stone_Sprite);
     },
 
     addStoneSprite:function (stone, index) {
@@ -239,34 +252,10 @@ var MainLayer = cc.Layer.extend({
 
         var track = [
             cc.p(x, y),
-            this.getStoneGoal(cc.p(x, y)),
+            this.getSpriteGoal(cc.p(x, y)),
         ];
 
-        this.moveStone(stone, 3, track, 2);
-    },
-
-    moveStone:function (sprite, time, track, scale) {
-        var action = cc.spawn(cc.catmullRomTo(time, track),
-                        cc.scaleTo(time, scale)
-                     );
-        sprite.runAction(action);
-    },
-
-    getStoneGoal:function (Org) {
-        var radian = GC.Angle / 180 * Math.PI;
-
-        var goalX = 0;
-        var goalY = 0;
-
-        if (Org.x > GC.Screen_Middle) {
-            goalX = GC.Main_Scene_w + 420;
-            goalY = Org.y - (GC.Main_Scene_w - Org.x) * Math.tan(radian)
-        } else {
-            goalX = -420;
-            goalY = Org.y - Math.tan(radian) * Org.x;
-        }
-
-        return cc.p(goalX, Math.round(goalY));
+        this.moveSprite(stone, 3, track, 2);
     },
 
     updateSprite:function () {
