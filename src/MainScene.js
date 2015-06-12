@@ -12,13 +12,12 @@
  ****************************************************************************/
 var MainLayer = cc.Layer.extend({
 
-    screenOffset:0,
-
     //路精灵
     currentRoad:null,
     roadSprite:null,
 
     //树精灵
+    currentTree:null,
     treeScale:null,
     treeOrg:null,
     treeGoal:null,
@@ -61,8 +60,8 @@ var MainLayer = cc.Layer.extend({
     //初始化游戏场景
     addSprite:function () {
         this.addBackGround();
-        this.addRoad();
-        this.addStone();
+//        this.addRoad();
+//        this.addStone();
         this.addTree();
         this.addCar();
 //
@@ -74,7 +73,6 @@ var MainLayer = cc.Layer.extend({
     //添加背景图片
     addBackGround:function () {
         var size = cc.winSize;
-        this.screenOffset = -GC.Screen_Offset;
         this.currentBg = 0;
         this.bgSprite = new BgSprite(res.BackGround_png, cc.rect(GC.Bg_Center_X, GC.Bg_Center_Y, GC.w, GC.h));
         this.bgSprite.attr({
@@ -124,7 +122,7 @@ var MainLayer = cc.Layer.extend({
 
     addTree:function () {
         cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
-
+        this.currentTree = 0;
         this.treeOrg = [
             cc.p(GC.Tree_01_X, GC.Tree_01_Y),
             cc.p(GC.Tree_02_X, GC.Tree_02_Y),
@@ -151,7 +149,7 @@ var MainLayer = cc.Layer.extend({
     },
 
     addTreeSprite:function (tree, index) {
-        var x = this.treeOrg[index].x - GC.Center_Offset;
+        var x = this.treeOrg[index].x;
         var y = this.treeOrg[index].y;
 
         tree.attr({
@@ -226,7 +224,7 @@ var MainLayer = cc.Layer.extend({
     },
 
     addStoneSprite:function (stone, index) {
-        var x = this.stoneOrg[index].x - GC.Center_Offset;
+        var x = this.stoneOrg[index].x;
         var y = this.stoneOrg[index].y;
 
         stone.attr({

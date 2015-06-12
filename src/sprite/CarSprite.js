@@ -94,8 +94,15 @@ var CarSprite = cc.Sprite.extend({
 
         var carPng = null;
 
+        var positionX = Math.round(position.x);
         var targetX = Math.round(target.x);
-        if (position.x < targetX) {// 向左
+        var carWidth = Math.round(target.width);
+
+        if (positionX >= (targetX - 215) && positionX < targetX + 215) {
+            return;
+        }
+
+        if (positionX < targetX) {// 向左
             if (targetX > GC.Car_Center_X) {
                 carGoalX = GC.Car_Center_X;
                 carPng = this.carBack;
@@ -106,7 +113,7 @@ var CarSprite = cc.Sprite.extend({
                 carGoalX = GC.Car_Left_X;
                 carPng = this.carLeft;
             }
-        } else if (position.x > targetX) {//向右
+        } else if (positionX > targetX) {//向右
             if (targetX < GC.Car_Center_X) {
                 carGoalX = GC.Car_Center_X;
                 carPng = this.carBack;

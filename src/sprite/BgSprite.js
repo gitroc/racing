@@ -61,9 +61,14 @@ var BgSprite = cc.Sprite.extend({
         var bgX = 0;
         var bgY = 0;
         target.stopAllActions();
+        var positionX = Math.round(position.x);
         var targetX = Math.round(target.x);
 
-        if (position.x < targetX) { //向左移动
+        if (positionX > targetX - 215 && positionX < targetX + 215) {
+            return;
+        }
+
+        if (positionX < targetX) { //向左移动
             if (this.getParent().currentBg == RightBg) { //在最右边
                 //背景替换为中间
                 bgX = GC.Bg_Center_X;
@@ -83,7 +88,7 @@ var BgSprite = cc.Sprite.extend({
 
                 this.getParent().currentBg = LeftBg;
             }
-        } else if (position.x > targetX) { //向右移动
+        } else if (positionX > targetX) { //向右移动
             if (this.getParent().currentBg == LeftBg) { //在最左边
                 //背景替换为中间
                 bgX = GC.Bg_Center_X;

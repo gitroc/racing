@@ -94,9 +94,14 @@
     moveRoad:function (target, position) {
         target.stopAllActions();
 
+        var positionX = Math.round(position.x);
         var targetX = Math.round(target.x);
 
-        if (position.x < targetX) { //向左移动
+        if (positionX > targetX - 215 && positionX < targetX + 215) {
+            return;
+        }
+
+        if (positionX < targetX) { //向左移动
             if (this.getParent().currentRoad == RightBg) { //在最右边
                 this.getParent().currentRoad = MidBg;
             } else if (this.getParent().currentRoad == MidBg){ //在中间
@@ -104,7 +109,7 @@
             } else {
                 this.getParent().currentRoad = LeftBg;
             }
-        } else if (position.x > targetX) { //向右移动
+        } else if (positionX > targetX) { //向右移动
             if (this.getParent().currentRoad == LeftBg) { //在最左边
                 this.getParent().currentRoad = MidBg;
             } else if (this.getParent().currentRoad == MidBg){ //在中间
@@ -113,8 +118,6 @@
                 this.getParent().currentRoad = RightBg;
             }
         }
-
-        this.roadAnimation = this.initAnimation();
 
         var road = new RoadSprite();
 

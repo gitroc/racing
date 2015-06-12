@@ -56,29 +56,29 @@ GC.Car_Right_Y = 175;
 
 GC.Tree_Show_Left_scale = 0.1;
 GC.Tree_Show_Right_scale = 0.2;
-GC.Tree_Show_Left_X = 250;
+GC.Tree_Show_Left_X = 150;
 GC.Tree_Show_Left_Y = 700;
-GC.Tree_Show_Right_X = 570;
+GC.Tree_Show_Right_X = 470;
 GC.Tree_Show_Right_Y = 700;
 
 GC.Tree_01_Scale = 0.2;
-GC.Tree_01_X = 260;
+GC.Tree_01_X = 160;
 GC.Tree_01_Y = 700;
 
 GC.Tree_02_Scale = 0.8;
-GC.Tree_02_X = 125;
+GC.Tree_02_X = 25;
 GC.Tree_02_Y = 625;
 
 GC.Tree_03_Scale = 0.3;
-GC.Tree_03_X = 560;
+GC.Tree_03_X = 460;
 GC.Tree_03_Y = 700;
 
 GC.Tree_04_Scale = 0.6;
-GC.Tree_04_X = 650;
+GC.Tree_04_X = 550;
 GC.Tree_04_Y = 710;
 
 GC.Tree_05_Scale = 0.5;
-GC.Tree_05_X = 700;
+GC.Tree_05_X = 600;
 GC.Tree_05_Y = 580;
 
 GC.Stone_Show_Left_scale = 0.1;

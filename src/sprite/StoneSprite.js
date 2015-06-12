@@ -103,6 +103,6 @@ var StoneSprite = cc.Sprite.extend({
     },
 
     stoneOffset:function () {
-        
+
     }
 });
