@@ -28,7 +28,6 @@ var MainLayer = cc.Layer.extend({
     stoneGoal:null,
 
     //背景精灵
-    currentBg:0,
     bgSprite:null,
     prospect:null,
 
@@ -62,7 +61,7 @@ var MainLayer = cc.Layer.extend({
         this.addBackGround();
 //        this.addRoad();
 //        this.addStone();
-        this.addTree();
+//        this.addTree();
         this.addCar();
 //
         this.addCounterSprite();
@@ -73,7 +72,6 @@ var MainLayer = cc.Layer.extend({
     //添加背景图片
     addBackGround:function () {
         var size = cc.winSize;
-        this.currentBg = 0;
         this.bgSprite = new BgSprite(res.BackGround_png, cc.rect(GC.Bg_Center_X, GC.Bg_Center_Y, GC.w, GC.h));
         this.bgSprite.attr({
             x: GC.w_2,
