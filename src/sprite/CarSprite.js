@@ -10,15 +10,12 @@
  Date: 2015-05-27
 
  ****************************************************************************/
+var currentCar = GC.Car_Center_X;
 var CarSprite = cc.Sprite.extend({
-    carLeft:null,
-    carBack:null,
-    carRight:null,
     touchListener:null,
     onEnter:function () {
         this._super();
 
-        this.initCar();
         this.addListener();
     },
 
@@ -71,70 +68,41 @@ var CarSprite = cc.Sprite.extend({
         cc.eventManager.removeListener(this.touchListener);
     },
 
-    initCar:function () {
-        if (this.carLeft == null) {
-            this.carLeft = cc.spriteFrameCache.getSpriteFrame("main_car_left.png");
-        }
-
-        if (this.carBack == null) {
-            this.carBack = cc.spriteFrameCache.getSpriteFrame("main_car_back.png");
-        }
-
-        if (this.carRight == null) {
-            this.carRight = cc.spriteFrameCache.getSpriteFrame("main_car_right.png");
-        }
-    },
-
     //触屏移动汽车精灵
     moveCar:function (target, position) {
-        var carGoalX = 0;
-        var carGoalY = target.y;
+        var currentX = 0;
+        var currentY = target.y;
 
         target.stopAllActions();
 
-        var carPng = null;
-
         var positionX = Math.round(position.x);
         var targetX = Math.round(target.x);
-        var carWidth = Math.round(target.width);
-//        cc.log("Car--targetX:"+targetX+"|targetY:"+targetY+"|positionX:"+positionX+"|carWidth:"+carWidth);
 
-        if (positionX >= (targetX - 120) && positionX < targetX + 120) {
+        if (positionX >= (targetX - GC.Car_Range) && positionX < targetX + GC.Car_Range) { //避开汽车范围
             return;
         }
 
         if (positionX < targetX) {// 向左
             if (targetX > GC.Car_Center_X) {
-                carGoalX = GC.Car_Center_X;
-                carPng = this.carBack;
-//            } else if (targetX > GC.Car_Left_X){
-//                carGoalX = GC.Car_Left_X;
-//                carPng = this.carLeft;
+                currentX = GC.Car_Center_X;
             } else {
-                carGoalX = GC.Car_Left_X;
-                carPng = this.carLeft;
+                currentX = GC.Car_Left_X;
             }
         } else if (positionX > targetX) {//向右
             if (targetX < GC.Car_Center_X) {
-                carGoalX = GC.Car_Center_X;
-                carPng = this.carBack;
-//            } else if (targetX < GC.Car_Right_X){
-//                carGoalX = GC.Car_Right_X;
-//                carPng = this.carRight;
+                currentX = GC.Car_Center_X;
             } else {
-                carGoalX = GC.Car_Right_X;
-                carPng = this.carRight;
+                currentX = GC.Car_Right_X;
             }
         } else {
-            carGoalX = targetX;
-            carPng = this.carBack;
+            currentX = targetX;
         }
 
-        var carSprite = new CarSprite(carPng);
+        var carSprite = new CarSprite(this.getParent().getCarSprite(currentX));
 
         carSprite.attr({
-            x: carGoalX,
-            y: carGoalY,
+            x: currentX,
+            y: currentY,
             anchorX: 0.5,
             anchorY: 0.5
         });

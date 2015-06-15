@@ -13,7 +13,6 @@
 var MainLayer = cc.Layer.extend({
 
     //路精灵
-    currentRoad:null,
     roadSprite:null,
 
     //树精灵
@@ -28,7 +27,6 @@ var MainLayer = cc.Layer.extend({
     stoneGoal:null,
 
     //背景精灵
-    currentBg:0,
     bgSprite:null,
     prospect:null,
 
@@ -60,7 +58,7 @@ var MainLayer = cc.Layer.extend({
     //初始化游戏场景
     addSprite:function () {
         this.addBackGround();
-//        this.addRoad();
+        this.addRoad();
         this.addStone();
 //        this.addTree();
         this.addCar();
@@ -93,7 +91,7 @@ var MainLayer = cc.Layer.extend({
     addCar:function () {
         cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
 
-        this.carSprite = new CarSprite(res.Car_png);
+        this.carSprite = new CarSprite(this.getCarSprite(GC.Car_Center_X));
 
         this.carSprite.attr({
             x: GC.Car_Center_X,
@@ -106,9 +104,18 @@ var MainLayer = cc.Layer.extend({
 
     },
 
+    getCarSprite:function (currentX) {
+        if (currentX == GC.Car_Left_X) {
+            return cc.spriteFrameCache.getSpriteFrame("main_car_left.png")
+        } else if (currentX == GC.Car_Right_X) {
+            return cc.spriteFrameCache.getSpriteFrame("main_car_right.png");
+        } else {
+            return cc.spriteFrameCache.getSpriteFrame("main_car_back.png");
+        }
+    },
+
     addRoad:function () {
         cc.spriteFrameCache.addSpriteFrames(res.Road_plist);
-        this.currentRoad = 0;
         this.roadSprite = new RoadSprite();
         this.roadSprite.attr({
             x: GC.w_2,

@@ -10,10 +10,7 @@
  Date: 2015-06-05
 
  ****************************************************************************/
- var LeftBg = -1;
- var MidBg = 0;
- var RightBg = 1;
-
+ var currentRoad = GC.Car_Center_X;
  var RoadSprite = cc.Sprite.extend({
     touchListener:null,
     roadAnimation:null,
@@ -66,11 +63,11 @@
 
     getRoadStr:function (index) {
         var str = "main_road_mid";
-        if (this.getParent().currentRoad == MidBg) { // 中间
+        if (currentRoad == GC.Car_Center_X) { // 中间
             str = "main_road_mid";
-        } else if (this.getParent().currentRoad == LeftBg){ // 左边
+        } else if (currentRoad == GC.Car_Left_X){ // 左边
             str = "main_road_left";
-        } else if (this.getParent().currentRoad == RightBg) { //右边
+        } else if (currentRoad == GC.Car_Right_X) { //右边
             str = "main_road_right";
         }
 
@@ -97,25 +94,27 @@
         var positionX = Math.round(position.x);
         var targetX = Math.round(target.x);
 
-        if (positionX > targetX - 215 && positionX < targetX + 215) {
+        if (positionX > currentRoad - GC.Car_Range && positionX < currentRoad + GC.Car_Range) { //避开汽车范围
             return;
         }
 
-        if (positionX < targetX) { //向左移动
-            if (this.getParent().currentRoad == RightBg) { //在最右边
-                this.getParent().currentRoad = MidBg;
-            } else if (this.getParent().currentRoad == MidBg){ //在中间
-                this.getParent().currentRoad = LeftBg;
+        if (currentRoad == GC.Car_Right_X) { //车在最右边
+            if (positionX < currentRoad) {
+                currentRoad = GC.Car_Center_X; //路向左移动
             } else {
-                this.getParent().currentRoad = LeftBg;
+                return; //路不动
             }
-        } else if (positionX > targetX) { //向右移动
-            if (this.getParent().currentRoad == LeftBg) { //在最左边
-                this.getParent().currentRoad = MidBg;
-            } else if (this.getParent().currentRoad == MidBg){ //在中间
-                this.getParent().currentRoad = RightBg;
+        } else if (currentRoad == GC.Car_Center_X) { //车在中间
+            if (positionX < currentRoad) {
+                currentRoad = GC.Car_Left_X; //路向左移动
             } else {
-                this.getParent().currentRoad = RightBg;
+                currentRoad = GC.Car_Right_X;  //路向右移动
+            }
+        } else if (currentRoad == GC.Car_Left_X) { //车在最左边
+            if (positionX > currentRoad) {
+                currentRoad = GC.Car_Center_X; //路向右移动
+            } else {
+                return;   //路不动
             }
         }
 

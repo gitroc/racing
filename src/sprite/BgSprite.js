@@ -10,11 +10,7 @@
  Date: 2015-06-10
 
  ****************************************************************************/
-var LeftBg = -1;
-var MidBg = 0;
-var RightBg = 1;
-var centerX = 320;
-
+var currentBg = GC.Car_Center_X;
 var BgSprite = cc.Sprite.extend({
     touchListener:null,
     onEnter:function () {
@@ -65,33 +61,35 @@ var BgSprite = cc.Sprite.extend({
         var positionX = Math.round(position.x);
         var targetX = Math.round(target.x);
 
-//        cc.log("targetX:"+targetX+"|positionX:"+positionX);
-
-        //targetX =320/190/540
-        if(positionX>centerX - 120&&positionX<centerX+120){//避开车的范围
+        if (positionX > currentBg - GC.Car_Range && positionX < currentBg + GC.Car_Range) { //避开汽车范围
             return;
         }
-        if(centerX == 450){//车在最右边
-            if(positionX<centerX){//向左移动
+
+        if(currentBg == GC.Car_Right_X){ //车在最右边
+            if(positionX < currentBg){
                 bgX = GC.Bg_Center_X;
                 bgY = GC.Bg_Center_Y;
-                centerX =320;
+                currentBg = GC.Car_Center_X; //向左移动
+            } else {
+                return; //背景不动
             }
-        }else if(centerX == 320){//车在中间
-            if(positionX<320){//向左移动
+        }else if(currentBg == GC.Car_Center_X){ //车在中间
+            if(positionX < GC.Car_Center_X){
                 bgX = GC.Bg_Left_X;
                 bgY = GC.Bg_Left_Y;
-                centerX = 190;
-            }else{//向右移动
-                centerX = 450;
+                currentBg = GC.Car_Left_X; //向左移动
+            } else {
                 bgX = GC.Bg_Right_X;
                 bgY = GC.Bg_Right_Y;
+                currentBg = GC.Car_Right_X; //向右移动
             }
-        }else if(centerX ==190){//车在最左边
-            if(positionX>190){//向右移动
+        }else if(currentBg == GC.Car_Left_X){ //车在最左边
+            if(positionX > currentBg){
                 bgX = GC.Bg_Center_X;
                 bgY = GC.Bg_Center_Y;
-                centerX = 320;
+                currentBg = GC.Car_Center_X;//向右移动
+            } else {
+                return; //背景不动
             }
         }
 
