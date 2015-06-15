@@ -106,11 +106,11 @@ GC.Tree_05_X = 600;
 GC.Tree_05_Y = 580;
 
 //随机出现左边石头位置
-GC.Stone_Show_Left_X = 290;
+GC.Stone_Show_Left_X = 190;
 GC.Stone_Show_Left_Y = 685;
 
 //随机出现右边石头位置
-GC.Stone_Show_Right_X = 560;
+GC.Stone_Show_Right_X = 460;
 GC.Stone_Show_Right_Y = 680;
 
 //随机出现左右边石头初始化缩放大小
@@ -119,22 +119,22 @@ GC.Stone_Show_Right_scale = 0.2;
 
 //第一棵石头初始化缩放大小及位置
 GC.Stone_01_Scale = 0.5;
-GC.Stone_01_X = 290;
+GC.Stone_01_X = 190;
 GC.Stone_01_Y = 685;
 
 //第二棵石头初始化缩放大小及位置
 GC.Stone_02_Scale = 1;
-GC.Stone_02_X = 215;
+GC.Stone_02_X = 115;
 GC.Stone_02_Y = 655;
 
 //第三棵石头初始化缩放大小及位置
 GC.Stone_03_Scale = 1;
-GC.Stone_03_X = 105;
+GC.Stone_03_X = 5;
 GC.Stone_03_Y = 485;
 
 //第四棵石头初始化缩放大小及位置
 GC.Stone_04_Scale = 1;
-GC.Stone_04_X = 650;
+GC.Stone_04_X = 550;
 GC.Stone_04_Y = 630;
 
 

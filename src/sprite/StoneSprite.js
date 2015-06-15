@@ -10,23 +10,56 @@
  Date: 2015-06-08
 
 ****************************************************************************/
-
 var StoneSprite = cc.Sprite.extend({
     stoneFrames:null,
-
+    touchListener:null,
     onEnter:function () {
         this._super();
         this.initSprites();
-        this.schedule(this.buriedStone, 1, 16*1024, 0);
+        this.addListener();
+        this.schedule(this.buriedStone, 1, cc.REPEAT_FOREVER, 0);
     },
 
     onExit:function () {
+        this.removeListener();
+        this.unschedule(this.buriedStone);
         this._super();
+    },
+
+    addListener:function() {
+        if('touches' in cc.sys.capabilities) { //支持触摸事件
+            this.touchListener = cc.eventManager.addListener(
+                cc.EventListener.create({
+                    event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+                    onTouchesEnded:function (touches, event) {
+                        if (touches.length <= 0) {
+                            return;
+                        }
+                        var target = event.getCurrentTarget();
+                        target.updateOffset(target, touches[0].getLocation());
+                    }
+                }),
+                this
+            );
+        } else if ('mouse' in cc.sys.capabilities) { //支持鼠标事件
+            this.touchListener = cc.eventManager.addListener({
+                event: cc.EventListener.MOUSE,
+                onMouseUp: function (event) {
+                    var target = event.getCurrentTarget();
+                    target.updateOffset(target, event.getLocation());
+                }
+            }, this);
+        }
+    },
+
+    removeListener:function() {
+        cc.eventManager.removeListener(this.touchListener);
     },
 
     //初始化精灵图片
     initSprites:function () {
         this.stoneFrames = [];
+
         for (var i = 0; i < GC.Stone_Png_Max; i++) {
             var str = "main_bg_object_stone" + (i + 1) + ".png";
             var frame = cc.spriteFrameCache.getSpriteFrame(str);
@@ -44,65 +77,83 @@ var StoneSprite = cc.Sprite.extend({
         }
     },
 
-    //埋石头
-    buriedStone:function () {
+    getStoneOrg:function () {
         var value = cc.random0To1();
-        var sprite = new cc.Sprite(this.getStoneFrame());
 
         var x = 0;
         var y = 0;
-        var scale = 0;
+
         if (value > 0.5) {
-            x = GC.Stone_Show_Right_X + this.getParent().screenOffset;
+            x = GC.Stone_Show_Right_X + this.getParent().currentStoneOffset;
             y = GC.Stone_Show_Right_Y;
+        } else {
+            x = GC.Stone_Show_Left_X + this.getParent().currentStoneOffset;
+            y = GC.Stone_Show_Left_Y;
+        }
+
+        return cc.p(x, y);
+    },
+
+    getStoneScale:function () {
+        var value = cc.random0To1();
+        var scale = 0;
+        if (value < 0.5) {
             scale = GC.Stone_Show_Left_scale;
         } else {
-            x = GC.Stone_Show_Left_X + this.getParent().screenOffset;
-            y = GC.Stone_Show_Left_Y;
             scale = GC.Stone_Show_Right_scale;
         }
 
+        return scale;
+    },
+
+    //埋石头
+    buriedStone:function () {
+        var sprite = new cc.Sprite(this.getStoneFrame());
+        var x = this.getStoneOrg().x;
+        var y = this.getStoneOrg().y;
         sprite.attr({
             x:x,
             y:y,
             anchorX: 0.5,
             anchorY: 0.5,
-            scale:scale
+            scale:this.getStoneScale()
         });
 
         this.getParent().addChild(sprite, GC.Stone_Sprite);
 
         var track = [
             cc.p(x, y),
-            this.getStoneGoal(cc.p(x, y)),
+            this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentStoneOffset),
         ];
 
-        this.moveSprite(sprite, 3, track, 2);
+        this.getParent().moveSprite(sprite, 2, track, 2);
     },
 
-    getStoneGoal:function (Org) {
-        var radian = GC.Angle / 180 * Math.PI;
+    updateOffset:function (target, position) {
+        target.stopAllActions();
+        target.unschedule(target.buriedStone);
 
-        var goalX = 0;
-        var goalY = 0;
+        var positionX = Math.round(position.x);
 
-        if (Org.x > GC.Screen_Middle) {
-            goalX = GC.Main_Scene_w + 80;
-            goalY = Org.y - (GC.Main_Scene_w - Org.x) * Math.tan(radian)
-        } else {
-            goalX = -80;
-            goalY = Org.y - Math.tan(radian) * Org.x;
+        if (this.getParent().currentStoneOffset == 0) { //在中间
+            if (positionX < GC.Car_Center_X) {
+                this.getParent().currentStoneOffset = 100;// 向左移动
+            } else {
+                this.getParent().currentStoneOffset = -100;// 向右移动
+            }
+        } else if (this.getParent().currentStoneOffset == 100) {
+            if (positionX > GC.Car_Left_X) {
+                this.getParent().currentStoneOffset = 0
+            }
+        } else if (this.getParent().currentStoneOffset == -100) {
+            if (positionX < GC.Car_Right_X) {
+                this.getParent().currentStoneOffset = 0
+            }
         }
 
-        return cc.p(goalX, Math.round(goalY));
-    },
+        var stone = new StoneSprite();
+        this.getParent().addChild(stone, GC.Stone_Sprite);
 
-    moveSprite:function (sprite, time, track, scale) {
-        var action = cc.spawn(new cc.catmullRomTo(time, track), new cc.scaleTo(time, scale));
-        sprite.runAction(action);
-    },
-
-    stoneOffset:function () {
-
+        target.removeFromParent();
     }
 });

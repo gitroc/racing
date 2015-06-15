@@ -11,6 +11,9 @@
 
  ****************************************************************************/
 var MainLayer = cc.Layer.extend({
+    //偏移
+    currentTreeOffset:null,
+    currentStoneOffset:null,
 
     //路精灵
     roadSprite:null,
@@ -60,12 +63,12 @@ var MainLayer = cc.Layer.extend({
         this.addBackGround();
         this.addRoad();
         this.addStone();
-//        this.addTree();
+        this.addTree();
         this.addCar();
-//
-        this.addCounterSprite();
-        this.addMileageSprite();
-        this.addBarrierSprite();
+
+//        this.addCounterSprite();
+//        this.addMileageSprite();
+//        this.addBarrierSprite();
     },
 
     //添加背景图片
@@ -101,7 +104,6 @@ var MainLayer = cc.Layer.extend({
         });
 
         this.addChild(this.carSprite, GC.Car_Sprite);
-
     },
 
     getCarSprite:function (currentX) {
@@ -153,6 +155,7 @@ var MainLayer = cc.Layer.extend({
             this.addTreeSprite(tree, i);
         }
 
+        this.currentTreeOffset = 0;
         var treeAnimation = new TreeSprite();
         this.addChild(treeAnimation, GC.Tree_Sprite);
     },
@@ -173,23 +176,23 @@ var MainLayer = cc.Layer.extend({
 
         var track = [
             cc.p(x, y),
-            this.getSpriteGoal(cc.p(x, y)),
+            this.getSpriteGoal(cc.p(x, y), this.currentTreeOffset),
         ];
 
-        this.moveSprite(tree, 6, track, 2);
+        this.moveSprite(tree, 2, track, 2);
     },
 
-    getSpriteGoal:function (Org) {
+    getSpriteGoal:function (Org, currentOffset) {
         var radian = GC.Angle / 180 * Math.PI;
 
         var goalX = 0;
         var goalY = 0;
 
-        if (Org.x > GC.Screen_Middle) {
-            goalX = GC.Main_Scene_w + 420;
-            goalY = Org.y - (GC.Main_Scene_w - Org.x) * Math.tan(radian)
+        if (Org.x > GC.w_2) {
+            goalX = GC.w * 2 + currentOffset;
+            goalY = Org.y - (GC.w - Org.x) * Math.tan(radian)
         } else {
-            goalX = -420;
+            goalX = -GC.w * 2 + currentOffset;
             goalY = Org.y - Math.tan(radian) * Org.x;
         }
 
@@ -238,6 +241,7 @@ var MainLayer = cc.Layer.extend({
             this.addStoneSprite(stone, i);
         }
 
+        this.currentStoneOffset = 0;
         var stoneAnimation = new StoneSprite();
         this.addChild(stoneAnimation, GC.Stone_Sprite);
     },
@@ -258,10 +262,10 @@ var MainLayer = cc.Layer.extend({
 
         var track = [
             cc.p(x, y),
-            this.getSpriteGoal(cc.p(x, y)),
+            this.getSpriteGoal(cc.p(x, y), this.currentStoneOffset),
         ];
 
-        this.moveSprite(stone, 3, track, 2);
+        this.moveSprite(stone, 2, track, 2);
     },
 
     updateSprite:function () {

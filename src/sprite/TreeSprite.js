@@ -10,22 +10,15 @@
  Date: 2015-06-08
 
 ****************************************************************************/
-var LeftBg = -1;
-var MidBg = 0;
-var RightBg = 1;
-
 var TreeSprite = cc.Sprite.extend({
     treeOffset:null,
     treeSprites:null,
     touchListener:null,
     onEnter:function () {
         this._super();
-
         this.initSprites();
-
         this.addListener();
-
-        this.schedule(this.plantTree, 1, 16*1024, 0);
+        this.schedule(this.plantTree, 1, cc.REPEAT_FOREVER, 0);
     },
 
     onExit:function () {
@@ -64,45 +57,9 @@ var TreeSprite = cc.Sprite.extend({
         cc.eventManager.removeListener(this.touchListener);
     },
 
-    updateOffset:function (target, position) {
-        var positionX = Math.round(position.x);
-        var targetX = Math.round(target.x);
-
-        target.stopAllActions();
-        target.unschedule(target.plantTree);
-        if (positionX > targetX - 215 && positionX < targetX + 215) {
-            return;
-        }
-
-        if (positionX < GC.h_2) { //向左移动
-            if (this.getParent().currentTree == RightBg) { //在最右边
-                this.getParent().currentTree = MidBg;
-            } else if (this.getParent().currentTree == MidBg){ //在中间
-                this.getParent().currentTree = LeftBg;
-            } else {
-                this.getParent().currentTree = LeftBg;
-            }
-        } else if (positionX > GC.h_2) { //向右移动
-            if (this.getParent().currentTree == LeftBg) { //在最左边
-                this.getParent().currentTree = MidBg;
-            } else if (this.getParent().currentTree == MidBg){ //在中间
-                this.getParent().currentTree = RightBg;
-            } else {
-                this.getParent().currentTree = RightBg;
-            }
-        }
-        
-        var tree = new TreeSprite();
-
-        this.getParent().addChild(tree, GC.Tree_Sprite);
-
-        target.removeFromParent();
-    },
-
+    //初始化精灵图片
     initSprites:function () {
         this.treeSprites = [];
-
-        this.getTreeOrgOffset();
 
         for (var i = 0; i < GC.Tree_Png_Max; i++) {
             var str = "main_bg_object_tree" + (i + 1) + ".png";
@@ -111,6 +68,7 @@ var TreeSprite = cc.Sprite.extend({
         }
     },
 
+    //获取树图片
     getTreeFrame:function () {
         var value = 10 * cc.random0To1().toFixed(1);
         if (value >= 0 && value < GC.Tree_Png_Max) {
@@ -120,70 +78,86 @@ var TreeSprite = cc.Sprite.extend({
         }
     },
 
+    getStoneOrg:function () {
+        var value = cc.random0To1();
+
+        var x = 0;
+        var y = 0;
+
+        if (value > 0.5) {
+            x = GC.Tree_Show_Right_X + this.getParent().currentTreeOffset;
+            y = GC.Tree_Show_Right_Y;
+        } else {
+            x = GC.Tree_Show_Left_X + this.getParent().currentTreeOffset;
+            y = GC.Tree_Show_Left_Y;
+        }
+
+        return cc.p(x, y);
+    },
+
+    getTreeScale:function () {
+        var value = cc.random0To1();
+        var scale = 0;
+        if (value < 0.5) {
+            scale = GC.Tree_Show_Left_scale;
+        } else {
+            scale = GC.Tree_Show_Right_scale;
+        }
+
+        return scale;
+    },
+
     plantTree:function () {
         var value = cc.random0To1();
         var sprite = new cc.Sprite(this.getTreeFrame());
 
-        var x = 0;
-        var y = 0;
-        var scale = 0;
-        if (value > 0.5) {
-            x = GC.Tree_Show_Right_X + this.treeOffset;
-            y = GC.Tree_Show_Right_Y;
-            scale = GC.Tree_Show_Left_scale;
-        } else {
-            x = GC.Tree_Show_Left_X + this.treeOffset;
-            y = GC.Tree_Show_Left_Y;
-            scale = GC.Tree_Show_Right_scale;
-        }
+        var x = this.getStoneOrg().x;
+        var y = this.getStoneOrg().y;
 
         sprite.attr({
             x:x,
             y:y,
             anchorX: 0.5,
             anchorY: 0.5,
-            scale:scale
+            scale:this.getTreeScale()
         });
 
         this.getParent().addChild(sprite, GC.Tree_Sprite);
 
         var track = [
             cc.p(x, y),
-            this.getTreeGoal(cc.p(x, y)),
+            this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentTreeOffset),
         ];
 
-        this.moveSprite(sprite, 3, track, 2);
+        this.getParent().moveSprite(sprite, 2, track, 2);
     },
 
-    getTreeOrgOffset:function () {
-        if (this.getParent().currentTree == LeftBg) {
-            this.treeOffset = 100;
-        } else if (this.getParent().currentTree == RightBg) {
-            this.treeOffset = -100;
-        } else if (this.getParent().currentTree == MidBg){
-            this.treeOffset = 0;
-        }
-    },
+    updateOffset:function (target, position) {
+        var positionX = Math.round(position.x);
 
-    getTreeGoal:function (Org) {
-        var radian = GC.Angle / 180 * Math.PI;
+        target.stopAllActions();
+        target.unschedule(target.plantTree);
 
-        var goalX = 0;
-        var goalY = 0;
-
-        if (Org.x > GC.Screen_Middle) {
-            goalX = GC.Main_Scene_w + 420 + this.treeOffset;
-            goalY = Org.y - (GC.Main_Scene_w - Org.x) * Math.tan(radian)
-        } else {
-            goalX = -420 + this.treeOffset;
-            goalY = Org.y - Math.tan(radian) * Org.x;
+        if (this.getParent().currentTreeOffset == 0) { //在中间
+            if (positionX < GC.Car_Center_X) {
+                this.getParent().currentTreeOffset = 100;// 向左移动
+            } else {
+                this.getParent().currentTreeOffset = -100;// 向右移动
+            }
+        } else if (this.getParent().currentTreeOffset == 100) {
+            if (positionX > GC.Car_Left_X) {
+                this.getParent().currentTreeOffset = 0
+            }
+        } else if (this.getParent().currentTreeOffset == -100) {
+            if (positionX < GC.Car_Right_X) {
+                this.getParent().currentTreeOffset = 0
+            }
         }
 
-        return cc.p(goalX, Math.round(goalY));
-    },
+        var tree = new TreeSprite();
 
-    moveSprite:function (sprite, time, track, scale) {
-        var action = cc.spawn(new cc.catmullRomTo(time, track), new cc.scaleTo(time, scale));
-        sprite.runAction(action);
+        this.getParent().addChild(tree, GC.Tree_Sprite);
+
+        target.removeFromParent();
     }
 });
