@@ -68,7 +68,7 @@ var MainLayer = cc.Layer.extend({
 
 //        this.addCounterSprite();
 //        this.addMileageSprite();
-//        this.addBarrierSprite();
+        this.addBarrierSprite();
     },
 
     //添加背景图片
@@ -268,15 +268,6 @@ var MainLayer = cc.Layer.extend({
         this.moveSprite(stone, 2, track, 2);
     },
 
-    updateSprite:function () {
-        var size = cc.winSize;
-
-        var x = (size.width / 2) * cc.random0To1();
-        var y = size.height - 40;
-
-        this.addPhysicsSprite(res.Barrier_png, cp.v(x, y));
-    },
-
     //初始化计数精灵
     addCounterSprite:function () {
         var size = cc.winSize;
@@ -298,13 +289,15 @@ var MainLayer = cc.Layer.extend({
     //添加障碍物精灵
     addBarrierSprite:function () {
         this.barrierSprites = [];
+        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
+        this.schedule(this.updateBarrierSprite, 1, cc.REPEAT_FOREVER, 0);
     },
 
     //刷新障碍物精灵
     updateBarrierSprite:function () {
         var size = cc.winSize;
 
-        var barrierSprite = new BarrierSprite("res/main/main_bg_object_tree1.png");
+        var barrierSprite = new BarrierSprite("res/main/main_road_barrier2.png");
         this.barrierRemove = barrierSprite.height;
         var x = barrierSprite.width/2 + GC.w * cc.random0To1();
         var y = GC.h_2 + 160;
@@ -333,11 +326,6 @@ var MainLayer = cc.Layer.extend({
         );
 
         this.removeBarrierSprite();
-    },
-
-    sendBarrierEvent:function () {
-        var event = new cc.EventCustom("barrier_crush");
-        cc.eventManager.dispatchEvent(event);
     },
 
     removeBarrierSpriteByCrush:function(dx) {

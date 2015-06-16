@@ -17,7 +17,7 @@
     onEnter:function () {
         this._super();
         this.roadAnimation = this.initAnimation();
-        this.schedule(this.update, 0.2, 16*1024, 0.2);
+        this.schedule(this.update, 0.2, cc.REPEAT_FOREVER, 0.2);
         this.addListener();
     },
 
