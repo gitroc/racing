@@ -30,5 +30,6 @@
         "src/sprite/RoadSprite.js",
         "src/sprite/CarSprite.js",
         "src/sprite/StoneSprite.js",
-        "src/sprite/TreeSprite.js"
+        "src/sprite/TreeSprite.js",
+        "src/sprite/NewBgSprite.js"
     ]}
