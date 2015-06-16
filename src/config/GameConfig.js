@@ -15,10 +15,6 @@ GC.h_2 = GC.winSize.height / 2;
 
 GC.SOUND_ON = false;
 
-//背景图的宽高
-GC.Main_Scene_w = 840;
-GC.Main_Scene_h = 1136;
-
 //精灵添加到场景的次序
 GC.BackGround_Sprite = 0;
 GC.Road_Sprite = 1;
@@ -36,10 +32,10 @@ GC.Tree_Png_Max = 5;
 //石头图片最大个数
 GC.Stone_Png_Max = 4;
 
+GC.Barrier_png_Max = 6;
+
 //树的移动角度
 GC.Angle = 45;
-
-GC.Screen_Middle = GC.Main_Scene_w / 2;
 
 //截最左边背景截图
 GC.Bg_Left_X = 0;
@@ -137,29 +133,69 @@ GC.Stone_04_Scale = 1;
 GC.Stone_04_X = 550;
 GC.Stone_04_Y = 630;
 
+//障碍物类型
+GC.Barrier_Type1 = 1;
+GC.Barrier_Type2 = 2;
+GC.Barrier_Type3 = 3;
+GC.Barrier_Type4 = 4;
+GC.Barrier_Type5 = 5;
+GC.Barrier_Type6 = 6;
 
-GC.Road_Map = [
-    [0, 0, 1],
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 0, 0],
-    [1, 0, 0],
-    [0, 0, 0],
-    [1, 0, 0],
-    [0, 0, 0],
-    [0, 0, 1],
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0]
+//障碍物速度 xxx/s 像素每秒
+GC.Barrier_Speed = 300;
+
+//障碍物初始缩放大小及位置坐标
+GC.Barrier_Org_Scale = 0.2;
+GC.Barrier_Org_Left_X = 260;
+GC.Barrier_Org_Center_X = 320;
+GC.Barrier_Org_Right_X = 400;
+GC.Barrier_Org_Y = 700;
+
+//障碍物结束缩放大小及位置坐标
+GC.Barrier_Goal_Scale = 1;
+GC.Barrier_Goal_Left_X = -100;
+GC.Barrier_Goal_Center_X = 320;
+GC.Barrier_Goal_Right_X = 730;
+GC.Barrier_Goal_Y = -100;
+
+GC.Barrier_Position = [
+    [GC.Barrier_Org_Left_X, GC.Barrier_Org_Center_X, GC.Barrier_Org_Right_X],
+    [GC.Barrier_Goal_Left_X, GC.Barrier_Goal_Center_X, GC.Barrier_Goal_Right_X],
+];
+
+//障碍物地图1
+GC.Barrier_Map1 = [
+    [0,     6, 0, 0],
+    [500,   0, 1, 0],
+    [700,   0, 2, 0],
+    [850,   0, 0, 5],
+    [1000,  1, 0, 2],
+    [1150,  0, 0, 3],
+    [1500,  0, 6, 0],
+    [2000,  3, 0, 0],
+    [2400,  3, 0, 3],
+    [3000,  0, 1, 0],
+    [3500,  1, 0, 0],
+    [4000,  2, 0, 0],
+    [4500,  0, 0, 3],
+    [4750,  0, 3, 0]
+];
+
+//障碍物地图2
+GC.Barrier_Map2 = [
+    [0.1,     5, 0, 0],
+    [5.2,   0, 1, 0],
+    [7.2,   0, 2, 0],
+    [8.5,   0, 0, 6],
+    [10,  1, 0, 2],
+    [11.5,  0, 0, 3],
+    [15,  0, 5, 0],
+    [20,  3, 0, 0],
+    [24,  3, 0, 3],
+    [30,  0, 1, 0],
+    [35,  1, 0, 0],
+    [40,  2, 0, 1],
+    [45,  0, 0, 3],
+    [47,  0, 3, 0]
 ];
 

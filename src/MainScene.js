@@ -73,7 +73,6 @@ var MainLayer = cc.Layer.extend({
 
     //添加背景图片
     addBackGround:function () {
-        var size = cc.winSize;
         this.bgSprite = new BgSprite(res.BackGround_png, cc.rect(GC.Bg_Center_X, GC.Bg_Center_Y, GC.w, GC.h));
         this.bgSprite.attr({
             x: GC.w_2,
@@ -289,14 +288,15 @@ var MainLayer = cc.Layer.extend({
     //添加障碍物精灵
     addBarrierSprite:function () {
         this.barrierSprites = [];
-        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
-        this.schedule(this.updateBarrierSprite, 1, cc.REPEAT_FOREVER, 0);
+        cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
+//        this.schedule(this.updateBarrierSprite, 1, cc.REPEAT_FOREVER, 0);
+
+        var barrier = new BarrierSprite();
+        this.addChild(barrier, GC.Barrier_Sprite);
     },
 
     //刷新障碍物精灵
     updateBarrierSprite:function () {
-        var size = cc.winSize;
-
         var barrierSprite = new BarrierSprite("res/main/main_road_barrier2.png");
         this.barrierRemove = barrierSprite.height;
         var x = barrierSprite.width/2 + GC.w * cc.random0To1();
@@ -392,29 +392,6 @@ var MainLayer = cc.Layer.extend({
     updateFaultSprite:function () {
 
     },
-
-    carCrash:function() {
-        for (var i = 0; i < this.barrierSprites.length; i++) {
-            var carRect = this.carSprite.getBoundingBox();
-            var barrierRect = this.barrierSprites[i].getBoundingBox();
-            cc.log("carRect.y = ", carRect.y);
-            cc.log("carRect.height = ", carRect.height);
-            cc.log("barrierRect.y = ", barrierRect.y);
-            cc.log("barrierRect.height = ", barrierRect.height);
-
-            if(cc.rectIntersectsRect(carRect, barrierRect)){
-                  //发生碰撞事件
-                cc.log("carCrash");
-                this.barrierSprites[i].runAction(cc.sequence(
-                    cc.rotateBy(0.5, 360),
-                    cc.fadeOut(0.5))
-                );
-                this.removeBarrierSpriteByCrush(i);
-
-                return true;
-            }
-        }
-    }
 });
 
 var MainScene = cc.Scene.extend({
