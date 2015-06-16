@@ -49,7 +49,7 @@ var MainLayer = cc.Layer.extend({
     //障碍物精灵
     barrierSprites:null,
     barrierRemove:0,
-
+    newBgSprite:null,
     ctor:function () {
         this._super();
 
@@ -60,17 +60,28 @@ var MainLayer = cc.Layer.extend({
 
     //初始化游戏场景
     addSprite:function () {
-        this.addBackGround();
-        this.addRoad();
+        this.addNewBackground();
+//        this.addBackGround();
+//        this.addRoad();
         this.addStone();
         this.addTree();
         this.addCar();
 
 //        this.addCounterSprite();
 //        this.addMileageSprite();
-        this.addBarrierSprite();
+//        this.addBarrierSprite();
     },
-
+    addNewBackground:function(){
+        cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
+        this.newBgSprite = new NewBgSprite();
+        this.newBgSprite.attr({
+                    x:GC.w_2,
+                    y:GC.h_2,
+                    anchorX : 0.5,
+                    anchorY : 0.5
+                });
+        this.addChild(this.newBgSprite);
+    },
     //添加背景图片
     addBackGround:function () {
         this.bgSprite = new BgSprite(res.BackGround_png, cc.rect(GC.Bg_Center_X, GC.Bg_Center_Y, GC.w, GC.h));
@@ -178,7 +189,7 @@ var MainLayer = cc.Layer.extend({
             this.getSpriteGoal(cc.p(x, y), this.currentTreeOffset),
         ];
 
-        this.moveSprite(tree, 2, track, 2);
+        this.moveSprite(tree, 3, track, 2);
     },
 
     getSpriteGoal:function (Org, currentOffset) {
@@ -264,7 +275,7 @@ var MainLayer = cc.Layer.extend({
             this.getSpriteGoal(cc.p(x, y), this.currentStoneOffset),
         ];
 
-        this.moveSprite(stone, 2, track, 2);
+        this.moveSprite(stone, 3, track, 2);
     },
 
     //初始化计数精灵

@@ -35,7 +35,7 @@ GC.Stone_Png_Max = 4;
 GC.Barrier_png_Max = 6;
 
 //树的移动角度
-GC.Angle = 45;
+GC.Angle = 60;
 
 //截最左边背景截图
 GC.Bg_Left_X = 0;
@@ -54,15 +54,15 @@ GC.Car_Range = 120;
 
 //汽车在中间位置
 GC.Car_Center_X = 320;
-GC.Car_Center_Y = 175;
+GC.Car_Center_Y = 190;
 
 //汽车在左边位置
-GC.Car_Left_X = 190;
-GC.Car_Left_Y = 175;
+GC.Car_Left_X = 125;
+GC.Car_Left_Y = 190;
 
 //汽车在右边位置
-GC.Car_Right_X = 450;
-GC.Car_Right_Y = 175;
+GC.Car_Right_X = 515;
+GC.Car_Right_Y = 190;
 
 //随机出现左边树位置
 GC.Tree_Show_Left_X = 150;

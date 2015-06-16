@@ -151,9 +151,11 @@ var StoneSprite = cc.Sprite.extend({
             }
         }
 
-        var stone = new StoneSprite();
-        this.getParent().addChild(stone, GC.Stone_Sprite);
-
-        target.removeFromParent();
+        var actionMove = cc.moveTo(0.5,cc.p(this.getParent().currentTreeOffset,0));//moveTo or moveBy
+        this.runAction(actionMove);
+//        var stone = new StoneSprite();
+//        this.getParent().addChild(stone, GC.Stone_Sprite);
+//
+//        target.removeFromParent();
     }
 });

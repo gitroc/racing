@@ -134,9 +134,8 @@ var TreeSprite = cc.Sprite.extend({
 
     updateOffset:function (target, position) {
         var positionX = Math.round(position.x);
-
-        target.stopAllActions();
-        target.unschedule(target.plantTree);
+//        target.stopAllActions();
+//        target.unschedule(target.plantTree);
 
         if (this.getParent().currentTreeOffset == 0) { //在中间
             if (positionX < GC.Car_Center_X) {
@@ -154,10 +153,14 @@ var TreeSprite = cc.Sprite.extend({
             }
         }
 
-        var tree = new TreeSprite();
+        var actionMove = cc.moveTo(0.5,cc.p(this.getParent().currentTreeOffset,0));//moveTo or moveBy
+        this.runAction(actionMove);
 
-        this.getParent().addChild(tree, GC.Tree_Sprite);
 
-        target.removeFromParent();
+//        var tree = new TreeSprite();
+//
+//        this.getParent().addChild(tree, GC.Tree_Sprite);
+//
+//        target.removeFromParent();
     }
 });
