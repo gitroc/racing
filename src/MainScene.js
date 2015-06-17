@@ -11,7 +11,9 @@
 
  ****************************************************************************/
 var MainLayer = cc.Layer.extend({
+    totalTime:0,
     //偏移
+    currentBarrierOffset:null,
     currentTreeOffset:null,
     currentStoneOffset:null,
 
@@ -55,7 +57,14 @@ var MainLayer = cc.Layer.extend({
 
         this.addSprite();
 
+        this.scheduleUpdate();
+
         return true;
+    },
+
+    update:function(dt) {
+        this.totalTime += dt;//dt为每一帧执行的时间，把它加起来等于运行了多长时间
+//        cc.log(this.totalTime);
     },
 
     //初始化游戏场景
@@ -69,7 +78,7 @@ var MainLayer = cc.Layer.extend({
 
 //        this.addCounterSprite();
 //        this.addMileageSprite();
-//        this.addBarrierSprite();
+        this.addBarrierSprite();
     },
     addNewBackground:function(){
         cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
@@ -189,7 +198,7 @@ var MainLayer = cc.Layer.extend({
             this.getSpriteGoal(cc.p(x, y), this.currentTreeOffset),
         ];
 
-        this.moveSprite(tree, 3, track, 2);
+        this.moveSprite(tree, GC.Tree_Time_Line[index], track, 2);
     },
 
     getSpriteGoal:function (Org, currentOffset) {
@@ -275,7 +284,7 @@ var MainLayer = cc.Layer.extend({
             this.getSpriteGoal(cc.p(x, y), this.currentStoneOffset),
         ];
 
-        this.moveSprite(stone, 3, track, 2);
+        this.moveSprite(stone, GC.Stone_Time_Line[index], track, 2);
     },
 
     //初始化计数精灵
@@ -300,8 +309,9 @@ var MainLayer = cc.Layer.extend({
     addBarrierSprite:function () {
         this.barrierSprites = [];
         cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
-//        this.schedule(this.updateBarrierSprite, 1, cc.REPEAT_FOREVER, 0);
 
+        this.barrierRemove = -200;
+        this.currentBarrierOffset = 0;
         var barrier = new BarrierSprite();
         this.addChild(barrier, GC.Barrier_Sprite);
     },

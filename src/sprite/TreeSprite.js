@@ -129,7 +129,7 @@ var TreeSprite = cc.Sprite.extend({
             this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentTreeOffset),
         ];
 
-        this.getParent().moveSprite(sprite, 2, track, 2);
+        this.getParent().moveSprite(sprite, GC.Vertical_Move_Time, track, GC.Tree_Goal_scale);
     },
 
     updateOffset:function (target, position) {
@@ -153,7 +153,7 @@ var TreeSprite = cc.Sprite.extend({
             }
         }
 
-        var actionMove = cc.moveTo(0.5,cc.p(this.getParent().currentTreeOffset,0));//moveTo or moveBy
+        var actionMove = cc.moveTo(GC.Horizontal_Move_Time, cc.p(this.getParent().currentTreeOffset,0));//moveTo or moveBy
         this.runAction(actionMove);
 
 

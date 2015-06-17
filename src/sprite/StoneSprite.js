@@ -126,12 +126,12 @@ var StoneSprite = cc.Sprite.extend({
             this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentStoneOffset),
         ];
 
-        this.getParent().moveSprite(sprite, 2, track, 2);
+        this.getParent().moveSprite(sprite, GC.Vertical_Move_Time, track, GC.Stone_Goal_scale);
     },
 
     updateOffset:function (target, position) {
-        target.stopAllActions();
-        target.unschedule(target.buriedStone);
+//        target.stopAllActions();
+//        target.unschedule(target.buriedStone);
 
         var positionX = Math.round(position.x);
 
@@ -151,7 +151,7 @@ var StoneSprite = cc.Sprite.extend({
             }
         }
 
-        var actionMove = cc.moveTo(0.5,cc.p(this.getParent().currentTreeOffset,0));//moveTo or moveBy
+        var actionMove = cc.moveTo(GC.Horizontal_Move_Time,cc.p(this.getParent().currentStoneOffset,0));//moveTo or moveBy
         this.runAction(actionMove);
 //        var stone = new StoneSprite();
 //        this.getParent().addChild(stone, GC.Stone_Sprite);
