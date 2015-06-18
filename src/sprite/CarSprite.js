@@ -16,7 +16,7 @@ var CarSprite = cc.Sprite.extend({
     onEnter:function () {
         this._super();
 
-        this.addListener();
+//        this.addListener();//注释测试RouteScene
     },
 
     onExit:function () {

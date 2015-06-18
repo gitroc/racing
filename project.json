@@ -20,6 +20,7 @@
         "src/SelectCarScene.js",
         "src/LoadingBarScene.js",
         "src/PlayScene.js",
+        "src/RouteScene.js",
 
         "src/sprite/CarTypeSprite.js",
         "src/sprite/DemoSprite.js",
