@@ -137,21 +137,53 @@ var TreeSprite = cc.Sprite.extend({
 //        target.stopAllActions();
 //        target.unschedule(target.plantTree);
 
-        if (this.getParent().currentTreeOffset == 0) { //在中间
-            if (positionX < GC.Car_Center_X) {
+
+        var currentBg = this.getParent().currentX;
+//        cc.log("--offset!!--||"+this.getParent().currentTreeOffset+"positionX"+positionX+"-currentX:"+currentBg);
+        //-----------------------------
+        if (positionX > currentBg - GC.Car_Range && positionX < currentBg + GC.Car_Range) { //避开汽车范围
+            return;
+        }
+
+        if(currentBg == GC.Car_Right_X){ //车在最右边
+            if(positionX < currentBg){
+                this.getParent().currentTreeOffset = 0;// 向左移动
+                this.getParent().currentX = GC.Car_Center_X; //向左移动
+            } else {
+                return; //背景不动
+            }
+        }else if(currentBg == GC.Car_Center_X){ //车在中间
+            if(positionX < GC.Car_Center_X){
                 this.getParent().currentTreeOffset = 100;// 向左移动
+                this.getParent().currentX = GC.Car_Left_X; //向左移动
             } else {
                 this.getParent().currentTreeOffset = -100;// 向右移动
+                this.getParent().currentX = GC.Car_Right_X; //向右移动
             }
-        } else if (this.getParent().currentTreeOffset == 100) {
-            if (positionX > GC.Car_Left_X) {
-                this.getParent().currentTreeOffset = 0
-            }
-        } else if (this.getParent().currentTreeOffset == -100) {
-            if (positionX < GC.Car_Right_X) {
-                this.getParent().currentTreeOffset = 0
+        }else if(currentBg == GC.Car_Left_X){ //车在最左边
+            if(positionX > currentBg){
+                this.getParent().currentTreeOffset = 0;
+                this.getParent().currentX = GC.Car_Center_X;//向右移动
+            } else {
+                return; //背景不动
             }
         }
+
+//        if (this.getParent().currentTreeOffset == 0) { //在中间
+//            if (positionX < GC.Car_Center_X) {
+//                this.getParent().currentTreeOffset = 100;// 向左移动
+//            } else {
+//                this.getParent().currentTreeOffset = -100;// 向右移动
+//            }
+//        } else if (this.getParent().currentTreeOffset == 100) {
+//            if (positionX > GC.Car_Left_X) {
+//                this.getParent().currentTreeOffset = 0
+//            }
+//        } else if (this.getParent().currentTreeOffset == -100) {
+//            if (positionX < GC.Car_Right_X) {
+//                this.getParent().currentTreeOffset = 0
+//            }
+//        }
 
         var actionMove = cc.moveTo(GC.Horizontal_Move_Time, cc.p(this.getParent().currentTreeOffset,0));//moveTo or moveBy
         this.runAction(actionMove);

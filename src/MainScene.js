@@ -15,6 +15,7 @@ var MainLayer = cc.Layer.extend({
     //偏移
     currentBarrierOffset:null,
     currentTreeOffset:null,
+    currentX:null,
     currentStoneOffset:null,
 
     //路精灵
@@ -175,6 +176,7 @@ var MainLayer = cc.Layer.extend({
         }
 
         this.currentTreeOffset = 0;
+        this.currentX = 320;
         var treeAnimation = new TreeSprite();
         this.addChild(treeAnimation, GC.Tree_Sprite);
     },
