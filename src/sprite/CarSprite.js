@@ -69,48 +69,50 @@ var CarSprite = cc.Sprite.extend({
 
     //触屏移动汽车精灵
     moveCar:function (target, position) {
-        var currentX = 0;
-        var currentY = target.y;
+        if (this.getParent().gameStatus == GC.Game_Running) {
+            var currentX = 0;
+            var currentY = target.y;
 
-        var currentBg = 0;
+            var currentBg = 0;
 
-        target.stopAllActions();
+            target.stopAllActions();
 
-        var positionX = Math.round(position.x);
-        var targetX = Math.round(target.x);
+            var positionX = Math.round(position.x);
+            var targetX = Math.round(target.x);
 
-        if (positionX >= (targetX - GC.Car_Range) && positionX < targetX + GC.Car_Range) { //避开汽车范围
-            return;
-        }
-
-        if (positionX < targetX) {// 向左
-            if (targetX > GC.Car_Center_X) {
-                currentBg = 0;
-                currentX = GC.Car_Center_X;
-            } else {
-                currentBg = 100;
-                currentX = GC.Car_Left_X;
+            if (positionX >= (targetX - GC.Car_Range) && positionX < targetX + GC.Car_Range) { //避开汽车范围
+                return;
             }
-        } else if (positionX > targetX) {//向右
-            if (targetX < GC.Car_Center_X) {
-                currentBg = 0;
-                currentX = GC.Car_Center_X;
+
+            if (positionX < targetX) {// 向左
+                if (targetX > GC.Car_Center_X) {
+                    currentBg = 0;
+                    currentX = GC.Car_Center_X;
+                } else {
+                    currentBg = 100;
+                    currentX = GC.Car_Left_X;
+                }
+            } else if (positionX > targetX) {//向右
+                if (targetX < GC.Car_Center_X) {
+                    currentBg = 0;
+                    currentX = GC.Car_Center_X;
+                } else {
+                    currentBg = -100;
+                    currentX = GC.Car_Right_X;
+                }
             } else {
-                currentBg = -100;
-                currentX = GC.Car_Right_X;
+                currentBg = 0;
+                currentX = targetX;
             }
-        } else {
-            currentBg = 0;
-            currentX = targetX;
+
+            target.setSpriteFrame(this.getParent().getCarSprite(currentX));
+
+            var actionCar = cc.moveTo(GC.Horizontal_Move_Time, cc.p(currentX, currentY));
+            target.runAction(actionCar);
+
+            var actionMain = cc.moveTo(GC.Horizontal_Move_Time, cc.p(currentBg, 0));
+            this.getParent().runAction(actionMain);
         }
-
-        target.setSpriteFrame(this.getParent().getCarSprite(currentX));
-
-        var actionCar = cc.moveTo(GC.Horizontal_Move_Time, cc.p(currentX, currentY));
-        target.runAction(actionCar);
-
-        var actionMain = cc.moveTo(GC.Horizontal_Move_Time, cc.p(currentBg, 0));
-        this.getParent().runAction(actionMain);
 
 //        var carSprite = new CarSprite(this.getParent().getCarSprite(currentX));
 //

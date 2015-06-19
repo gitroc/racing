@@ -66,7 +66,8 @@ var MainLayer = cc.Layer.extend({
         this.totalTime += dt;//dt为每一帧执行的时间，把它加起来等于运行了多长时间
 //        cc.log(this.totalTime);
         if (this.gameStatus == GC.Game_Over) {
-            cc.log("Game_Over");
+            this.getActionManager().pauseAllRunningActions();
+            this.gameOver();
             return;
         }
     },
@@ -421,6 +422,36 @@ var MainLayer = cc.Layer.extend({
     updateFaultSprite:function () {
 
     },
+
+    gameOver:function () {
+        var gameOver = new cc.LayerColor(cc.color(225,225,225,100));
+        var titleLabel = new cc.LabelTTF("Game Over", "Arial", 38);
+        titleLabel.attr({
+            x:GC.w_2,
+            y:GC.h_2
+        });
+        gameOver.addChild(titleLabel, 5);
+        var TryAgainItem = new cc.MenuItemFont(
+                "Try Again",
+                function () {
+                    cc.log("Menu is clicked!");
+//                    var transition= cc.TransitionFade(1, new MainScene(),cc.color(255,255,255,255));
+//                    cc.director.runScene(transition);
+                    cc.director.runScene(new cc.TransitionFade(1.2, new MainScene(), cc.color(255,255,255,255)));
+                }, this);
+        TryAgainItem.attr({
+            x:GC.w_2,
+            y:GC.h_2 - 60,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+
+        var menu = new cc.Menu(TryAgainItem);
+        menu.x = 0;
+        menu.y = 0;
+        gameOver.addChild(menu, 1);
+//        this.addChild(gameOver);
+    }
 });
 
 var MainScene = cc.Scene.extend({
