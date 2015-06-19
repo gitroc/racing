@@ -36,7 +36,7 @@ var StoneSprite = cc.Sprite.extend({
                             return;
                         }
                         var target = event.getCurrentTarget();
-                        target.updateOffset(target, touches[0].getLocation());
+//                        target.updateOffset(target, touches[0].getLocation());
                     }
                 }),
                 this
@@ -46,7 +46,7 @@ var StoneSprite = cc.Sprite.extend({
                 event: cc.EventListener.MOUSE,
                 onMouseUp: function (event) {
                     var target = event.getCurrentTarget();
-                    target.updateOffset(target, event.getLocation());
+//                    target.updateOffset(target, event.getLocation());
                 }
             }, this);
         }
@@ -108,25 +108,30 @@ var StoneSprite = cc.Sprite.extend({
 
     //埋石头
     buriedStone:function () {
-        var sprite = new cc.Sprite(this.getStoneFrame());
-        var x = this.getStoneOrg().x;
-        var y = this.getStoneOrg().y;
-        sprite.attr({
-            x:x,
-            y:y,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            scale:this.getStoneScale()
-        });
+        if (this.getParent().gameStatus == GC.Game_Running) {
+            var sprite = new cc.Sprite(this.getStoneFrame());
+            var x = this.getStoneOrg().x;
+            var y = this.getStoneOrg().y;
+            sprite.attr({
+                x:x,
+                y:y,
+                anchorX: 0.5,
+                anchorY: 0.5,
+                scale:this.getStoneScale()
+            });
 
-        this.getParent().addChild(sprite, GC.Stone_Sprite);
+            this.getParent().addChild(sprite, GC.Stone_Sprite);
 
-        var track = [
-            cc.p(x, y),
-            this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentStoneOffset),
-        ];
+            var track = [
+                cc.p(x, y),
+                this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentStoneOffset),
+            ];
 
-        this.getParent().moveSprite(sprite, GC.Vertical_Move_Time, track, GC.Stone_Goal_scale);
+            this.getParent().moveSprite(sprite, GC.Vertical_Move_Time, track, GC.Stone_Goal_scale);
+        } else {
+             this.stopAllActions();
+             this.unschedule(this.buriedStone);
+         }
     },
 
     updateOffset:function (target, position) {

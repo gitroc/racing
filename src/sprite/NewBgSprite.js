@@ -12,8 +12,8 @@ var NewBgSprite = cc.Sprite.extend({
         this.addListener();
     },
     onExit:function(){
-        this._super();
         this.unschedule(update);
+        this._super();
     },
     initSprite:function(){
         this.bgs =[];
@@ -25,32 +25,38 @@ var NewBgSprite = cc.Sprite.extend({
     },
     //循环动画
     update:function(){
-        var animation = new cc.Animation(this.bgs, 0.1);
-        var action = new cc.Animate(animation);
-        this.runAction(action);
+        if (this.getParent().gameStatus == GC.Game_Running) {
+            var animation = new cc.Animation(this.bgs, 0.1);
+            var action = new cc.Animate(animation);
+            this.runAction(action);
+        } else {
+            this.stopAllActions();
+            this.unschedule(this.update);
+        }
+
     },
     addListener:function() {
-            if('touches' in cc.sys.capabilities) { //支持触摸事件
-                this.touchListener = cc.eventManager.addListener(
-                    cc.EventListener.create({
-                        event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-                        onTouchesEnded:function (touches, event) {
-                            if (touches.length <= 0) {
-                                return;
-                            }
-                            var target = event.getCurrentTarget();
-                            target.move(target, touches[0].getLocation());
+        if('touches' in cc.sys.capabilities) { //支持触摸事件
+            this.touchListener = cc.eventManager.addListener(
+                cc.EventListener.create({
+                    event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+                    onTouchesEnded:function (touches, event) {
+                        if (touches.length <= 0) {
+                            return;
                         }
-                    }),this);
-            } else if ('mouse' in cc.sys.capabilities) { //支持鼠标事件
-                this.touchListener = cc.eventManager.addListener({
-                    event: cc.EventListener.MOUSE,
-                    onMouseUp: function (event) {
                         var target = event.getCurrentTarget();
-                        target.move(target, event.getLocation());
+//                            target.move(target, touches[0].getLocation());
                     }
-                }, this);
-            }
+                }),this);
+        } else if ('mouse' in cc.sys.capabilities) { //支持鼠标事件
+            this.touchListener = cc.eventManager.addListener({
+                event: cc.EventListener.MOUSE,
+                onMouseUp: function (event) {
+                    var target = event.getCurrentTarget();
+//                        target.move(target, event.getLocation());
+                }
+            }, this);
+        }
         },
 
     move:function(target,position){

@@ -11,6 +11,7 @@
 
  ****************************************************************************/
 var MainLayer = cc.Layer.extend({
+    gameStatus:GC.Game_Stop,
     totalTime:0,
     //偏移
     currentBarrierOffset:null,
@@ -58,14 +59,16 @@ var MainLayer = cc.Layer.extend({
 
         this.addSprite();
 
-        this.scheduleUpdate();
-
         return true;
     },
 
     update:function(dt) {
         this.totalTime += dt;//dt为每一帧执行的时间，把它加起来等于运行了多长时间
 //        cc.log(this.totalTime);
+        if (this.gameStatus == GC.Game_Over) {
+            cc.log("Game_Over");
+            return;
+        }
     },
 
     //初始化游戏场景
@@ -75,15 +78,18 @@ var MainLayer = cc.Layer.extend({
 //        this.addRoad();
         this.addStone();
         this.addTree();
+        this.addBarrierSprite();
         this.addCar();
 
 //        this.addCounterSprite();
 //        this.addMileageSprite();
-        this.addBarrierSprite();
+        this.gameStatus = GC.Game_Running;
+        this.scheduleUpdate();
     },
+
     addNewBackground:function(){
         cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
-        this.newBgSprite = new NewBgSprite();
+        this.newBgSprite = new NewBgSprite(res.Road_png);
         this.newBgSprite.attr({
                     x:GC.w_2,
                     y:GC.h_2,

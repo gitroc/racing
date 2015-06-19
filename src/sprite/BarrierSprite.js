@@ -13,6 +13,7 @@
 
 var BarrierSprite = cc.Sprite.extend({
     totalTime:0,
+    currentMapIndex:0,
     crushListener:null,
     touchListener:null,
     barrierSprites:null,
@@ -20,16 +21,15 @@ var BarrierSprite = cc.Sprite.extend({
     trackArrays:null,
     goalScaleArrays:null,
     timeLineArrays:null,
+    crashType:null,
     onEnter:function () {
         this._super();
         this.initSprites();
         this.addCrushListener();
-        this.addTouchListener();
     },
 
     onExit:function () {
         this.removeCrushListener();
-        this.removeTouchListener();
         this._super();
     },
 
@@ -40,7 +40,7 @@ var BarrierSprite = cc.Sprite.extend({
                 event: cc.EventListener.CUSTOM,
                 eventName: "barrier_crush",
                 callback: function(event){
-//                    cc.log("barrier_crush");
+                    cc.log("barrier_crush");
                     var target = event.getCurrentTarget();
                     target.carCrash(target);
                 }
@@ -53,36 +53,6 @@ var BarrierSprite = cc.Sprite.extend({
         cc.eventManager.removeListener(this.crushListener);
     },
 
-    addTouchListener:function() {
-        if('touches' in cc.sys.capabilities) { //支持触摸事件
-            this.touchListener = cc.eventManager.addListener(
-                cc.EventListener.create({
-                    event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-                    onTouchesEnded:function (touches, event) {
-                        if (touches.length <= 0) {
-                            return;
-                        }
-                        var target = event.getCurrentTarget();
-//                        target.updateOffset(target, touches[0].getLocation());
-                    }
-                }),
-                this
-            );
-        } else if ('mouse' in cc.sys.capabilities) { //支持鼠标事件
-            this.touchListener = cc.eventManager.addListener({
-                event: cc.EventListener.MOUSE,
-                onMouseUp: function (event) {
-                    var target = event.getCurrentTarget();
-//                    target.updateOffset(target, event.getLocation());
-                }
-            }, this);
-        }
-    },
-
-    removeTouchListener:function() {
-        cc.eventManager.removeListener(this.touchListener);
-    },
-
     //初始化精灵图片
     initSprites:function () {
         this.barrierSprites = [];
@@ -90,6 +60,7 @@ var BarrierSprite = cc.Sprite.extend({
         this.trackArrays = [];
         this.goalScaleArrays = [];
         this.timeLineArrays = [];
+        this.crashType = [];
 
         for (var i = 0; i < GC.Barrier_png_Max; i++) {
             var str = "main_road_barrier" + (i + 1) + ".png";
@@ -98,13 +69,13 @@ var BarrierSprite = cc.Sprite.extend({
         }
 
         this.generateBarrier(GC.Barrier_Map1, GC.Time_Line1, GC.Barrier_Org_Position, GC.Barrier_Org_Scale, GC.Barrier_Goal_Position, GC.Barrier_Goal_Scale);
-
+        this.getBarrierMap(GC.Barrier_Map1, GC.Time_Line1);
         this.scheduleUpdate();
     },
 
     //获取障碍物地图
-    getBarrierMap:function () {
-        return 0;
+    getBarrierMap:function (barrierMap, timeLine) {
+        this.generateBarrier(barrierMap, timeLine, GC.Barrier_Org_Position, GC.Barrier_Org_Scale, GC.Barrier_Goal_Position, GC.Barrier_Goal_Scale);
     },
 
     //生成障碍物
@@ -141,29 +112,58 @@ var BarrierSprite = cc.Sprite.extend({
                     this.goalScaleArrays.push(Barrier_Goal_Scale[j]);
                     this.timeLineArrays.push(Time_Line[i]);
 
+                    if (type == 6) { //加速图片
+                        this.crashType.push(GC.Crash_Speed_Up);
+                    } else if (type == 5) { //减速图片
+                        this.crashType.push(GC.Crash_Slow_Down);
+                    } else {
+                        this.crashType.push(GC.Crash_Shut_Down);
+                    }
                 }
             }
         }
     },
 
+    //清理障碍物
+    clearBarrier:function () {
+        if (this.spriteArrays.length > 0) {
+            for (var i = 0; i < this.spriteArrays.length; i++) {
+                this.clearBarrierArray(this.spriteArrays);
+                this.clearBarrierArray(this.trackArrays);
+                this.clearBarrierArray(this.goalScaleArrays);
+                this.clearBarrierArray(this.timeLineArrays);
+                this.clearBarrierArray(this.crashType);
+                i = i - 1;
+            }
+        }
+    },
+
+    clearBarrierArray:function (array, index) {
+        array = undefined;
+        array.splice(index, 1);
+    },
+
     update:function(dt) {
         this.totalTime += dt;
-
-        for (var i = 0; i < this.timeLineArrays.length; i++) {
-            if (this.totalTime.toFixed(1) == this.timeLineArrays[i]) {
-                cc.log("this.totalTime.toFixed(1)", this.totalTime.toFixed(1));
-                this.spriteArrays[i].visible = true;
-                this.moveSprite(this.spriteArrays[i], 10, this.trackArrays[i], this.goalScaleArrays[i]);
+        if (this.getParent().gameStatus == GC.Game_Running) {
+            if (this.spriteArrays.length > 0) {
+                for (var i = 0; i < this.spriteArrays.length; i++) {
+                    if (this.totalTime.toFixed(1) == this.timeLineArrays[i] * 5) {
+                        this.spriteArrays[i].visible = true;
+                        this.moveSprite(this.spriteArrays[i], GC.Vertical_Move_Time * 2, this.trackArrays[i], this.goalScaleArrays[i]);
+                    }
+                    this.carCrash(this.spriteArrays[i], this.crashType[i]);
+                }
             }
         }
     },
 
     moveSprite:function (sprite, time, track, scale) {
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
-//        var spawn = cc.spawn(cc.moveTo(10, cc.p(GC.Barrier_Goal_Position[1])), cc.scaleTo(time, 2));
         var seq = cc.sequence(
             spawn,
-            cc.fadeOut(0.5),
+            cc.rotateBy(time, 360),
+            cc.fadeOut(time),
             cc.callFunc(function () {
                 sprite.removeFromParent();
             })
@@ -186,41 +186,31 @@ var BarrierSprite = cc.Sprite.extend({
     },
 
     //障碍物碰撞检测
-    carCrash:function(target) {
+    carCrash:function(target, crashType) {
         var carRect = this.getParent().carSprite.getBoundingBox();
         var barrierRect = target.getBoundingBox();
 
-        if(cc.rectIntersectsRect(carRect, barrierRect)){
-              //发生碰撞事件
-              cc.log("carCrash");
-              target.runAction(cc.sequence(
-                  cc.rotateBy(0.5, 360),
-                  cc.fadeOut(0.5))
-              );
-              this.getParent().removeBarrierSpriteByCrush(target.index - 1);
-        }
-    },
+        if(cc.rectIntersectsRect (carRect, barrierRect)){
 
-    updateOffset:function (target, position) {
-        var positionX = Math.round(position.x);
-
-        if (this.getParent().currentBarrierOffset == 0) { //在中间
-            if (positionX < GC.Car_Center_X) {
-                this.getParent().currentBarrierOffset = 100;// 向左移动
+            if (crashType == GC.Crash_Shut_Down) { //所有动作停止
+                target.stopAllActions();
+                this.getParent().gameStatus = GC.Game_Over; //告知情景
             } else {
-                this.getParent().currentBarrierOffset = -100;// 向右移动
-            }
-        } else if (this.getParent().currentBarrierOffset == 100) {
-            if (positionX > GC.Car_Left_X) {
-                this.getParent().currentBarrierOffset = 0
-            }
-        } else if (this.getParent().currentBarrierOffset == -100) {
-            if (positionX < GC.Car_Right_X) {
-                this.getParent().currentBarrierOffset = 0
+                if (crashType == GC.Crash_Speed_Up){
+
+                } else if (crashType == GC.Crash_Slow_Down){
+
+                }
+
+                var spawn = cc.spawn(cc.rotateBy(0.2, 360), cc.fadeOut(0.2));
+                target.runAction(cc.sequence(
+                      spawn,
+                      cc.callFunc(function () {
+                          target.removeFromParent();
+                      })
+                ));
             }
         }
-
-        var actionMove = cc.moveTo(GC.Horizontal_Move_Time,cc.p(this.getParent().currentBarrierOffset,0));//moveTo or moveBy
-        this.runAction(actionMove);
     }
+
 });

@@ -19,9 +19,9 @@ GC.SOUND_ON = false;
 GC.BackGround_Sprite = 0;
 GC.Road_Sprite = 1;
 GC.Barrier_Sprite = 2;
-GC.Car_Sprite = 3;
-GC.Stone_Sprite = 4;
-GC.Tree_Sprite = 5;
+GC.Car_Sprite = 2;
+GC.Stone_Sprite = 3;
+GC.Tree_Sprite = 4;
 
 //路的图片的最大数
 GC.Road_Png_Max = 4;
@@ -38,7 +38,7 @@ GC.Barrier_png_Max = 6;
 GC.Angle = 60;
 
 //水平移动时间
-GC.Horizontal_Move_Time = 5;
+GC.Horizontal_Move_Time = 0.5;
 //竖直移动时间
 GC.Vertical_Move_Time = 5;
 
@@ -62,11 +62,11 @@ GC.Car_Center_X = 320;
 GC.Car_Center_Y = 275;
 
 //汽车在左边位置
-GC.Car_Left_X = 140;
+GC.Car_Left_X = 40;
 GC.Car_Left_Y = 275;
 
 //汽车在右边位置
-GC.Car_Right_X = 500;
+GC.Car_Right_X = 600;
 GC.Car_Right_Y = 275;
 
 //随机出现左边树位置
@@ -165,7 +165,7 @@ GC.Barrier_Speed = 300;
 
 //障碍物初始缩放大小及位置坐标
 GC.Barrier_Org_Scale = [
-    0.2, 0.2, 0.2
+    0.4, 0.4, 0.4
 ];
 
 GC.Barrier_Org_Position = [
@@ -176,17 +176,17 @@ GC.Barrier_Org_Position = [
 
 //障碍物结束缩放大小及位置坐标
 GC.Barrier_Goal_Scale = [
-    1.5, 1.5, 1.5
+    3, 3, 3
 ];
 
 GC.Barrier_Goal_Position = [
-    cc.p(-100, -100),
-    cc.p( 320, -100),
-    cc.p( 730, -100),
+    cc.p(-300, -500),
+    cc.p( 320, -500),
+    cc.p( 930, -500),
 ];
 
 //障碍物最大地图个数
-GC.Barrier_Map_Max = 30;
+GC.Barrier_Map_Max = 3;
 
 //障碍物地图1
 GC.Barrier_Map1 = [
@@ -210,8 +210,74 @@ GC.Barrier_Map1 = [
     [0, 0, 3],
 ];
 
-//障碍物时间轴
+//障碍物时间轴1
 GC.Time_Line1 = [
     0.1, 1.5, 1.7, 2.5, 3.2, 3.5, 4.2, 5, 5.3, 6, 6.7, 6.9, 7.5, 8, 8.3, 8.6, 9.2, 9.8
 ];
+
+//障碍物地图2
+GC.Barrier_Map2 = [
+    [6, 0, 0],
+    [0, 1, 0],
+    [0, 2, 0],
+    [0, 0, 5],
+    [1, 0, 2],
+    [0, 0, 3],
+    [0, 6, 0],
+    [3, 0, 0],
+    [3, 0, 3],
+    [0, 1, 0],
+    [1, 0, 0],
+    [2, 0, 0],
+    [0, 0, 3],
+    [0, 3, 0],
+    [0, 4, 0],
+    [0, 3, 0],
+    [0, 3, 0],
+    [0, 0, 3],
+];
+
+//障碍物时间轴2
+GC.Time_Line2 = [
+    0.1, 1.5, 1.7, 2.5, 3.2, 3.5, 4.2, 5, 5.3, 6, 6.7, 6.9, 7.5, 8, 8.3, 8.6, 9.2, 9.8
+];
+
+//障碍物地图3
+GC.Barrier_Map3 = [
+    [6, 0, 0],
+    [0, 1, 0],
+    [0, 2, 0],
+    [0, 0, 5],
+    [1, 0, 2],
+    [0, 0, 3],
+    [0, 6, 0],
+    [3, 0, 0],
+    [3, 0, 3],
+    [0, 1, 0],
+    [1, 0, 0],
+    [2, 0, 0],
+    [0, 0, 3],
+    [0, 3, 0],
+    [0, 4, 0],
+    [0, 3, 0],
+    [0, 3, 0],
+    [0, 0, 3],
+];
+
+//障碍物时间轴3
+GC.Time_Line3 = [
+    0.1, 1.5, 1.7, 2.5, 3.2, 3.5, 4.2, 5, 5.3, 6, 6.7, 6.9, 7.5, 8, 8.3, 8.6, 9.2, 9.8
+];
+
+//碰撞类型
+GC.Crash_Shut_Down = 0; //停车
+GC.Crash_Speed_Up  = 1; //加速
+GC.Crash_Slow_Down = 2; //减速
+
+//游戏主界面状态机
+GC.Game_Loading   = 1;
+GC.Game_Start     = 2;
+GC.Game_Running   = 3;
+GC.Game_Over      = 0;
+
 

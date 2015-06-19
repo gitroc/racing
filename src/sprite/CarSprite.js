@@ -10,13 +10,12 @@
  Date: 2015-05-27
 
  ****************************************************************************/
-var currentCar = GC.Car_Center_X;
 var CarSprite = cc.Sprite.extend({
     touchListener:null,
     onEnter:function () {
         this._super();
 
-//        this.addListener();//注释测试RouteScene
+        this.addListener();
     },
 
     onExit:function () {
@@ -73,6 +72,8 @@ var CarSprite = cc.Sprite.extend({
         var currentX = 0;
         var currentY = target.y;
 
+        var currentBg = 0;
+
         target.stopAllActions();
 
         var positionX = Math.round(position.x);
@@ -84,32 +85,45 @@ var CarSprite = cc.Sprite.extend({
 
         if (positionX < targetX) {// 向左
             if (targetX > GC.Car_Center_X) {
+                currentBg = 0;
                 currentX = GC.Car_Center_X;
             } else {
+                currentBg = 100;
                 currentX = GC.Car_Left_X;
             }
         } else if (positionX > targetX) {//向右
             if (targetX < GC.Car_Center_X) {
+                currentBg = 0;
                 currentX = GC.Car_Center_X;
             } else {
+                currentBg = -100;
                 currentX = GC.Car_Right_X;
             }
         } else {
+            currentBg = 0;
             currentX = targetX;
         }
 
-        var carSprite = new CarSprite(this.getParent().getCarSprite(currentX));
+        target.setSpriteFrame(this.getParent().getCarSprite(currentX));
 
-        carSprite.attr({
-            x: currentX,
-            y: currentY,
-            anchorX: 0.5,
-            anchorY: 0.5
-        });
+        var actionCar = cc.moveTo(GC.Horizontal_Move_Time, cc.p(currentX, currentY));
+        target.runAction(actionCar);
 
-        this.getParent().addChild(carSprite, GC.Car_Sprite);
+        var actionMain = cc.moveTo(GC.Horizontal_Move_Time, cc.p(currentBg, 0));
+        this.getParent().runAction(actionMain);
 
-        target.removeFromParent();
+//        var carSprite = new CarSprite(this.getParent().getCarSprite(currentX));
+//
+//        target.attr({
+//            x: currentX,
+//            y: currentY,
+//            anchorX: 0.5,
+//            anchorY: 0.5
+//        });
+//
+//        this.getParent().addChild(carSprite, GC.Car_Sprite);
+//
+//        target.removeFromParent();
     },
 
     carCrash:function(target) {

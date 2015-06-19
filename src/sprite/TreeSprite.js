@@ -37,7 +37,7 @@ var TreeSprite = cc.Sprite.extend({
                             return;
                         }
                         var target = event.getCurrentTarget();
-                        target.updateOffset(target, touches[0].getLocation());
+//                        target.updateOffset(target, touches[0].getLocation());
                     }
                 }),
                 this
@@ -47,7 +47,7 @@ var TreeSprite = cc.Sprite.extend({
                 event: cc.EventListener.MOUSE,
                 onMouseUp: function (event) {
                     var target = event.getCurrentTarget();
-                    target.updateOffset(target, event.getLocation());
+//                    target.updateOffset(target, event.getLocation());
                 }
             }, this);
         }
@@ -108,28 +108,33 @@ var TreeSprite = cc.Sprite.extend({
     },
 
     plantTree:function () {
-        var value = cc.random0To1();
-        var sprite = new cc.Sprite(this.getTreeFrame());
+        if (this.getParent().gameStatus == GC.Game_Running) {
+            var value = cc.random0To1();
+            var sprite = new cc.Sprite(this.getTreeFrame());
 
-        var x = this.getStoneOrg().x;
-        var y = this.getStoneOrg().y;
+            var x = this.getStoneOrg().x;
+            var y = this.getStoneOrg().y;
 
-        sprite.attr({
-            x:x,
-            y:y,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            scale:this.getTreeScale()
-        });
+            sprite.attr({
+                x:x,
+                y:y,
+                anchorX: 0.5,
+                anchorY: 0.5,
+                scale:this.getTreeScale()
+            });
 
-        this.getParent().addChild(sprite, GC.Tree_Sprite);
+            this.getParent().addChild(sprite, GC.Tree_Sprite);
 
-        var track = [
-            cc.p(x, y),
-            this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentTreeOffset),
-        ];
+            var track = [
+                cc.p(x, y),
+                this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentTreeOffset),
+            ];
 
-        this.getParent().moveSprite(sprite, GC.Vertical_Move_Time, track, GC.Tree_Goal_scale);
+            this.getParent().moveSprite(sprite, GC.Vertical_Move_Time, track, GC.Tree_Goal_scale);
+        } else {
+            this.stopAllActions();
+            this.unschedule(this.plantTree);
+        }
     },
 
     updateOffset:function (target, position) {
