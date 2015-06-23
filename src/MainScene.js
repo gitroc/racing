@@ -11,13 +11,14 @@
 
  ****************************************************************************/
 var MainLayer = cc.Layer.extend({
-    gameStatus:GC.Game_Stop,
+    //游戏速度
+    gameSpeed:GC.Car_Speed_Normal,
+    //游戏状态
+    gameStatus:GC.Game_Loading,
+    //游戏时间
     totalTime:0,
     //偏移
-    currentBarrierOffset:null,
-    currentTreeOffset:null,
     currentX:null,
-    currentStoneOffset:null,
 
     //路精灵
     roadSprite:null,
@@ -40,9 +41,9 @@ var MainLayer = cc.Layer.extend({
     //汽车精灵
     carSprite:null,
 
-    //倒计时
+    //游戏计时
     timeout:300,
-    timeoutLabel:null,
+    timerLabel:null,
 
     //里程
     time:0,
@@ -51,13 +52,13 @@ var MainLayer = cc.Layer.extend({
     mileageLabel:null,
 
     //障碍物精灵
-    barrierSprites:null,
+    barrierSprite:null,
     barrierRemove:0,
     newBgSprite:null,
     ctor:function () {
         this._super();
 
-        this.addSprite();
+        this.Loading();
 
         return true;
     },
@@ -72,24 +73,67 @@ var MainLayer = cc.Layer.extend({
         }
     },
 
-    //初始化游戏场景
-    addSprite:function () {
-        this.addNewBackground();
-//        this.addBackGround();
-//        this.addRoad();
-        this.addStone();
-        this.addTree();
-        this.addBarrierSprite();
-        this.addCar();
-
-//        this.addCounterSprite();
-//        this.addMileageSprite();
+    //加速
+    speedUp:function () {
+        this.gameSpeed = GC.Car_Speed_Fast;
         this.gameStatus = GC.Game_Running;
+    },
+
+    //减速
+    slowDown:function () {
+        this.gameSpeed = GC.Car_Speed_Slow;
+        this.gameStatus = GC.Game_Running;
+    },
+
+    //速度恢复
+    speedNormal:function () {
+        this.gameStatus = GC.Game_Running;
+    },
+
+    //初始化游戏场景
+    Loading:function () {
+
+        cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
+
+//        this.readyGo();
+        this.startGame();
         this.scheduleUpdate();
     },
 
+    readyGo:function () {
+        this.gameStatus = GC.Game_Start;
+
+        var readyGo = new ReadyGoSprite();
+        readyGo.attr ({
+            x: GC.w_2,
+            y: GC.h_2,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+
+        this.addChild(readyGo);
+    },
+
+    //启动游戏
+    startGame:function () {
+        this.gameStatus = GC.Game_Running;
+        this.addSprite();
+    },
+
+    addSprite:function () {
+        this.addNewBackground();
+        this.addStone();
+        this.addTree();
+        this.addBarrier();
+        this.addCar();
+    },
+
     addNewBackground:function(){
-        cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
         this.newBgSprite = new NewBgSprite(res.Road_png);
         this.newBgSprite.attr({
                     x:GC.w_2,
@@ -119,8 +163,6 @@ var MainLayer = cc.Layer.extend({
 
     //添加汽车
     addCar:function () {
-        cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
-
         this.carSprite = new CarSprite(this.getCarSprite(GC.Car_Center_X));
 
         this.carSprite.attr({
@@ -156,7 +198,6 @@ var MainLayer = cc.Layer.extend({
     },
 
     addTree:function () {
-        cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
         this.currentTree = 0;
         this.treeOrg = [
             cc.p(GC.Tree_01_X, GC.Tree_01_Y),
@@ -182,7 +223,6 @@ var MainLayer = cc.Layer.extend({
             this.addTreeSprite(tree, i);
         }
 
-        this.currentTreeOffset = 0;
         this.currentX = 320;
         var treeAnimation = new TreeSprite();
         this.addChild(treeAnimation, GC.Tree_Sprite);
@@ -204,23 +244,23 @@ var MainLayer = cc.Layer.extend({
 
         var track = [
             cc.p(x, y),
-            this.getSpriteGoal(cc.p(x, y), this.currentTreeOffset),
+            this.getSpriteGoal(cc.p(x, y)),
         ];
 
         this.moveSprite(tree, GC.Tree_Time_Line[index], track, 2);
     },
 
-    getSpriteGoal:function (Org, currentOffset) {
+    getSpriteGoal:function (Org) {
         var radian = GC.Angle / 180 * Math.PI;
 
         var goalX = 0;
         var goalY = 0;
 
         if (Org.x > GC.w_2) {
-            goalX = GC.w * 2 + currentOffset;
+            goalX = GC.w * 2;
             goalY = Org.y - (GC.w - Org.x) * Math.tan(radian)
         } else {
-            goalX = -GC.w * 2 + currentOffset;
+            goalX = -GC.w * 2;
             goalY = Org.y - Math.tan(radian) * Org.x;
         }
 
@@ -245,8 +285,6 @@ var MainLayer = cc.Layer.extend({
     },
 
     addStone:function () {
-        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
-
         this.stoneOrg = [
             cc.p(GC.Stone_01_X, GC.Stone_01_Y),
             cc.p(GC.Stone_02_X, GC.Stone_02_Y),
@@ -269,7 +307,6 @@ var MainLayer = cc.Layer.extend({
             this.addStoneSprite(stone, i);
         }
 
-        this.currentStoneOffset = 0;
         var stoneAnimation = new StoneSprite();
         this.addChild(stoneAnimation, GC.Stone_Sprite);
     },
@@ -290,137 +327,24 @@ var MainLayer = cc.Layer.extend({
 
         var track = [
             cc.p(x, y),
-            this.getSpriteGoal(cc.p(x, y), this.currentStoneOffset),
+            this.getSpriteGoal(cc.p(x, y)),
         ];
 
         this.moveSprite(stone, GC.Stone_Time_Line[index], track, 2);
     },
 
-    //初始化计数精灵
-    addCounterSprite:function () {
-        var size = cc.winSize;
-        this.timeoutLabel = cc.LabelTTF.create(this.timeout, "Arial", 20);
-        this.timeoutLabel.x = 60;
-        this.timeoutLabel.y = size.height - 40;
-        this.addChild(this.timeoutLabel, 5);
-    },
-
-    //初始化里程精灵
-    addMileageSprite:function () {
-        var size = cc.winSize;
-        this.mileageLabel = cc.LabelTTF.create(this.kilometer  + " km", "Arial", 20);
-        this.mileageLabel.x = size.width / 2 - 20;
-        this.mileageLabel.y = size.height - 40;
-        this.addChild(this.mileageLabel, 5);
+    //初始化计时精灵
+    addTimerSprite:function () {
+        this.timerLabel = cc.LabelTTF.create(this.timeout, "Arial", 20);
+        this.timerLabel.x = 60;
+        this.timerLabel.y = size.height - 40;
+        this.addChild(this.timerLabel, GC.Timer_Sprite);
     },
 
     //添加障碍物精灵
-    addBarrierSprite:function () {
-        this.barrierSprites = [];
-        cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
-
-        this.barrierRemove = -200;
-        this.currentBarrierOffset = 0;
-        var barrier = new BarrierSprite();
-        this.addChild(barrier, GC.Barrier_Sprite);
-    },
-
-    //刷新障碍物精灵
-    updateBarrierSprite:function () {
-        var barrierSprite = new BarrierSprite("res/main/main_road_barrier2.png");
-        this.barrierRemove = barrierSprite.height;
-        var x = barrierSprite.width/2 + GC.w * cc.random0To1();
-        var y = GC.h_2 + 160;
-
-        barrierSprite.attr({
-            x: x,
-            y: y,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            scale : 0.2
-        });
-
-        this.barrierSprites.push(barrierSprite);
-        barrierSprite.index = this.barrierSprites.length;
-
-        this.addChild(barrierSprite, GC.Barrier_Sprite);
-
-        barrierSprite.runAction(
-            cc.spawn(new cc.MoveTo(4, cc.p(barrierSprite.x, -this.barrierRemove)),
-                new cc.scaleTo(4, 1.5),
-                new cc.CallFunc(function () {
-                    var event = new cc.EventCustom("barrier_crush");
-                    cc.eventManager.dispatchEvent(event);
-                })
-            )
-        );
-
-        this.removeBarrierSprite();
-    },
-
-    removeBarrierSpriteByCrush:function(dx) {
-        if(isNaN(dx) || dx > this.barrierSprites.length){
-            return false;
-        }
-
-        for(var i = 0, n = 0; i < this.barrierSprites.length; i++) {
-            if(this.barrierSprites[i] != this[dx])
-            {
-                cc.log("--------------");
-                this.barrierSprites[n++] = this.barrierSprites[i]
-            }
-        }
-
-        if (this.barrierSprites.length >= 1) {
-            this.barrierSprites.length -= 1;
-        }
-    },
-
-    //障碍物精灵自动消失
-    removeBarrierSprite:function () {
-        for (var i = 0; i < this.barrierSprites.length; i++) {
-//            cc.log("this.barrierSprites[i].y = ", this.barrierSprites[i].y);
-            if(-this.barrierRemove == this.barrierSprites[i].y) {
-//                cc.log("======removeBarrierSprite: " + i);
-                this.barrierSprites[i].removeFromParent();
-                this.barrierSprites[i] = undefined;
-                this.barrierSprites.splice(i, 1);
-                i = i - 1;
-            }
-        }
-    },
-
-    //刷新倒计时精灵
-    updateCounterSprite:function () {
-        var size = cc.winSize;
-
-        var counter = new CounterSprite();
-
-        counter.attr({
-            x: 60,
-            y:size.height - 40
-        });
-
-        this.addChild(counter, 5);
-    },
-
-    //刷新里程精灵
-    updateMileageSprite:function () {
-        var size = cc.winSize;
-
-        var mileage = new MileageSprite();
-
-        mileage.attr({
-            x:size.width / 2 - 20,
-            y:size.height - 40
-        });
-
-        this.addChild(mileage, 5);
-    },
-
-    //刷新违规精灵
-    updateFaultSprite:function () {
-
+    addBarrier:function () {
+        this.barrierSprite = new BarrierSprite();
+        this.addChild(this.barrierSprite, GC.Barrier_Sprite);
     },
 
     gameOver:function () {

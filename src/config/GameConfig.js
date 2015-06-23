@@ -22,6 +22,7 @@ GC.Barrier_Sprite = 2;
 GC.Car_Sprite = 2;
 GC.Stone_Sprite = 3;
 GC.Tree_Sprite = 4;
+GC.Timer_Sprite = 5;
 
 //路的图片的最大数
 GC.Road_Png_Max = 4;
@@ -38,7 +39,7 @@ GC.Barrier_png_Max = 6;
 GC.Angle = 60;
 
 //水平移动时间
-GC.Horizontal_Move_Time = 0.5;
+GC.Horizontal_Move_Time = 0.1;
 //竖直移动时间
 GC.Vertical_Move_Time = 5;
 
@@ -69,6 +70,9 @@ GC.Car_Left_Y = 275;
 GC.Car_Right_X = 600;
 GC.Car_Right_Y = 275;
 
+//游戏内部timer间隔
+GC.Game_Timer_Interval = 0.5;
+
 //随机出现左边树位置
 GC.Tree_Show_Left_X = 150;
 GC.Tree_Show_Left_Y = 700;
@@ -84,6 +88,8 @@ GC.Tree_Show_Right_scale = 0.2;
 //随机出现树的最终缩放大小
 GC.Tree_Goal_scale = 2;
 
+
+//五棵树的时间轴
 GC.Tree_Time_Line = [
     5, 2, 5, 3, 1
 ];
@@ -278,6 +284,15 @@ GC.Crash_Slow_Down = 2; //减速
 GC.Game_Loading   = 1;
 GC.Game_Start     = 2;
 GC.Game_Running   = 3;
-GC.Game_Over      = 0;
+GC.Game_Speed_Up  = 4;
+GC.Game_Slow_Down = 5;
+GC.Game_Over      = 6;
+
+//游戏速度定义
+GC.Car_Speed_Slow   = 1;
+GC.Car_Speed_Normal = 2;
+GC.Car_Speed_Fast   = 3;
+
+
 
 

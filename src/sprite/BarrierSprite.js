@@ -13,9 +13,6 @@
 
 var BarrierSprite = cc.Sprite.extend({
     totalTime:0,
-    currentMapIndex:0,
-    crushListener:null,
-    touchListener:null,
     barrierSprites:null,
     spriteArrays:null,
     trackArrays:null,
@@ -25,32 +22,10 @@ var BarrierSprite = cc.Sprite.extend({
     onEnter:function () {
         this._super();
         this.initSprites();
-        this.addCrushListener();
     },
 
     onExit:function () {
-        this.removeCrushListener();
         this._super();
-    },
-
-    //添加碰撞事件监听
-    addCrushListener:function() {
-        this.crushListener = cc.eventManager.addListener(
-             cc.EventListener.create({
-                event: cc.EventListener.CUSTOM,
-                eventName: "barrier_crush",
-                callback: function(event){
-                    cc.log("barrier_crush");
-                    var target = event.getCurrentTarget();
-                    target.carCrash(target);
-                }
-            }),
-            this
-        );
-    },
-
-    removeCrushListener:function() {
-        cc.eventManager.removeListener(this.crushListener);
     },
 
     //初始化精灵图片
@@ -68,9 +43,11 @@ var BarrierSprite = cc.Sprite.extend({
             this.barrierSprites.push(frame);
         }
 
-        this.generateBarrier(GC.Barrier_Map1, GC.Time_Line1, GC.Barrier_Org_Position, GC.Barrier_Org_Scale, GC.Barrier_Goal_Position, GC.Barrier_Goal_Scale);
+//        this.generateBarrier(GC.Barrier_Map1, GC.Time_Line1, GC.Barrier_Org_Position, GC.Barrier_Org_Scale, GC.Barrier_Goal_Position, GC.Barrier_Goal_Scale);
         this.getBarrierMap(GC.Barrier_Map1, GC.Time_Line1);
+
         this.scheduleUpdate();
+//        this.schedule(this.setBarrier, 1, cc.REPEAT_FOREVER, 0);
     },
 
     //获取障碍物地图
@@ -88,7 +65,7 @@ var BarrierSprite = cc.Sprite.extend({
 
                     var sprite = new cc.Sprite(this.getBarrierFrame(type));
 
-                    var x = Barrier_Org_Position[j].x + this.getParent().currentBarrierOffset;
+                    var x = Barrier_Org_Position[j].x;
                     var y = Barrier_Org_Position[j].y;
 
                     sprite.attr({
@@ -100,7 +77,7 @@ var BarrierSprite = cc.Sprite.extend({
                         scale:GC.Barrier_Org_Scale[j]
                     });
 
-                    this.getParent().addChild(sprite, GC.Tree_Sprite);
+                    this.getParent().addChild(sprite, GC.Barrier_Sprite);
 
                     var track = [
                         cc.p(x, y),
@@ -158,6 +135,18 @@ var BarrierSprite = cc.Sprite.extend({
         }
     },
 
+    setBarrier:function () {
+        if (this.spriteArrays.length > 0) {
+            for (var i = 0; i < this.spriteArrays.length; i++) {
+                if (this.totalTime.toFixed(1) == this.timeLineArrays[i] * 5) {
+                    this.spriteArrays[i].visible = true;
+                    this.moveSprite(this.spriteArrays[i], GC.Vertical_Move_Time * 2, this.trackArrays[i], this.goalScaleArrays[i]);
+                }
+                this.carCrash(this.spriteArrays[i], this.crashType[i]);
+            }
+        }
+    },
+
     moveSprite:function (sprite, time, track, scale) {
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
         var seq = cc.sequence(
@@ -194,23 +183,39 @@ var BarrierSprite = cc.Sprite.extend({
 
             if (crashType == GC.Crash_Shut_Down) { //所有动作停止
                 target.stopAllActions();
-                this.getParent().gameStatus = GC.Game_Over; //告知情景
+                this.getParent().gameStatus = GC.Game_Over;
             } else {
-                if (crashType == GC.Crash_Speed_Up){
-
-                } else if (crashType == GC.Crash_Slow_Down){
-
-                }
-
                 var spawn = cc.spawn(cc.rotateBy(0.2, 360), cc.fadeOut(0.2));
                 target.runAction(cc.sequence(
                       spawn,
                       cc.callFunc(function () {
-                          target.removeFromParent();
+                            var event = new cc.EventCustom("speed_change");
+                            if (crashType == GC.Crash_Speed_Up){ //加速
+                                event.setUserData(GC.Car_Speed_Fast);
+                            } else if (crashType == GC.Crash_Slow_Down){ //减速
+                                event.setUserData(GC.Car_Speed_Slow);
+                            }
+                            cc.eventManager.dispatchEvent(event);
+
+                            target.removeFromParent();
                       })
                 ));
             }
         }
-    }
+    },
 
+    //加速
+    speedUp:function () {
+        this.getParent().gameSpeed = GC.Car_Speed_Fast;
+    },
+
+    //减速
+    slowDown:function () {
+        this.getParent().gameSpeed = GC.Car_Speed_Slow;
+    },
+
+    //速度恢复
+    speedNormal:function () {
+        this.getParent().gameSpeed = GC.Car_Speed_Normal;
+    }
 });

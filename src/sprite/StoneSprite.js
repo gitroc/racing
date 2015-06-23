@@ -12,48 +12,37 @@
 ****************************************************************************/
 var StoneSprite = cc.Sprite.extend({
     stoneFrames:null,
-    touchListener:null,
+    speedListener:null,
+    time:0,
     onEnter:function () {
         this._super();
         this.initSprites();
         this.addListener();
-        this.schedule(this.buriedStone, 1, cc.REPEAT_FOREVER, 0);
     },
 
     onExit:function () {
-        this.removeListener();
         this.unschedule(this.buriedStone);
+        this.removeListener();
         this._super();
     },
 
     addListener:function() {
-        if('touches' in cc.sys.capabilities) { //支持触摸事件
-            this.touchListener = cc.eventManager.addListener(
-                cc.EventListener.create({
-                    event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-                    onTouchesEnded:function (touches, event) {
-                        if (touches.length <= 0) {
-                            return;
-                        }
-                        var target = event.getCurrentTarget();
-//                        target.updateOffset(target, touches[0].getLocation());
-                    }
-                }),
-                this
-            );
-        } else if ('mouse' in cc.sys.capabilities) { //支持鼠标事件
-            this.touchListener = cc.eventManager.addListener({
-                event: cc.EventListener.MOUSE,
-                onMouseUp: function (event) {
+        this.speedListener = cc.eventManager.addListener(
+             cc.EventListener.create({
+                event: cc.EventListener.CUSTOM,
+                eventName: "speed_change",
+                callback: function(event){
+                    cc.log("stone speed_change", event.getUserData());
                     var target = event.getCurrentTarget();
-//                    target.updateOffset(target, event.getLocation());
+                    target.resetSpeed(event.getUserData());
                 }
-            }, this);
-        }
+            }),
+            this
+        );
     },
 
     removeListener:function() {
-        cc.eventManager.removeListener(this.touchListener);
+        cc.eventManager.removeListener(this.speedListener);
     },
 
     //初始化精灵图片
@@ -64,6 +53,33 @@ var StoneSprite = cc.Sprite.extend({
             var str = "main_bg_object_stone" + (i + 1) + ".png";
             var frame = cc.spriteFrameCache.getSpriteFrame(str);
             this.stoneFrames.push(frame);
+        }
+
+        this.startTimer();
+    },
+
+    //启动定时器
+    startTimer:function () {
+        if (this.getParent().gameStatus == GC.Game_Running) {
+            this.setSpeed();
+            this.schedule(this.buriedStone, 1, cc.REPEAT_FOREVER, 0);
+        } else {
+            this.stopAllActions();
+            this.unschedule(this.buriedStone);
+        }
+    },
+
+    setSpeed:function () {
+        this.time = GC.Vertical_Move_Time;
+    },
+
+    resetSpeed:function (gameSpeed) {
+        if (GC.Car_Speed_Slow == gameSpeed) {
+            this.time = GC.Vertical_Move_Time + 1;
+        } else if (GC.Car_Speed_Fast == gameSpeed) {
+            this.time = GC.Vertical_Move_Time - 1;
+        } else {
+            this.setSpeed();
         }
     },
 
@@ -77,6 +93,7 @@ var StoneSprite = cc.Sprite.extend({
         }
     },
 
+    //获取石头初始坐标
     getStoneOrg:function () {
         var value = cc.random0To1();
 
@@ -84,16 +101,17 @@ var StoneSprite = cc.Sprite.extend({
         var y = 0;
 
         if (value > 0.5) {
-            x = GC.Stone_Show_Right_X + this.getParent().currentStoneOffset;
+            x = GC.Stone_Show_Right_X;
             y = GC.Stone_Show_Right_Y;
         } else {
-            x = GC.Stone_Show_Left_X + this.getParent().currentStoneOffset;
+            x = GC.Stone_Show_Left_X;
             y = GC.Stone_Show_Left_Y;
         }
 
         return cc.p(x, y);
     },
 
+    //获取石头初始大小
     getStoneScale:function () {
         var value = cc.random0To1();
         var scale = 0;
@@ -108,59 +126,24 @@ var StoneSprite = cc.Sprite.extend({
 
     //埋石头
     buriedStone:function () {
-        if (this.getParent().gameStatus == GC.Game_Running) {
-            var sprite = new cc.Sprite(this.getStoneFrame());
-            var x = this.getStoneOrg().x;
-            var y = this.getStoneOrg().y;
-            sprite.attr({
-                x:x,
-                y:y,
-                anchorX: 0.5,
-                anchorY: 0.5,
-                scale:this.getStoneScale()
-            });
+        var sprite = new cc.Sprite(this.getStoneFrame());
+        var x = this.getStoneOrg().x;
+        var y = this.getStoneOrg().y;
+        sprite.attr({
+            x:x,
+            y:y,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            scale:this.getStoneScale()
+        });
 
-            this.getParent().addChild(sprite, GC.Stone_Sprite);
+        this.getParent().addChild(sprite, GC.Stone_Sprite);
 
-            var track = [
-                cc.p(x, y),
-                this.getParent().getSpriteGoal(cc.p(x, y), this.getParent().currentStoneOffset),
-            ];
+        var track = [
+            cc.p(x, y),
+            this.getParent().getSpriteGoal(cc.p(x, y)),
+        ];
 
-            this.getParent().moveSprite(sprite, GC.Vertical_Move_Time, track, GC.Stone_Goal_scale);
-        } else {
-             this.stopAllActions();
-             this.unschedule(this.buriedStone);
-         }
-    },
-
-    updateOffset:function (target, position) {
-//        target.stopAllActions();
-//        target.unschedule(target.buriedStone);
-
-        var positionX = Math.round(position.x);
-
-        if (this.getParent().currentStoneOffset == 0) { //在中间
-            if (positionX < GC.Car_Center_X) {
-                this.getParent().currentStoneOffset = 100;// 向左移动
-            } else {
-                this.getParent().currentStoneOffset = -100;// 向右移动
-            }
-        } else if (this.getParent().currentStoneOffset == 100) {
-            if (positionX > GC.Car_Left_X) {
-                this.getParent().currentStoneOffset = 0
-            }
-        } else if (this.getParent().currentStoneOffset == -100) {
-            if (positionX < GC.Car_Right_X) {
-                this.getParent().currentStoneOffset = 0
-            }
-        }
-
-        var actionMove = cc.moveTo(GC.Horizontal_Move_Time,cc.p(this.getParent().currentStoneOffset,0));//moveTo or moveBy
-        this.runAction(actionMove);
-//        var stone = new StoneSprite();
-//        this.getParent().addChild(stone, GC.Stone_Sprite);
-//
-//        target.removeFromParent();
+        this.getParent().moveSprite(sprite, this.time, track, GC.Stone_Goal_scale);
     }
 });

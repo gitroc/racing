@@ -33,8 +33,8 @@ var NewBgSprite = cc.Sprite.extend({
             this.stopAllActions();
             this.unschedule(this.update);
         }
-
     },
+
     addListener:function() {
         if('touches' in cc.sys.capabilities) { //支持触摸事件
             this.touchListener = cc.eventManager.addListener(

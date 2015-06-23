@@ -11,7 +11,7 @@
 
  ****************************************************************************/
 
-var CounterSprite = cc.Sprite.extend({
+var TimerSprite = cc.Sprite.extend({
     time:null,
     onEnter:function () {
 //        cc.log("CounterSprite onEnter");

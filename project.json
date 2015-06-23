@@ -24,7 +24,7 @@
 
         "src/sprite/CarTypeSprite.js",
         "src/sprite/DemoSprite.js",
-        "src/sprite/CounterSprite.js",
+        "src/sprite/TimerSprite.js",
         "src/sprite/BarrierSprite.js",
         "src/sprite/MileageSprite.js",
         "src/sprite/BgSprite.js",
@@ -32,5 +32,6 @@
         "src/sprite/CarSprite.js",
         "src/sprite/StoneSprite.js",
         "src/sprite/TreeSprite.js",
-        "src/sprite/NewBgSprite.js"
+        "src/sprite/NewBgSprite.js",
+        "src/sprite/ReadyGoSprite.js"
     ]}

@@ -12,7 +12,8 @@ var res = {
     Start_S_png : "res/start_S.png",
     Ground_png : "res/bg.png",
     Prospect_png : "res/prospect.png",
-    Background_plist:"res/main/main_bg_road.plist"
+    Background_plist : "res/main/main_bg_road.plist",
+    ReadyGo_plist : "res/main/main_road.plist"
 };
 
 var g_resources = [];
