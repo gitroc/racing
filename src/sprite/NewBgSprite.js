@@ -4,12 +4,16 @@
 */
 var currentBg = GC.Car_Center_X;
 var NewBgSprite = cc.Sprite.extend({
+    onceTime:null,
+    allTime:null,
     bgs:null,
     onEnter:function(){
         this._super();
         this.initSprite();
-        this.schedule(this.update, 0.4, cc.REPEAT_FOREVER, 0);
-        this.addListener();
+        this.onceTime = 0.1;
+        this.allTime = 0.4;
+        this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
+//        this.addListener();
     },
     onExit:function(){
         this.unschedule(update);
@@ -26,15 +30,24 @@ var NewBgSprite = cc.Sprite.extend({
     //循环动画
     update:function(){
         if (this.getParent().gameStatus == GC.Game_Running) {
-            var animation = new cc.Animation(this.bgs, 0.1);
+            var animation = new cc.Animation(this.bgs, this.onceTime);
             var action = new cc.Animate(animation);
             this.runAction(action);
         } else {
             this.stopAllActions();
             this.unschedule(this.update);
         }
-    },
 
+    },
+    //重启动画,碰到加（减）速道具速度改变
+    updateAction:function(oTime,aTime){
+        this.unschedule(this.update);
+        this.onceTime = oTime;
+        this.allTime=aTime;
+        cc.log("Once:"+this.onceTime+"--All:"+this.allTime);
+//        this.update(this.schedule);
+        this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
+    },
     addListener:function() {
         if('touches' in cc.sys.capabilities) { //支持触摸事件
             this.touchListener = cc.eventManager.addListener(

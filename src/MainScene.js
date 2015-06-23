@@ -55,10 +55,15 @@ var MainLayer = cc.Layer.extend({
     barrierSprite:null,
     barrierRemove:0,
     newBgSprite:null,
+    _drawNode2:null,
     ctor:function () {
         this._super();
 
         this.Loading();
+
+        this._drawNode2 = new cc.DrawNode();
+        this._drawNode2.setDrawColor(cc.color(255,255,255,255));
+        this.addChild(this._drawNode2);
 
         return true;
     },
