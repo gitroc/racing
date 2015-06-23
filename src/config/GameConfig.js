@@ -38,7 +38,7 @@ GC.Barrier_png_Max = 6;
 GC.Angle = 60;
 
 //水平移动时间
-GC.Horizontal_Move_Time = 0.5;
+GC.Horizontal_Move_Time = 0.1;
 //竖直移动时间
 GC.Vertical_Move_Time = 5;
 

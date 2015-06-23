@@ -159,6 +159,7 @@ var BarrierSprite = cc.Sprite.extend({
     },
 
     moveSprite:function (sprite, time, track, scale) {
+        this.getParent()._drawNode2.drawCatmullRom(track,50, 1);
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
         var seq = cc.sequence(
             spawn,
