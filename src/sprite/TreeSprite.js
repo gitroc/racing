@@ -69,16 +69,21 @@ var TreeSprite = cc.Sprite.extend({
         }
     },
 
+    //设置纵向移动速度
     setSpeed:function () {
         this.time = GC.Vertical_Move_Time;
     },
 
-    resetSpeed:function (gameSpeed) {
-        if (GC.Car_Speed_Slow == gameSpeed) {
-            this.time = GC.Vertical_Move_Time + 1;
-        } else if (GC.Car_Speed_Fast == gameSpeed) {
-            this.time = GC.Vertical_Move_Time - 1;
-        } else {
+    //重新设置纵向移动速度
+    resetSpeed:function (gameStatus) {
+        if (GC.Game_Slow_Down == gameStatus) {
+            this.time = GC.Vertical_Move_Time * 2;
+        } else if (GC.Game_Speed_Up == gameStatus) {
+            this.time = GC.Vertical_Move_Time / 2;
+        } else if (GC.Game_Over == gameStatus) {
+            this.stopAllActions();
+            this.unschedule(this.plantTree);
+        }else {
             this.setSpeed();
         }
     },

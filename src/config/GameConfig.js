@@ -171,7 +171,7 @@ GC.Barrier_Speed = 300;
 
 //障碍物初始缩放大小及位置坐标
 GC.Barrier_Org_Scale = [
-    0.4, 0.4, 0.4
+    0.2, 0.2, 0.2
 ];
 
 GC.Barrier_Org_Position = [
@@ -182,13 +182,13 @@ GC.Barrier_Org_Position = [
 
 //障碍物结束缩放大小及位置坐标
 GC.Barrier_Goal_Scale = [
-    3, 3, 3
+    1, 1, 1
 ];
 
 GC.Barrier_Goal_Position = [
-    cc.p(-300, -500),
-    cc.p( 320, -500),
-    cc.p( 930, -500),
+    cc.p(-300, -100),
+    cc.p( 320, -100),
+    cc.p( 930, -100),
 ];
 
 //障碍物最大地图个数
@@ -272,7 +272,7 @@ GC.Barrier_Map3 = [
 
 //障碍物时间轴3
 GC.Time_Line3 = [
-    0.1, 1.5, 1.7, 2.5, 3.2, 3.5, 4.2, 5, 5.3, 6, 6.7, 6.9, 7.5, 8, 8.3, 8.6, 9.2, 9.8
+    0.5, 1.5, 2.0, 2.5, 3.5, 3.5, 4.5, 5.0, 5.5, 6.0, 7.0, 7.0, 7.5, 8, 8.5, 8.5, 9.5, 10.0
 ];
 
 //碰撞类型
@@ -287,11 +287,6 @@ GC.Game_Running   = 3;
 GC.Game_Speed_Up  = 4;
 GC.Game_Slow_Down = 5;
 GC.Game_Over      = 6;
-
-//游戏速度定义
-GC.Car_Speed_Slow   = 1;
-GC.Car_Speed_Normal = 2;
-GC.Car_Speed_Fast   = 3;
 
 
 
