@@ -7,80 +7,80 @@
             <key>main_road_barrier1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{375,164},{134,154}}</string>
+                <string>{{371,220},{136,155}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{134,154}}</string>
+                <string>{{0,0},{136,155}}</string>
                 <key>sourceSize</key>
-                <string>{134,154}</string>
+                <string>{136,155}</string>
             </dict>
             <key>main_road_barrier2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{218,121}}</string>
+                <string>{{388,2},{216,121}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{218,121}}</string>
+                <string>{{0,0},{216,121}}</string>
                 <key>sourceSize</key>
-                <string>{218,121}</string>
+                <string>{216,121}</string>
             </dict>
             <key>main_road_barrier3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{199,287},{174,184}}</string>
+                <string>{{2,216},{205,195}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{174,184}}</string>
+                <string>{{0,0},{205,195}}</string>
                 <key>sourceSize</key>
-                <string>{174,184}</string>
+                <string>{205,195}</string>
             </dict>
             <key>main_road_barrier4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,287},{207,195}}</string>
+                <string>{{2,2},{222,212}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{207,195}}</string>
+                <string>{{0,0},{222,212}}</string>
                 <key>sourceSize</key>
-                <string>{207,195}</string>
+                <string>{222,212}</string>
             </dict>
             <key>main_road_barrier5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,125},{160,209}}</string>
+                <string>{{209,216},{160,208}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{160,209}}</string>
+                <string>{{0,0},{160,208}}</string>
                 <key>sourceSize</key>
-                <string>{160,209}</string>
+                <string>{160,208}</string>
             </dict>
             <key>main_road_barrier6.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{222,2},{160,209}}</string>
+                <string>{{226,2},{160,208}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{160,209}}</string>
+                <string>{{0,0},{160,208}}</string>
                 <key>sourceSize</key>
-                <string>{160,209}</string>
+                <string>{160,208}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -92,7 +92,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:db6d6f284632e8deec1df2e19948ad5d$</string>
+            <string>$TexturePacker:SmartUpdate:241769759b9ca7daea3613b750bd9e6d$</string>
             <key>textureFileName</key>
             <string>main_road_barrier.png</string>
         </dict>

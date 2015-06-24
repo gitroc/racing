@@ -66,19 +66,37 @@ var BarrierSprite = cc.Sprite.extend({
             this.barrierSprites.push(frame);
         }
 
-        this.getBarrierMap(GC.Barrier_Map1, GC.Time_Line1);
+        this.LoadingMaps(GC.Game_Level_Normal);
 
-//        this.scheduleUpdate();
         this.startTimer();
     },
 
-    //获取障碍物地图
-    getBarrierMap:function (barrierMap, timeLine) {
-        this.generateBarrier(barrierMap, timeLine, GC.Barrier_Org_Position, GC.Barrier_Org_Scale, GC.Barrier_Goal_Position, GC.Barrier_Goal_Scale);
+    //根据游戏难度加载相关难度地图
+    LoadingMaps:function (level) {
+        var value = 10 * cc.random0To1().toFixed(1);
+        var barrierMap = [];
+        var timeLine = [];
+        switch (level) {
+            case GC.Game_Level_Easy:
+                barrierMap = GC.Barrier_Map[value][0];
+                timeLine = GC.Barrier_Map[value][1];
+            break;
+            case GC.Game_Level_Normal:
+                barrierMap = GC.Barrier_Map[value + 10][0];
+                timeLine = GC.Barrier_Map[value + 10][1];
+            break;
+            case GC.Game_Level_Hard:
+                barrierMap = GC.Barrier_Map[value + 20][0];
+                timeLine = GC.Barrier_Map[value + 20][1];
+            break;
+        }
+
+        this.clearBarrier();
+        this.LoadOneMap(barrierMap, timeLine, GC.Barrier_Org_Position, GC.Barrier_Org_Scale, GC.Barrier_Goal_Position, GC.Barrier_Goal_Scale);
     },
 
     //生成障碍物
-    generateBarrier:function (Barrier_Map, Time_Line, Barrier_Org_Position, Barrier_Org_Scale, Barrier_Goal_Position, Barrier_Goal_Scale) {
+    LoadOneMap:function (Barrier_Map, Time_Line, Barrier_Org_Position, Barrier_Org_Scale, Barrier_Goal_Position, Barrier_Goal_Scale) {
         for (var i = 0; i < Barrier_Map.length ; i++) { //按列查询
             for (var j = 0; j < Barrier_Map[i].length; j++) {
                 var type = Barrier_Map[i][j];
@@ -123,7 +141,7 @@ var BarrierSprite = cc.Sprite.extend({
         }
     },
 
-    //清理障碍物
+    //清理一张地图的障碍物
     clearBarrier:function () {
         if (this.spriteArrays.length > 0) {
             for (var i = 0; i < this.spriteArrays.length; i++) {
@@ -137,24 +155,10 @@ var BarrierSprite = cc.Sprite.extend({
         }
     },
 
+    //定点清理障碍物
     clearBarrierArray:function (array, index) {
         array = undefined;
         array.splice(index, 1);
-    },
-
-    update:function(dt) {
-        this.totalTime += dt;
-        if (this.getParent().gameStatus == GC.Game_Running) {
-            if (this.spriteArrays.length > 0) {
-                for (var i = 0; i < this.spriteArrays.length; i++) {
-                    if (this.totalTime.toFixed(1) == this.timeLineArrays[i] * 5) {
-                        this.spriteArrays[i].visible = true;
-                        this.moveSprite(this.spriteArrays[i], GC.Vertical_Move_Time * 2, this.trackArrays[i], this.goalScaleArrays[i]);
-                    }
-                    this.carCrash(this.spriteArrays[i], this.crashType[i]);
-                }
-            }
-        }
     },
 
     //启动定时器
@@ -187,6 +191,7 @@ var BarrierSprite = cc.Sprite.extend({
         }
     },
 
+    //根据地图画障碍物
     setBarrier:function () {
         this.totalTime += GC.Game_Timer_Interval;
         if (this.spriteArrays.length > 0) {
@@ -200,6 +205,7 @@ var BarrierSprite = cc.Sprite.extend({
         }
     },
 
+    //移动障碍物
     moveSprite:function (sprite, time, track, scale) {
         this.getParent()._drawNode2.drawCatmullRom(track,50, 1);
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
@@ -213,10 +219,6 @@ var BarrierSprite = cc.Sprite.extend({
         );
 
         sprite.runAction(seq);
-    },
-
-    getScheduleTime:function (distance) {
-        return (distance / GC.Barrier_Speed).toFixed(1)
     },
 
     //获取障碍物图片
@@ -257,20 +259,5 @@ var BarrierSprite = cc.Sprite.extend({
                 ));
             }
         }
-    },
-
-    //加速
-    speedUp:function () {
-        this.getParent().gameStatus = GC.Car_Speed_Fast;
-    },
-
-    //减速
-    slowDown:function () {
-        this.getParent().gameStatus = GC.Car_Speed_Slow;
-    },
-
-    //速度恢复
-    speedNormal:function () {
-        this.getParent().gameStatus = GC.Car_Speed_Normal;
     }
 });

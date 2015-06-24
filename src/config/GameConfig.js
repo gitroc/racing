@@ -191,9 +191,6 @@ GC.Barrier_Goal_Position = [
     cc.p( 930, -100),
 ];
 
-//障碍物最大地图个数
-GC.Barrier_Map_Max = 3;
-
 //障碍物地图1
 GC.Barrier_Map1 = [
     [6, 0, 0],
@@ -218,56 +215,56 @@ GC.Barrier_Map1 = [
 
 //障碍物时间轴1
 GC.Time_Line1 = [
-    0.1, 1.5, 1.7, 2.5, 3.2, 3.5, 4.2, 5, 5.3, 6, 6.7, 6.9, 7.5, 8, 8.3, 8.6, 9.2, 9.8
+    0.5, 1.5, 2.0, 2.5, 3.5, 3.5, 4.5, 5.0, 5.5, 6.0, 7.0, 7.0, 7.5, 8, 8.5, 8.5, 9.5, 10.0
 ];
 
 //障碍物地图2
 GC.Barrier_Map2 = [
-    [6, 0, 0],
+    [0, 3, 0],
     [0, 1, 0],
     [0, 2, 0],
-    [0, 0, 5],
+    [0, 3, 0],
     [1, 0, 2],
     [0, 0, 3],
     [0, 6, 0],
     [3, 0, 0],
-    [3, 0, 3],
+    [3, 3, 0],
     [0, 1, 0],
     [1, 0, 0],
     [2, 0, 0],
     [0, 0, 3],
     [0, 3, 0],
-    [0, 4, 0],
-    [0, 3, 0],
-    [0, 3, 0],
-    [0, 0, 3],
+    [0, 0, 2],
+    [0, 0, 1],
+    [2, 0, 0],
+    [2, 0, 3],
 ];
 
 //障碍物时间轴2
 GC.Time_Line2 = [
-    0.1, 1.5, 1.7, 2.5, 3.2, 3.5, 4.2, 5, 5.3, 6, 6.7, 6.9, 7.5, 8, 8.3, 8.6, 9.2, 9.8
+    0.5, 1.5, 2.0, 2.5, 3.5, 3.5, 4.5, 5.0, 5.5, 6.0, 7.0, 7.0, 7.5, 8, 8.5, 8.5, 9.5, 10.0
 ];
 
 //障碍物地图3
 GC.Barrier_Map3 = [
-    [6, 0, 0],
+    [5, 0, 0],
+    [0, 3, 0],
+    [0, 2, 0],
+    [0, 0, 6],
+    [3, 0, 2],
+    [0, 0, 1],
+    [0, 6, 0],
+    [1, 0, 0],
+    [1, 0, 3],
+    [0, 3, 0],
+    [3, 0, 0],
+    [4, 0, 0],
+    [0, 0, 1],
     [0, 1, 0],
     [0, 2, 0],
-    [0, 0, 5],
-    [1, 0, 2],
-    [0, 0, 3],
-    [0, 6, 0],
-    [3, 0, 0],
-    [3, 0, 3],
     [0, 1, 0],
-    [1, 0, 0],
-    [2, 0, 0],
-    [0, 0, 3],
-    [0, 3, 0],
-    [0, 4, 0],
-    [0, 3, 0],
-    [0, 3, 0],
-    [0, 0, 3],
+    [0, 1, 0],
+    [0, 0, 1],
 ];
 
 //障碍物时间轴3
@@ -288,6 +285,45 @@ GC.Game_Speed_Up  = 4;
 GC.Game_Slow_Down = 5;
 GC.Game_Over      = 6;
 
+//游戏难度
+GC.Game_Level_Easy   = 1;
+GC.Game_Level_Normal = 2;
+GC.Game_Level_Hard   = 3;
 
 
+//障碍物最大地图个数
+GC.Barrier_Map_Max = 30;
+
+GC.Barrier_Map = [
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map1, GC.Time_Line1],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map2, GC.Time_Line2],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+   [GC.Barrier_Map3, GC.Time_Line3],
+];
 

@@ -7,65 +7,65 @@
             <key>main_bg_object_tree1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,680},{220,136}}</string>
+                <string>{{2,190},{200,136}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{220,136}}</string>
+                <string>{{10,0},{200,136}}</string>
                 <key>sourceSize</key>
                 <string>{220,136}</string>
             </dict>
             <key>main_bg_object_tree2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{250,186}}</string>
+                <string>{{2,2},{240,186}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{250,186}}</string>
+                <string>{{5,0},{240,186}}</string>
                 <key>sourceSize</key>
                 <string>{250,186}</string>
             </dict>
             <key>main_bg_object_tree3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,518},{220,160}}</string>
+                <string>{{2,330},{210,160}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{220,160}}</string>
+                <string>{{5,0},{210,160}}</string>
                 <key>sourceSize</key>
                 <string>{220,160}</string>
             </dict>
             <key>main_bg_object_tree4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,190},{250,164}}</string>
+                <string>{{244,2},{240,164}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{250,164}}</string>
+                <string>{{5,0},{240,164}}</string>
                 <key>sourceSize</key>
                 <string>{250,164}</string>
             </dict>
             <key>main_bg_object_tree5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,356},{250,160}}</string>
+                <string>{{244,168},{240,160}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{250,160}}</string>
+                <string>{{5,0},{240,160}}</string>
                 <key>sourceSize</key>
                 <string>{250,160}</string>
             </dict>
@@ -77,9 +77,9 @@
             <key>realTextureFileName</key>
             <string>main_bg_object_tree.png</string>
             <key>size</key>
-            <string>{254,818}</string>
+            <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:97f7518fa1051f52fc76e4d97d04be0f:63958953678235d930abbe3e198a6f19:3fbd6b2d49f8d8de5f1e2466794cc4bf$</string>
+            <string>$TexturePacker:SmartUpdate:8047cf89cd1aff54789713807d4a04d3$</string>
             <key>textureFileName</key>
             <string>main_bg_object_tree.png</string>
         </dict>
