@@ -15,7 +15,10 @@ var OverLayer = cc.Layer.extend({
                 cc.log("Menu is clicked!");
 //    			cc.director.replaceScene(cc.TransitionFade(1.2, new RaceAskScene()));
 //                cc.director.runScene(new cc.TransitionFade(1.2, new RaceAskScene()));
-                document.title = window.wxFriend.desc = "我拿了分，战胜了个汪，超越了％的好友！你能超过我吗";
+                document.title =  window.wxData.desc = "wxData喵星刷屏！喵获得";
+                document.title = window.wxFriend.desc = "wxFriend我拿了分，战胜了个汪，超越了％的好友！你能超过我吗";
+
+                cc.log(window.wxData.desc);
                 cc.log(window.wxFriend.desc);
             }, this);
 
