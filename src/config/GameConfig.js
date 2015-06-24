@@ -290,6 +290,12 @@ GC.Game_Level_Easy   = 1;
 GC.Game_Level_Normal = 2;
 GC.Game_Level_Hard   = 3;
 
+//游戏难度调整时间 秒
+GC.Game_Easy_To_Normal = 30;
+GC.Game_Normal_To_Hard = 60;
+
+//地图切换时间
+GC.Game_Map_Adjust_Time = 10;
 
 //障碍物最大地图个数
 GC.Barrier_Map_Max = 30;

@@ -13,7 +13,7 @@
 var StoneSprite = cc.Sprite.extend({
     stoneFrames:null,
     speedListener:null,
-    time:0,
+    verticalMoveTime:0,
     onEnter:function () {
         this._super();
         this.initSprites();
@@ -71,15 +71,15 @@ var StoneSprite = cc.Sprite.extend({
 
     //设置纵向移动速度
     setSpeed:function () {
-        this.time = GC.Vertical_Move_Time;
+        this.verticalMoveTime = GC.Vertical_Move_Time;
     },
 
     //重新设置纵向移动速度
     resetSpeed:function (gameStatus) {
         if (GC.Game_Slow_Down == gameStatus) {
-            this.time = GC.Vertical_Move_Time * 2;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 2;
         } else if (GC.Game_Speed_Up == gameStatus) {
-            this.time = GC.Vertical_Move_Time / 2;
+            this.verticalMoveTime = GC.Vertical_Move_Time / 2;
         } else if (GC.Game_Over == gameStatus) {
             this.stopAllActions();
             this.unschedule(this.buriedStone);
@@ -149,6 +149,6 @@ var StoneSprite = cc.Sprite.extend({
             this.getParent().getSpriteGoal(cc.p(x, y)),
         ];
 
-        this.getParent().moveSprite(sprite, this.time, track, GC.Stone_Goal_scale);
+        this.getParent().moveSprite(sprite, this.verticalMoveTime, track, GC.Stone_Goal_scale);
     }
 });

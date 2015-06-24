@@ -12,7 +12,7 @@
  ****************************************************************************/
 
 var BarrierSprite = cc.Sprite.extend({
-    totalTime:0,
+    oneMapTime:0,
     barrierSprites:null,
     spriteArrays:null,
     trackArrays:null,
@@ -20,7 +20,8 @@ var BarrierSprite = cc.Sprite.extend({
     timeLineArrays:null,
     crashType:null,
     speedListener:null,
-    time:0,
+    verticalMoveTime:0,
+    timeAdjustSpeed:0,
     onEnter:function () {
         this._super();
         this.initSprites();
@@ -66,7 +67,7 @@ var BarrierSprite = cc.Sprite.extend({
             this.barrierSprites.push(frame);
         }
 
-        this.LoadingMaps(GC.Game_Level_Normal);
+        this.autoAdjustMap(this.timeAdjustSpeed);
 
         this.startTimer();
     },
@@ -76,6 +77,11 @@ var BarrierSprite = cc.Sprite.extend({
         var value = 10 * cc.random0To1().toFixed(1);
         var barrierMap = [];
         var timeLine = [];
+
+        if (value + 20 >= GC.Barrier_Map_Max) {
+            return;
+        }
+
         switch (level) {
             case GC.Game_Level_Easy:
                 barrierMap = GC.Barrier_Map[value][0];
@@ -145,19 +151,21 @@ var BarrierSprite = cc.Sprite.extend({
     clearBarrier:function () {
         if (this.spriteArrays.length > 0) {
             for (var i = 0; i < this.spriteArrays.length; i++) {
-                this.clearBarrierArray(this.spriteArrays);
-                this.clearBarrierArray(this.trackArrays);
-                this.clearBarrierArray(this.goalScaleArrays);
-                this.clearBarrierArray(this.timeLineArrays);
-                this.clearBarrierArray(this.crashType);
+                this.clearBarrierArray(this.spriteArrays, i);
+                this.clearBarrierArray(this.trackArrays, i);
+                this.clearBarrierArray(this.goalScaleArrays, i);
+                this.clearBarrierArray(this.timeLineArrays, i);
+                this.clearBarrierArray(this.crashType, i);
                 i = i - 1;
             }
         }
+
+        this.oneMapTime = 0;
     },
 
     //定点清理障碍物
     clearBarrierArray:function (array, index) {
-        array = undefined;
+        array[index] = undefined;
         array.splice(index, 1);
     },
 
@@ -174,15 +182,15 @@ var BarrierSprite = cc.Sprite.extend({
 
     //设置纵向移动速度
     setSpeed:function () {
-        this.time = GC.Vertical_Move_Time;
+        this.verticalMoveTime = GC.Vertical_Move_Time;
     },
 
     //重新设置纵向移动速度
     resetSpeed:function (gameStatus) {
         if (GC.Game_Slow_Down == gameStatus) {
-            this.time = GC.Vertical_Move_Time * 2;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 2;
         } else if (GC.Game_Speed_Up == gameStatus) {
-            this.time = GC.Vertical_Move_Time / 2;
+            this.verticalMoveTime = GC.Vertical_Move_Time / 2;
         } else if (GC.Game_Over == gameStatus) {
             this.stopAllActions();
             this.unschedule(this.setBarrier);
@@ -191,14 +199,30 @@ var BarrierSprite = cc.Sprite.extend({
         }
     },
 
+    //自动速度调整
+    autoAdjustMap:function (time) {
+        if (time >=0 && time < GC.Game_Easy_To_Normal) {
+            this.LoadingMaps(GC.Game_Level_Easy);
+        } else if (time >= GC.Game_Easy_To_Normal && time < GC.Game_Easy_To_Normal) {
+            this.LoadingMaps(GC.Game_Level_Normal);
+        } else if (time > GC.Game_Easy_To_Normal) {
+            this.LoadingMaps(GC.Game_Level_Hard);
+        }
+    },
+
     //根据地图画障碍物
     setBarrier:function () {
-        this.totalTime += GC.Game_Timer_Interval;
+        this.oneMapTime += GC.Game_Timer_Interval;
+        this.timeAdjustSpeed += GC.Game_Timer_Interval;
+
         if (this.spriteArrays.length > 0) {
             for (var i = 0; i < this.spriteArrays.length; i++) {
-                if (this.totalTime.toFixed(1) == this.timeLineArrays[i] * 5) {
+                if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] * 5) {
                     this.spriteArrays[i].visible = true;
-                    this.moveSprite(this.spriteArrays[i], this.time, this.trackArrays[i], this.goalScaleArrays[i]);
+                    this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
+
+                } else if (this.oneMapTime > 10 * 5){
+                    this.autoAdjustMap(this.timeAdjustSpeed / 5);
                 }
                 this.carCrash(this.spriteArrays[i], this.crashType[i]);
             }
