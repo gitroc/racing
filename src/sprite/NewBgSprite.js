@@ -7,6 +7,7 @@ var NewBgSprite = cc.Sprite.extend({
     onceTime:null,
     allTime:null,
     bgs:null,
+    speedListener:null,
     onEnter:function(){
         this._super();
         this.initSprite();
@@ -14,6 +15,7 @@ var NewBgSprite = cc.Sprite.extend({
         this.allTime = 0.4;
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
 //        this.addListener();
+        this.addSpeedListener();
     },
     onExit:function(){
         this.unschedule(update);
@@ -47,6 +49,35 @@ var NewBgSprite = cc.Sprite.extend({
         cc.log("Once:"+this.onceTime+"--All:"+this.allTime);
 //        this.update(this.schedule);
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
+    },
+    addSpeedListener:function(){
+        this.speedListener = cc.eventManager.addListener(
+             cc.EventListener.create({
+                event: cc.EventListener.CUSTOM,
+                eventName: "speed_change",
+                callback: function(event){
+                    cc.log("tree speed_change", event.getUserData());
+                    var target = event.getCurrentTarget();
+                    target.updateSpeed(event.getUserData());
+                }
+            }),
+            this
+        );
+    },
+    removeSpeedListener:function(){
+         cc.eventManager.removeListener(this.speedListener);
+    },
+    updateSpeed:function(gameStatus){
+        if (GC.Game_Slow_Down == gameStatus) {
+            this.updateAction(0.06,0.24);
+        } else if (GC.Game_Speed_Up == gameStatus) {
+            this.updateAction(0.05,0.2);
+        } else if (GC.Game_Over == gameStatus) {
+            this.stopAllActions();
+            this.unschedule(this.update);
+        }else {
+            this.updateAction(0.1,0.4);
+        }
     },
     addListener:function() {
         if('touches' in cc.sys.capabilities) { //支持触摸事件
