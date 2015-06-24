@@ -21,6 +21,7 @@
         "src/LoadingBarScene.js",
         "src/PlayScene.js",
         "src/RouteScene.js",
+        "src/GameOverScene.js",
 
         "src/sprite/CarTypeSprite.js",
         "src/sprite/DemoSprite.js",

@@ -18,7 +18,7 @@ var NewBgSprite = cc.Sprite.extend({
         this.addSpeedListener();
     },
     onExit:function(){
-        this.unschedule(update);
+        this.unschedule(this.update);
         this._super();
     },
     initSprite:function(){

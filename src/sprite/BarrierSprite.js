@@ -266,6 +266,7 @@ var BarrierSprite = cc.Sprite.extend({
                 var event = new cc.EventCustom("speed_change");
                 event.setUserData(GC.Game_Over);
                 cc.eventManager.dispatchEvent(event);
+
             } else {
                 var spawn = cc.spawn(cc.rotateBy(0.2, 360), cc.fadeOut(0.2));
                 target.runAction(cc.sequence(
