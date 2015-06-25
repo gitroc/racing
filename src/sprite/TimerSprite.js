@@ -49,5 +49,9 @@ var TimerSprite = cc.Sprite.extend({
 
     resetTimer:function (offset) {
         this.timerX = this.timerX + offset;
+    },
+
+    getTimer:function () {
+        return this.totalTime.toFixed(2);
     }
 });

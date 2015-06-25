@@ -364,7 +364,7 @@ var ProspectLayer = cc.Layer.extend({
     addTimer:function () {
         this.timer = new TimerSprite();
         this.addChild(this.timer, GC.Timer_Sprite);
-    },
+    }
 });
 
 var MainScene = cc.Scene.extend({
