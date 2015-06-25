@@ -320,34 +320,10 @@ var MainLayer = cc.Layer.extend({
 
     gameOver:function () {
         cc.log("Game over!");
+        var timeCount = this.getParent().prospect.getLayerTimer().getTimer();
+        GC.Total_Time  = timeCount;
+        cc.log(timeCount+"--");
         cc.director.runScene(new cc.TransitionFade(1.2, new GameOverScene()));
-//        var gameOver = new cc.LayerColor(cc.color(225,225,225,100));
-//        var titleLabel = new cc.LabelTTF("Game Over", "Arial", 38);
-//        titleLabel.attr({
-//            x:GC.w_2,
-//            y:GC.h_2
-//        });
-//        gameOver.addChild(titleLabel, 5);
-//        var TryAgainItem = new cc.MenuItemFont(
-//                "Try Again",
-//                function () {
-//                    cc.log("Menu is clicked!");
-////                    var transition= cc.TransitionFade(1, new MainScene(),cc.color(255,255,255,255));
-////                    cc.director.runScene(transition);
-//                    cc.director.runScene(new cc.TransitionFade(1.2, new MainScene(), cc.color(255,255,255,255)));
-//                }, this);
-//        TryAgainItem.attr({
-//            x:GC.w_2,
-//            y:GC.h_2 - 60,
-//            anchorX: 0.5,
-//            anchorY: 0.5
-//        });
-//
-//        var menu = new cc.Menu(TryAgainItem);
-//        menu.x = 0;
-//        menu.y = 0;
-//        gameOver.addChild(menu, 1);
-//        this.addChild(gameOver);
     }
 });
 
@@ -364,16 +340,22 @@ var ProspectLayer = cc.Layer.extend({
     addTimer:function () {
         this.timer = new TimerSprite();
         this.addChild(this.timer, GC.Timer_Sprite);
+    },
+    getLayerTimer:function(){
+        return this.timer;
     }
 });
-
 var MainScene = cc.Scene.extend({
+    prospect:null,
 	onEnter:function () {
 		this._super();
+
 		var layer = new MainLayer();
 		this.addChild(layer);
 
-		var prospect = new ProspectLayer();
-		this.addChild(prospect);
+		this.prospect = new ProspectLayer();
+		this.addChild(this.prospect);
+
+		var timeCount = 0;
 	}
 });

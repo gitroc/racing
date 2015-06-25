@@ -12,7 +12,7 @@ var OverLayer = cc.Layer.extend({
     initSprite:function(){
         var title = cc.LabelTTF.create("GAME OVER","黑体",50);
         var lb = cc.LabelTTF.create("最终时间：", "黑体", 20, cc.size(225,105), cc.TEXT_ALIGNMENT_LEFT);
-        var time = cc.LabelTTF.create("50"+this.time+"!!", "黑体", 50, cc.TEXT_ALIGNMENT_RIGHT);
+        var time = cc.LabelTTF.create(GC.Total_Time+"!!", "黑体", 50, cc.TEXT_ALIGNMENT_RIGHT);
         lb.strokeStyle = cc.color(0,0,0);
         title.setPosition(cc.p(GC.w_2,GC.h_2+100));
         lb.setPosition(cc.p(GC.w_2,GC.h_2));

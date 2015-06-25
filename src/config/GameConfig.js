@@ -330,3 +330,5 @@ GC.Barrier_Map = [
    [GC.Barrier_Map3, GC.Time_Line3],
 ];
 
+GC.Total_Time=0;//显示总时间
+

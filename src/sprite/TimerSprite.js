@@ -52,6 +52,7 @@ var TimerSprite = cc.Sprite.extend({
     },
 
     getTimer:function () {
+        this.unscheduleUpdate();
         return this.totalTime.toFixed(2);
     }
 });
