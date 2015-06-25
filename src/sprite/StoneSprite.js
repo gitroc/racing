@@ -32,7 +32,6 @@ var StoneSprite = cc.Sprite.extend({
                 event: cc.EventListener.CUSTOM,
                 eventName: "speed_change",
                 callback: function(event){
-                    cc.log("stone speed_change", event.getUserData());
                     var target = event.getCurrentTarget();
                     target.resetSpeed(event.getUserData());
                 }

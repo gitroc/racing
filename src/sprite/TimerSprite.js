@@ -3,65 +3,51 @@
 
  http://www.autogames.com
 
- 倒计时精灵
+ 计时精灵
 
  Author: roc from android team.
 
- Date: 2015-05-27
+ Date: 2015-06-27
 
  ****************************************************************************/
-
 var TimerSprite = cc.Sprite.extend({
-    time:null,
+    timerLabel:null,
+    totalTime:0,
+    timerX:100,
+    timerY:GC.h - 40,
     onEnter:function () {
-//        cc.log("CounterSprite onEnter");
         this._super();
-
-        this.onUpdate();
+        this.initTimer();
     },
 
     onExit:function () {
-//        cc.log("CounterSprite onExit");
         this._super();
     },
 
-    //倒计时精灵刷新
-    onUpdate:function () {
-        if (this.getParent().timeout == 0) {
-            this.onTimeOut();
-            return;
-        } else if (this.getParent().timeout == 300) {
-            this.getParent().timeoutLabel.setString(this.getParent().timeout);
-        }
+    //计时精灵刷新
+    update:function (dt) {
+        this.totalTime += dt;
 
-        this.getParent().timeout -= 1;
-        this.getParent().timeoutLabel.setString(this.getParent().timeout);
+        this.timerLabel.attr({
+            x:this.timerX,
+            y:this.timerY
+        });
+        this.timerLabel.setString("Time : " + this.totalTime.toFixed(2));
     },
 
-    initCounter:function () {
-        this.time = 0;
+    initTimer:function () {
+        this.timerLabel = new cc.LabelTTF("Time : " + this.totalTime.toFixed(2), "Tahoma", 32);
+        this.timerLabel.attr({
+            x:this.timerX,
+            y:this.timerY
+        });
 
-        var label2 = new cc.LabelAtlas("0123456789", s_resprefix + "fonts/tuffy_bold_italic-charmap.plist");
-        this.addChild(label2, 0, TAG_LABEL_SPRITE12);
-        label2.x = 10;
-        label2.y = 200;
-        label2.opacity = 32;
+        this.addChild(this.timerLabel, GC.Timer_Sprite);
 
-        this.schedule(this.step);
+        this.scheduleUpdate();
     },
 
-    step:function (dt) {
-        //----start0----step
-        this.time += dt;
-
-        var label2 = this.getChildByTag(TAG_LABEL_SPRITE12);
-        var string2 = parseInt(this.time, 10).toString();
-        label2.setString(string2);
-        //----end0----
-    },
-
-    //倒计时精灵结束
-    onTimeOut:function () {
-        //调用游戏失败Sence.
+    resetTimer:function (offset) {
+        this.timerX = this.timerX + offset;
     }
 });

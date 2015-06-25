@@ -46,7 +46,6 @@ var CarSprite = cc.Sprite.extend({
                         }
                         var target = event.getCurrentTarget();
                         target.moveCar(target, touches[0].getLocation());
-//                        target.carCrash();
                     }
                 }),
                 this
@@ -57,7 +56,6 @@ var CarSprite = cc.Sprite.extend({
                 onMouseUp: function (event) {
                     var target = event.getCurrentTarget();
                     target.moveCar(target, event.getLocation());
-//                    target.carCrash(target);
                 }
             }, this);
         }
@@ -70,10 +68,10 @@ var CarSprite = cc.Sprite.extend({
     //触屏移动汽车精灵
     moveCar:function (target, position) {
         if (this.getParent().gameStatus == GC.Game_Running) {
-            var currentX = 0;
-            var currentY = target.y;
+            var carX = 0;
+            var carY = target.y;
 
-            var currentBg = 0;
+            var BgX = 0;
 
             target.stopAllActions();
 
@@ -89,64 +87,34 @@ var CarSprite = cc.Sprite.extend({
                 //测试碰到加速道具道路的变化
 //                    cc.log("test--到左道");
 //                    this.getParent().newBgSprite.updateAction(0.05,0.2);
-                    currentBg = 0;
-                    currentX = GC.Car_Center_X;
+                    BgX = GC.Bg_Center_Offset_X;
+                    carX = GC.Car_Center_X;
                 } else {
                 //测试碰到加速道具道路的变化
 //                    cc.log("test--道中道");
 //                    this.getParent().newBgSprite.updateAction(0.25,1);
-                    currentBg = 100;
-                    currentX = GC.Car_Left_X;
+                    BgX = GC.Bg_Left_Offset_X;
+                    carX = GC.Car_Left_X;
                 }
             } else if (positionX > targetX) {//向右
                 if (targetX < GC.Car_Center_X) {
-                    currentBg = 0;
-                    currentX = GC.Car_Center_X;
+                    BgX = GC.Bg_Center_Offset_X;
+                    carX = GC.Car_Center_X;
                 } else {
-                    currentBg = -100;
-                    currentX = GC.Car_Right_X;
+                    BgX = GC.Bg_Right_Offset_X;
+                    carX = GC.Car_Right_X;
                 }
-            } else {
-                currentBg = 0;
-                currentX = targetX;
             }
 
-            target.setSpriteFrame(this.getParent().getCarSprite(currentX));
+            target.setSpriteFrame(this.getParent().getCarSprite(carX));
 
-            var actionCar = cc.moveTo(GC.Horizontal_Move_Time, cc.p(currentX, currentY));
+            var actionCar = cc.moveTo(GC.Horizontal_Move_Time, cc.p(carX, carY));
             target.runAction(actionCar);
 
-            var actionMain = cc.moveTo(GC.Horizontal_Move_Time, cc.p(currentBg, 0));
-            this.getParent().runAction(actionMain);
+            var actionBg = cc.moveTo(GC.Horizontal_Move_Time, cc.p(BgX, 0));
+            this.getParent().runAction(actionBg);
+
         }
 
-//        var carSprite = new CarSprite(this.getParent().getCarSprite(currentX));
-//
-//        target.attr({
-//            x: currentX,
-//            y: currentY,
-//            anchorX: 0.5,
-//            anchorY: 0.5
-//        });
-//
-//        this.getParent().addChild(carSprite, GC.Car_Sprite);
-//
-//        target.removeFromParent();
-    },
-
-    carCrash:function(target) {
-        for (var i = 0; i < this.getParent().barrierSprites.length; i++) {
-            var carRect = target.getBoundingBox();
-            var barrierRect = this.getParent().barrierSprites[i].getBoundingBox();
-            if(cc.rectIntersectsRect(carRect, barrierRect)){
-                  //发生碰撞事件
-                  cc.log("carCrash");
-                  this.getParent().barrierSprites[i].runAction(cc.sequence(
-                      cc.rotateBy(0.5, 360),
-                      cc.fadeOut(0.5))
-                  );
-                  this.getParent().removeBarrierSpriteByCrush(i);
-            }
-        }
     }
 });

@@ -44,16 +44,13 @@ GC.Horizontal_Move_Time = 0.1;
 GC.Vertical_Move_Time = 5;
 
 //截最左边背景截图
-GC.Bg_Left_X = 0;
-GC.Bg_Left_Y = 0;
+GC.Bg_Left_Offset_X = 100;
 
 //截最中间背景截图
-GC.Bg_Center_X = 100;
-GC.Bg_Center_Y = 0;
+GC.Bg_Center_Offset_X = 0;
 
 //截最右边背景截图
-GC.Bg_Right_X = 200;
-GC.Bg_Right_Y = 0;
+GC.Bg_Right_Offset_X = -100;
 
 //汽车的范围
 GC.Car_Range = 120;

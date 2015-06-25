@@ -41,19 +41,8 @@ var MainLayer = cc.Layer.extend({
     //汽车精灵
     carSprite:null,
 
-    //游戏计时
-    timeout:300,
-    timerLabel:null,
-
-    //里程
-    time:0,
-    speed:30, //单位km/h
-    kilometer:0,
-    mileageLabel:null,
-
     //障碍物精灵
     barrierSprite:null,
-    barrierRemove:0,
     newBgSprite:null,
     _drawNode2:null,
     ctor:function () {
@@ -76,24 +65,8 @@ var MainLayer = cc.Layer.extend({
             this.unscheduleUpdate();
             this.gameOver();
             return;
+        } else {
         }
-    },
-
-    //加速
-    speedUp:function () {
-        this.gameSpeed = GC.Car_Speed_Fast;
-        this.gameStatus = GC.Game_Running;
-    },
-
-    //减速
-    slowDown:function () {
-        this.gameSpeed = GC.Car_Speed_Slow;
-        this.gameStatus = GC.Game_Running;
-    },
-
-    //速度恢复
-    speedNormal:function () {
-        this.gameStatus = GC.Game_Running;
     },
 
     //初始化游戏场景
@@ -339,14 +312,6 @@ var MainLayer = cc.Layer.extend({
         this.moveSprite(stone, GC.Stone_Time_Line[index], track, 2);
     },
 
-    //初始化计时精灵
-    addTimerSprite:function () {
-        this.timerLabel = cc.LabelTTF.create(this.timeout, "Arial", 20);
-        this.timerLabel.x = 60;
-        this.timerLabel.y = size.height - 40;
-        this.addChild(this.timerLabel, GC.Timer_Sprite);
-    },
-
     //添加障碍物精灵
     addBarrier:function () {
         this.barrierSprite = new BarrierSprite();
@@ -386,10 +351,29 @@ var MainLayer = cc.Layer.extend({
     }
 });
 
+var ProspectLayer = cc.Layer.extend({
+    //游戏计时
+    timer:0,
+    ctor:function () {
+        this._super();
+        this.addTimer();
+        return true;
+    },
+
+    //初始化计时精灵
+    addTimer:function () {
+        this.timer = new TimerSprite();
+        this.addChild(this.timer, GC.Timer_Sprite);
+    },
+});
+
 var MainScene = cc.Scene.extend({
 	onEnter:function () {
 		this._super();
 		var layer = new MainLayer();
 		this.addChild(layer);
+
+		var prospect = new ProspectLayer();
+		this.addChild(prospect);
 	}
 });
