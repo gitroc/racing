@@ -11,8 +11,8 @@ var NewBgSprite = cc.Sprite.extend({
     onEnter:function(){
         this._super();
         this.initSprite();
-        this.onceTime = 0.1;
-        this.allTime = 0.4;
+        this.onceTime =GC.Speed_Normal_Once;
+        this.allTime = GC.Speed_Normal_All;
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
 //        this.addListener();
         this.addSpeedListener();
@@ -42,13 +42,21 @@ var NewBgSprite = cc.Sprite.extend({
 
     },
     //重启动画,碰到加（减）速道具速度改变
-    updateAction:function(oTime,aTime){
+    updateAction:function(oTime,aTime,object){
         this.unschedule(this.update);
         this.onceTime = oTime;
         this.allTime=aTime;
         cc.log("Once:"+this.onceTime+"--All:"+this.allTime);
 //        this.update(this.schedule);
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
+        this.runAction(cc.Sequence.create( cc.DelayTime.create(3), cc.CallFunc.create(function () {
+            object.origin();
+        })));
+    },
+    origin:function(){
+        this.unschedule(this.update);
+        this.onceTime = GC.Speed_Normal_Once;
+        this.schedule(this.update, GC.Speed_Normal_All, cc.REPEAT_FOREVER, 0);
     },
     addSpeedListener:function(){
         this.speedListener = cc.eventManager.addListener(
@@ -57,7 +65,7 @@ var NewBgSprite = cc.Sprite.extend({
                 eventName: "speed_change",
                 callback: function(event){
                     var target = event.getCurrentTarget();
-                    target.updateSpeed(event.getUserData());
+                    target.updateSpeed(event.getUserData(),target);
                 }
             }),
             this
@@ -66,16 +74,16 @@ var NewBgSprite = cc.Sprite.extend({
     removeSpeedListener:function(){
          cc.eventManager.removeListener(this.speedListener);
     },
-    updateSpeed:function(gameStatus){
+    updateSpeed:function(gameStatus,target){
         if (GC.Game_Slow_Down == gameStatus) {
-            this.updateAction(0.06,0.24);
+            this.updateAction(GC.Speed_Low_Once,GC.Speed_Low_All,target);
         } else if (GC.Game_Speed_Up == gameStatus) {
-            this.updateAction(0.05,0.2);
+            this.updateAction(GC.Speed_High_Once,GC.Speed_High_All,target);
         } else if (GC.Game_Over == gameStatus) {
             this.stopAllActions();
             this.unschedule(this.update);
         }else {
-            this.updateAction(0.1,0.4);
+            this.updateAction(Speed_Normal_Once,Speed_Normal_All,target);
         }
     },
     addListener:function() {
