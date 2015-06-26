@@ -281,6 +281,7 @@ GC.Game_Running   = 3;
 GC.Game_Speed_Up  = 4;
 GC.Game_Slow_Down = 5;
 GC.Game_Over      = 6;
+GC.Game_Origin_Speed =7;
 
 //游戏难度
 GC.Game_Level_Easy   = 1;
@@ -331,4 +332,12 @@ GC.Barrier_Map = [
 ];
 
 GC.Total_Time=0;//显示总时间
+GC.Speed_Normal_Once = 0.1;
+GC.Speed_Normal_All = 0.4;
+GC.Speed_High_Once = 0.05;
+GC.Speed_High_All = 0.2;
+GC.Speed_Low_Once = 0.15;
+GC.Speed_Low_All = 0.6;
+
+
 
