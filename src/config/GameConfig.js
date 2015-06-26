@@ -19,10 +19,10 @@ GC.SOUND_ON = false;
 GC.BackGround_Sprite = 0;
 GC.Road_Sprite = 1;
 GC.Barrier_Sprite = 2;
-GC.Car_Sprite = 2;
-GC.Stone_Sprite = 3;
-GC.Tree_Sprite = 4;
-GC.Timer_Sprite = 5;
+GC.Car_Sprite = 3;
+GC.Stone_Sprite = 4;
+GC.Tree_Sprite = 5;
+GC.Timer_Sprite = 6;
 
 //路的图片的最大数
 GC.Road_Png_Max = 4;

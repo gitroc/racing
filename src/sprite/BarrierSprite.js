@@ -255,21 +255,21 @@ var BarrierSprite = cc.Sprite.extend({
 
     //障碍物碰撞检测
     carCrash:function(target, crashType) {
-        var carRect = this.getParent().carSprite.getBoundingBox();
-        var barrierRect = target.getBoundingBox();
-
-        if(cc.rectIntersectsRect (carRect, barrierRect)){
-            if (crashType == GC.Crash_Shut_Down) { //所有动作停止
-                target.stopAllActions();
-                this.getParent().gameStatus = GC.Game_Over;
-                var event = new cc.EventCustom("speed_change");
-                event.setUserData(GC.Game_Over);
-                cc.eventManager.dispatchEvent(event);
-
-            } else {
-                var spawn = cc.spawn(cc.rotateBy(0.2, 360), cc.fadeOut(0.2));
+        if(this.judgeCrash(target)){
+            if (crashType == GC.Crash_Shut_Down) { //碰撞动作
                 target.runAction(cc.sequence(
-                      spawn,
+                        this.getCrashEffect(target),
+                        cc.callFunc(function () {
+                            target.stopAllActions();
+                            target.getParent().gameStatus = GC.Game_Over;
+                            var event = new cc.EventCustom("speed_change");
+                            event.setUserData(GC.Game_Over);
+                            cc.eventManager.dispatchEvent(event);
+                        })
+                ));
+            } else {
+                target.runAction(cc.sequence(
+                      this.getSpeedChangeEffect(target),
                       cc.callFunc(function () {
                             var event = new cc.EventCustom("speed_change");
                             if (crashType == GC.Crash_Speed_Up){ //加速
@@ -283,5 +283,142 @@ var BarrierSprite = cc.Sprite.extend({
                 ));
             }
         }
-    }
+    },
+
+    //碰撞检测算法
+    judgeCrash:function (target) {
+        var carRect = this.getParent().carSprite.getBoundingBox();
+        var barrierRect = target.getBoundingBox();
+
+        if (cc.rectContainsPoint(carRect, this.getBoxTop(barrierRect))
+            ||cc.rectContainsPoint(carRect, this.getBoxLeft(barrierRect))
+            ||cc.rectContainsPoint(carRect, this.getBoxRight(barrierRect))
+            ||cc.rectContainsPoint(carRect, this.getBoxBottom(barrierRect))
+            ||cc.rectContainsPoint(carRect, this.getBoxLT(barrierRect))
+            ||cc.rectContainsPoint(carRect, this.getBoxRT(barrierRect))
+            ||cc.rectContainsPoint(carRect, this.getBoxLB(barrierRect))
+            ||cc.rectContainsPoint(carRect, this.getBoxRB(barrierRect))
+            ) {
+            return true;
+        }
+        return false;
+    },
+
+    //碰撞特效算法
+    getCrashEffect:function (target) {
+        var spawn = null;
+        var carRect = this.getParent().carSprite.getBoundingBox();
+        var barrierRect = target.getBoundingBox();
+
+        if (this.getBoxBottom(barrierRect).y <=  this.getBoxTop(carRect).y
+            && this.getBoxBottom(barrierRect).y > this.getBoxCore(carRect).y) {
+            if (this.getBoxRight(barrierRect).x >= this.getBoxLeft(carRect).x
+                        &&  this.getBoxRight(barrierRect).x <= this.getBoxCore(carRect).x) {
+                //向左上反弹
+                cc.log("左上");
+                spawn = cc.spawn(cc.rotateBy(0.2, -90), cc.moveBy(0.2, cc.p(50, 100)));
+            } else if (this.getBoxLeft(barrierRect).x <= this.getBoxRight(carRect).x
+                        && this.getBoxLeft(barrierRect).x >=  this.getBoxCore(carRect).x){
+                //向右上反弹
+                cc.log("右上");
+                spawn = cc.spawn(cc.rotateBy(0.2, 90), cc.moveBy(0.2, cc.p(-50, 100)));
+            } else {
+                //向上反弹
+                cc.log("向上");
+                if (this.getBoxCore(carRect).x > GC.Car_Center_X) {
+                    cc.log("右边道路");
+                    spawn = cc.spawn(cc.rotateBy(0.2, -45), cc.moveBy(0.2, cc.p(-100, 100)));
+                } else if (this.getBoxCore(carRect).x < GC.Car_Center_X){
+                    cc.log("左边道路");
+                    spawn = cc.spawn(cc.rotateBy(0.2, 45), cc.moveBy(0.2, cc.p(100, 100)));
+                } else {
+                    cc.log("中间道路");
+                    spawn = cc.spawn(cc.rotateBy(0.2, 0), cc.moveBy(0.2, cc.p(0, 100)));
+                }
+            }
+        } else {
+            if (this.getBoxRight(barrierRect).x >= this.getBoxLeft(carRect).x
+                && this.getBoxRight(barrierRect).x <= this.getBoxCore(carRect).x) {
+                //左反弹
+                cc.log("左");
+                spawn = cc.spawn(cc.rotateBy(0.2, -45), cc.moveBy(0.2, cc.p(-50, 0)));
+            } else if (this.getBoxLeft(barrierRect).x <= this.getBoxRight(carRect).x
+                && this.getBoxLeft(barrierRect).x >= this.getBoxCore(carRect).x) {
+                //右反弹
+                cc.log("右");
+                spawn = cc.spawn(cc.rotateBy(0.2, 45), cc.moveBy(0.2, cc.p(50, 0)));
+            } else {
+                //下反弹
+                cc.log("下");
+                spawn = cc.spawn(cc.rotateBy(0.2, 0), cc.moveBy(0.2, cc.p(0, -100)));
+//                target.removeFromParent();
+            }
+        }
+
+        return spawn;
+    },
+
+    //加速特效算法
+    getSpeedChangeEffect:function (target) {
+        var spawn = null;
+        var carRect = this.getParent().carSprite.getBoundingBox();
+        var barrierRect = target.getBoundingBox();
+        cc.log("加减速");
+        if (this.getBoxCore(carRect).x > GC.Car_Center_X) {
+            cc.log("右边道路");
+            spawn = cc.spawn(cc.jumpBy(0.5, cc.p(this.getBoxCore(barrierRect).x - 50, this.getBoxCore(barrierRect).y), 50, 1), cc.fadeOut(0.2), cc.delayTime(0.25));
+        } else if (this.getBoxCore(carRect).x < GC.Car_Center_X){
+            cc.log("左边道路");
+            spawn = cc.spawn(cc.jumpBy(0.5, cc.p(this.getBoxCore(barrierRect).x + 50, this.getBoxCore(barrierRect).y), 50, 1), cc.fadeOut(0.2), cc.delayTime(0.25));
+        } else {
+            cc.log("中间道路");
+            spawn = cc.spawn(cc.jumpBy(0.5, this.getBoxCore(barrierRect), 200, 1), cc.fadeOut(0.2), cc.delayTime(0.25));
+        }
+        return spawn;
+    },
+
+    //获取矩形上坐标
+    getBoxTop:function (box) {
+        return cc.p(box.x + box.width / 2, box.y + box.height);
+    },
+
+    //获取矩形左坐标
+    getBoxLeft:function (box) {
+        return cc.p(box.x, box.y + box.height / 2);
+    },
+
+    //获取矩形右坐标
+    getBoxRight:function (box) {
+        return cc.p(box.x + box.width, box.y + box.height / 2);
+    },
+
+    //获取矩形下坐标
+    getBoxBottom:function (box) {
+        return cc.p(box.x + box.width / 2, box.y);
+    },
+
+    //获取矩形中心坐标
+    getBoxCore:function (box) {
+        return cc.p(box.x + box.width / 2, box.y + box.height / 2);
+    },
+
+    //获取矩形左上坐标
+    getBoxLT:function (box) {
+        return cc.p(box.x, box.y + box.height);
+    },
+
+    //获取矩形右上坐标
+    getBoxRT:function (box) {
+        return cc.p(box.x + box.width, box.y + box.height);
+    },
+
+    //获取矩形左下坐标
+    getBoxLB:function (box) {
+        return cc.p(box.x, box.y);
+    },
+
+    //获取矩形右下坐标
+    getBoxRB:function (box) {
+        return cc.p(box.x + box.width, box.y);
+    },
 });
