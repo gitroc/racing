@@ -13,6 +13,7 @@
     "jsList" : [
         "src/resource.js",
         "src/config/GameConfig.js",
+        "src/config/Map.js",
         "src/DemoScene.js",
         "src/MainScene.js",
         "src/StartScene.js",
