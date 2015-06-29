@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Racing</title>
     <link rel="icon" type="image/GIF" href="res/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="full-screen" content="yes"/>
     <meta name="screen-orientation" content="portrait"/>
@@ -20,6 +21,16 @@
     </style>
 </head>
 <body style="padding:0; margin: 0; background: #000;">
+<script>
+    function setFontsize() {
+        document.querySelector('html').style.fontSize = (document.body.clientWidth / 320 * 14 + 'px');
+    }
+    setFontsize();
+    window.onresize = function() {
+        setFontsize();
+    }
+</script>
+
 <canvas id="gameCanvas" width="640" height="1136"></canvas>
 
 <script type="text/javascript" src="src/WeixinApi.js"></script>

@@ -30,7 +30,7 @@ var StoneSprite = cc.Sprite.extend({
         this.speedListener = cc.eventManager.addListener(
              cc.EventListener.create({
                 event: cc.EventListener.CUSTOM,
-                eventName: "speed_change",
+                eventName: "car_crash",
                 callback: function(event){
                     var target = event.getCurrentTarget();
                     target.resetSpeed(event.getUserData());
@@ -75,15 +75,27 @@ var StoneSprite = cc.Sprite.extend({
 
     //重新设置纵向移动速度
     resetSpeed:function (gameStatus) {
-        if (GC.Game_Slow_Down == gameStatus) {
-            this.verticalMoveTime = GC.Vertical_Move_Time * 2;
-        } else if (GC.Game_Speed_Up == gameStatus) {
-            this.verticalMoveTime = GC.Vertical_Move_Time / 2;
-        } else if (GC.Game_Over == gameStatus) {
-            this.stopAllActions();
-            this.unschedule(this.buriedStone);
-        } else {
-            this.setSpeed();
+        switch (gameStatus) {
+            case GC.Game_Slow_Down:
+                this.verticalMoveTime = GC.Vertical_Move_Time * 2;
+            break;
+
+            case GC.Game_Speed_Up:
+                this.verticalMoveTime = GC.Vertical_Move_Time / 2;
+            break;
+
+            case GC.Game_Over:
+                this.stopAllActions();
+                this.unschedule(this.buriedStone);
+            break;
+
+            case GC.Game_Hit:
+                //
+            break;
+
+            default:
+                this.setSpeed();
+            break;
         }
     },
 

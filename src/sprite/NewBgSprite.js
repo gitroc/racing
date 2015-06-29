@@ -62,7 +62,7 @@ var NewBgSprite = cc.Sprite.extend({
         this.speedListener = cc.eventManager.addListener(
              cc.EventListener.create({
                 event: cc.EventListener.CUSTOM,
-                eventName: "speed_change",
+                eventName: "car_crash",
                 callback: function(event){
                     var target = event.getCurrentTarget();
                     target.updateSpeed(event.getUserData(),target);
@@ -74,16 +74,29 @@ var NewBgSprite = cc.Sprite.extend({
     removeSpeedListener:function(){
          cc.eventManager.removeListener(this.speedListener);
     },
+
     updateSpeed:function(gameStatus,target){
-        if (GC.Game_Slow_Down == gameStatus) {
-            this.updateAction(GC.Speed_Low_Once,GC.Speed_Low_All,target);
-        } else if (GC.Game_Speed_Up == gameStatus) {
-            this.updateAction(GC.Speed_High_Once,GC.Speed_High_All,target);
-        } else if (GC.Game_Over == gameStatus) {
-            this.stopAllActions();
-            this.unschedule(this.update);
-        }else {
-            this.updateAction(Speed_Normal_Once,Speed_Normal_All,target);
+        switch (gameStatus) {
+            case GC.Game_Slow_Down:
+                this.updateAction(GC.Speed_Low_Once,GC.Speed_Low_All,target);
+            break;
+
+            case GC.Game_Speed_Up:
+                this.updateAction(GC.Speed_High_Once,GC.Speed_High_All,target);
+            break;
+
+            case GC.Game_Over:
+                this.stopAllActions();
+                this.unschedule(this.update);
+            break;
+
+            case GC.Game_Hit:
+                //
+            break;
+
+            default:
+                this.updateAction(GC.Speed_Normal_Once, GC.Speed_Normal_All,target);
+            break;
         }
     },
     addListener:function() {

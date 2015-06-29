@@ -37,7 +37,7 @@ var BarrierSprite = cc.Sprite.extend({
         this.speedListener = cc.eventManager.addListener(
              cc.EventListener.create({
                 event: cc.EventListener.CUSTOM,
-                eventName: "speed_change",
+                eventName: "car_crash",
                 callback: function(event){
                     var target = event.getCurrentTarget();
                     target.resetSpeed(event.getUserData());
@@ -142,7 +142,9 @@ var BarrierSprite = cc.Sprite.extend({
                         this.crashType.push(GC.Crash_Speed_Up);
                     } else if (type == 5) { //减速图片
                         this.crashType.push(GC.Crash_Slow_Down);
-                    } else {
+                    } else if (type == 1 || type == 2){
+                        this.crashType.push(GC.Crash_Only_Hit);
+                    } else if (type == 3 || type == 4){
                         this.crashType.push(GC.Crash_Shut_Down);
                     }
                 }
@@ -190,15 +192,27 @@ var BarrierSprite = cc.Sprite.extend({
 
     //重新设置纵向移动速度
     resetSpeed:function (gameStatus) {
-        this.autoAdjustMap(this.timeAdjustSpeed);
-        if (GC.Game_Slow_Down == gameStatus) {
-            this.verticalMoveTime = GC.Vertical_Move_Time * 2;
-        } else if (GC.Game_Speed_Up == gameStatus) {
-            this.verticalMoveTime = GC.Vertical_Move_Time / 2;
-        } else if (GC.Game_Over == gameStatus) {
-            this.unschedule(this.setBarrier);
-        } else {
-            this.setSpeed();
+        switch (gameStatus) {
+            case GC.Game_Slow_Down:
+                this.verticalMoveTime = GC.Vertical_Move_Time * 2;
+            break;
+
+            case GC.Game_Speed_Up:
+                this.verticalMoveTime = GC.Vertical_Move_Time / 2;
+            break;
+
+            case GC.Game_Over:
+                this.stopAllActions();
+                this.unschedule(this.setBarrier);
+            break;
+
+            case GC.Game_Hit:
+                //
+            break;
+
+            default:
+                this.setSpeed();
+            break;
         }
     },
 
@@ -260,34 +274,59 @@ var BarrierSprite = cc.Sprite.extend({
     //障碍物碰撞检测
     carCrash:function(target, crashType) {
         if(this.judgeCrash(target)){
-            if (crashType == GC.Crash_Shut_Down) { //碰撞动作
-                target.stopAllActions();
-                target.runAction(cc.sequence(
-                        this.getCrashEffect(target),
-                        cc.callFunc(function () {
-                            target.getParent().gameStatus = GC.Game_Over;
-                            var event = new cc.EventCustom("speed_change");
-                            event.setUserData(GC.Game_Over);
-                            cc.eventManager.dispatchEvent(event);
-                        })
-                ));
-            } else if (crashType == GC.Crash_Speed_Up || crashType == GC.Crash_Slow_Down){
-                target.stopAllActions();
-                target.runAction(cc.sequence(
-                      this.getSpeedChangeEffect(target),
-                      cc.callFunc(function () {
-                            var event = new cc.EventCustom("speed_change");
-                            if (crashType == GC.Crash_Speed_Up){ //加速
-                                event.setUserData(GC.Game_Speed_Up);
-                            } else if (crashType == GC.Crash_Slow_Down){ //减速
-                                event.setUserData(GC.Game_Slow_Down);
-                            }
-                            target.removeFromParent();
-                            cc.eventManager.dispatchEvent(event);
-                      })
-                ));
+            target.stopAllActions();
+            var effect = null;
+            var event = new cc.EventCustom("car_crash");
+            var eventData = -1;
+
+            switch (crashType) {
+                case GC.Crash_Only_Hit: // 简单碰撞
+                    effect = this.getCrashEffect(target);
+                    eventData = GC.Game_Hit;
+                break;
+
+                case GC.Crash_Shut_Down: //游戏停止
+                    effect = this.getCrashEffect(target);
+                    eventData = GC.Game_Over;
+                break;
+
+                case GC.Crash_Speed_Up: //加速
+                    effect = this.getSpeedChangeEffect(target);
+                    eventData = GC.Game_Speed_Up;
+                break;
+
+                case GC.Crash_Slow_Down: //减速
+                    effect = this.getSpeedChangeEffect(target);
+                    eventData = GC.Game_Slow_Down;
+                break;
             }
+
+            target.runAction(cc.sequence(
+                effect,
+                cc.callFunc(function () {
+                    if (crashType == GC.Crash_Speed_Up
+                        || crashType == GC.Crash_Slow_Down
+                        || crashType == GC.Crash_Only_Hit){
+                        target.removeFromParent();
+                    } else {
+                        target.getParent().gameStatus = GC.Game_Over;
+                    }
+
+                    event.setUserData(eventData);
+                    cc.eventManager.dispatchEvent(event);
+                })
+            ));
         }
+    },
+
+    judgeRemove:function (crashType) {
+        if (crashType == GC.Crash_Speed_Up
+            || crashType == GC.Crash_Slow_Down
+            || crashType == GC.Crash_Only_Hit){
+            return true;
+        }
+
+        return false;
     },
 
     //碰撞检测算法
@@ -321,24 +360,28 @@ var BarrierSprite = cc.Sprite.extend({
                         &&  this.getBoxRight(barrierRect).x <= this.getBoxCore(carRect).x) {
                 //向左上反弹
                 cc.log("左上");
-                spawn = cc.spawn(cc.rotateBy(0.2, -90), cc.moveBy(0.2, cc.p(50, 100)));
+                spawn = cc.spawn(cc.rotateBy(0.5, -90), cc.moveBy(0.5, cc.p(-150, 150)));
             } else if (this.getBoxLeft(barrierRect).x <= this.getBoxRight(carRect).x
                         && this.getBoxLeft(barrierRect).x >=  this.getBoxCore(carRect).x){
                 //向右上反弹
                 cc.log("右上");
-                spawn = cc.spawn(cc.rotateBy(0.2, 90), cc.moveBy(0.2, cc.p(100, 100)));
+                spawn = cc.spawn(cc.rotateBy(0.5, 90), cc.moveBy(0.5, cc.p(150, 150)));
             } else {
                 //向上反弹
                 cc.log("向上");
                 if (this.getBoxCore(carRect).x > GC.Car_Center_X + GC.Car_Range) {
                     cc.log("右边道路");
-                    spawn = cc.spawn(cc.rotateBy(0.2, -45), cc.moveBy(0.2, cc.p(-100, 100)));
+                    spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-150, 150)));
                 } else if (this.getBoxCore(carRect).x < GC.Car_Center_X - GC.Car_Range){
                     cc.log("左边道路");
-                    spawn = cc.spawn(cc.rotateBy(0.2, 45), cc.moveBy(0.2, cc.p(100, 100)));
+                    spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(150, 150)));
                 } else {
                     cc.log("中间道路");
-                    spawn = cc.spawn(cc.rotateBy(0.2, 0), cc.moveBy(0.2, cc.p(0, 100)));
+                    if (this.getBoxCore(carRect).x > GC.Car_Center_X) {
+                        spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-150, 150)));
+                    } else {
+                        spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(150, 150)));
+                    }
                 }
             }
         } else {
@@ -346,17 +389,21 @@ var BarrierSprite = cc.Sprite.extend({
                 && this.getBoxRight(barrierRect).x <= this.getBoxCore(carRect).x) {
                 //左反弹
                 cc.log("左");
-                spawn = cc.spawn(cc.rotateBy(0.2, -45), cc.moveBy(0.2, cc.p(-50, 0)));
+                spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-100, 0)));
             } else if (this.getBoxLeft(barrierRect).x <= this.getBoxRight(carRect).x
                 && this.getBoxLeft(barrierRect).x >= this.getBoxCore(carRect).x) {
                 //右反弹
                 cc.log("右");
-                spawn = cc.spawn(cc.rotateBy(0.2, 45), cc.moveBy(0.2, cc.p(50, 0)));
+                spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(100, 0)));
             } else {
                 //下反弹
                 cc.log("下");
-                spawn = cc.spawn(cc.rotateBy(0.2, 0), cc.moveBy(0.2, cc.p(0, 200)));
-//                target.removeFromParent();
+                if (this.getBoxCore(carRect).x > GC.Car_Center_X) {
+                    spawn = cc.spawn(cc.rotateBy(0.5, 0), cc.moveBy(0.5, cc.p(100, -100)));
+                } else {
+                    spawn = cc.spawn(cc.rotateBy(0.5, 0), cc.moveBy(0.5, cc.p(-100, -100)));
+                }
+
             }
         }
 
@@ -370,13 +417,13 @@ var BarrierSprite = cc.Sprite.extend({
         var barrierRect = target.getBoundingBox();
         if (this.getBoxCore(carRect).x > GC.Car_Center_X + GC.Car_Range) {
             cc.log("右边道路加减速");
-            spawn = cc.spawn(cc.jumpBy(0.2, cc.p(0, 50), 50, 1), cc.fadeOut(0.2), cc.moveBy(0.2, cc.p(-100, 0)));
+            spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.moveBy(0.5, cc.p(-50, 0)));
         } else if (this.getBoxCore(carRect).x < GC.Car_Center_X - GC.Car_Range){
             cc.log("左边道路加减速");
-            spawn = cc.spawn(cc.jumpBy(0.2, cc.p(0, 50), 50, 1), cc.fadeOut(0.2), cc.moveBy(0.2, cc.p(100, 0)));
+            spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.moveBy(0.5, cc.p(50, 0)));
         } else {
             cc.log("中间道路加减速");
-            spawn = cc.spawn(cc.jumpBy(0.2, cc.p(0, 50), 50, 1), cc.fadeOut(0.2));
+            spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5));
         }
         return spawn;
     },

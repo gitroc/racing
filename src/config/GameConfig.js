@@ -172,9 +172,9 @@ GC.Barrier_Org_Scale = [
 ];
 
 GC.Barrier_Org_Position = [
-    cc.p(260, 710),
-    cc.p(320, 710),
-    cc.p(400, 710),
+    cc.p(250, 690),
+    cc.p(320, 690),
+    cc.p(390, 690),
 ];
 
 //障碍物结束缩放大小及位置坐标
@@ -183,9 +183,9 @@ GC.Barrier_Goal_Scale = [
 ];
 
 GC.Barrier_Goal_Position = [
-    cc.p(-300, -100),
+    cc.p(-110, -100),
     cc.p( 320, -100),
-    cc.p( 930, -100),
+    cc.p( 750, -100),
 ];
 
 //障碍物地图1
@@ -271,8 +271,9 @@ GC.Time_Line3 = [
 
 //碰撞类型
 GC.Crash_Shut_Down = 0; //停车
-GC.Crash_Speed_Up  = 1; //加速
-GC.Crash_Slow_Down = 2; //减速
+GC.Crash_Only_Hit  = 1; //碰撞
+GC.Crash_Speed_Up  = 2; //加速
+GC.Crash_Slow_Down = 3; //减速
 
 //游戏主界面状态机
 GC.Game_Loading   = 1;
@@ -281,7 +282,7 @@ GC.Game_Running   = 3;
 GC.Game_Speed_Up  = 4;
 GC.Game_Slow_Down = 5;
 GC.Game_Over      = 6;
-GC.Game_Origin_Speed =7;
+GC.Game_Hit       = 7;
 
 //游戏难度
 GC.Game_Level_Easy   = 1;
