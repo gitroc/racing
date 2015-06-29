@@ -68,7 +68,7 @@ GC.Car_Right_X = 600;
 GC.Car_Right_Y = 275;
 
 //游戏内部timer间隔
-GC.Game_Timer_Interval = 0.5;
+GC.Game_Timer_Interval = 0.1;
 
 //随机出现左边树位置
 GC.Tree_Show_Left_X = 150;
@@ -179,18 +179,18 @@ GC.Barrier_Org_Position = [
 
 //障碍物结束缩放大小及位置坐标
 GC.Barrier_Goal_Scale = [
-    1, 1, 1
+    1.5, 1.5, 1,5
 ];
 
 GC.Barrier_Goal_Position = [
-    cc.p(-110, -100),
-    cc.p( 320, -100),
-    cc.p( 750, -100),
+    cc.p(-160, -150),
+    cc.p( 320, -150),
+    cc.p( 800, -150),
 ];
 
 //障碍物地图1
 GC.Barrier_Map1 = [
-    [6, 0, 0],
+    [0, 0, 0],
     [0, 1, 0],
     [0, 2, 0],
     [0, 0, 5],

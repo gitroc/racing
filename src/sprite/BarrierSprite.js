@@ -199,6 +199,7 @@ var BarrierSprite = cc.Sprite.extend({
 
             case GC.Game_Speed_Up:
                 this.verticalMoveTime = GC.Vertical_Move_Time / 2;
+                this.autoAdjustMap(this.timeAdjustSpeed);
             break;
 
             case GC.Game_Over:
@@ -252,8 +253,6 @@ var BarrierSprite = cc.Sprite.extend({
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
         var seq = cc.sequence(
             spawn,
-            cc.rotateBy(time, 360),
-            cc.fadeOut(time),
             cc.callFunc(function () {
                 sprite.removeFromParent();
             })
@@ -342,6 +341,7 @@ var BarrierSprite = cc.Sprite.extend({
             ||cc.rectContainsPoint(carRect, this.getBoxRT(barrierRect))
             ||cc.rectContainsPoint(carRect, this.getBoxLB(barrierRect))
             ||cc.rectContainsPoint(carRect, this.getBoxRB(barrierRect))
+            ||cc.rectIntersectsRect(carRect, barrierRect)
             ) {
             return true;
         }

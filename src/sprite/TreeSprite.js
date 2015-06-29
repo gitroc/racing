@@ -61,7 +61,7 @@ var TreeSprite = cc.Sprite.extend({
     startTimer:function () {
         if (this.getParent().gameStatus == GC.Game_Running) {
             this.setSpeed();
-            this.schedule(this.plantTree, GC.Game_Timer_Interval, cc.REPEAT_FOREVER, 0);
+            this.schedule(this.plantTree, 1, cc.REPEAT_FOREVER, 0);
         } else {
             this.stopAllActions();
             this.unschedule(this.plantTree);
