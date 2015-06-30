@@ -160,8 +160,8 @@ GC.Barrier_Type1 = 1;
 GC.Barrier_Type2 = 2;
 GC.Barrier_Type3 = 3;
 GC.Barrier_Type4 = 4;
-GC.Barrier_Type5 = 5;
-GC.Barrier_Type6 = 6;
+GC.Barrier_Type5 = 5; // 减速
+GC.Barrier_Type6 = 6; // 加速
 
 //障碍物速度 xxx/s 像素每秒
 GC.Barrier_Speed = 300;

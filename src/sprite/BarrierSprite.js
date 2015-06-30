@@ -138,13 +138,13 @@ var BarrierSprite = cc.Sprite.extend({
                     this.goalScaleArrays.push(Barrier_Goal_Scale[j]);
                     this.timeLineArrays.push(Time_Line[i]);
 
-                    if (type == 6) { //加速图片
+                    if (type == GC.Barrier_Type6) { //加速图片
                         this.crashType.push(GC.Crash_Speed_Up);
-                    } else if (type == 5) { //减速图片
+                    } else if (type == GC.Barrier_Type5) { //减速图片
                         this.crashType.push(GC.Crash_Slow_Down);
-                    } else if (type == 1 || type == 2){
+                    } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2){
                         this.crashType.push(GC.Crash_Only_Hit);
-                    } else if (type == 3 || type == 4){
+                    } else if (type == GC.Barrier_Type3 || type == GC.Barrier_Type4){
                         this.crashType.push(GC.Crash_Shut_Down);
                     }
                 }
