@@ -45,9 +45,14 @@ var StartLayer = cc.Layer.extend({
     	cc.MenuItemFont.setFontSize(30);
     	var title = new cc.MenuItemFont("Racing Game");
     	title.setEnabled(false);
-    	var actionMove = cc.moveTo(0.5,cc.p(0,100));//moveTo or moveBy
+    	var actionMove = cc.moveTo(4,cc.p(0,600));//moveTo or moveBy
 		title.runAction(actionMove);
 
+
+		var title2 = new cc.MenuItemFont("Racing Game22222");
+    	title2.setEnabled(false);
+    	var actionMove = cc.moveTo(4,cc.p(0,600));//moveTo or moveBy
+		title2.runAction(actionMove);
     	//add start menu
     	var startItem = new cc.MenuItemImage(
     		res.Start_N_png,
@@ -58,8 +63,8 @@ var StartLayer = cc.Layer.extend({
     			cc.director.runScene(new cc.TransitionFade(1.2, new RaceAskScene()));
     		}, this);
 
-    	var menu = new cc.Menu(title,startItem);
-    	menu.alignItemsInColumns(1, 1);
+    	var menu = new cc.Menu(title,title2,startItem);
+    	menu.alignItemsInColumns(1, 1,1);
     	menu.x = GC.w_2;
     	menu.y = 200;
     	this.addChild(menu, 1);
