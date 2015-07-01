@@ -1,4 +1,6 @@
 var res = {
+    Play_N_png:"res/image/loading_btn_on.jpg",
+    Play_S_png:"res/image/loading_btn_off.jpg",
     BackGround_png : "res/main/main_bg_pic.png",
     Tree_plist : "res/main/main_bg_object_tree.plist",
     Stone_plist : "res/main/main_bg_object_stone.plist",
