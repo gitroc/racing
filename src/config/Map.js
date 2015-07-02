@@ -22,18 +22,17 @@ GC.Barrier_Map1 = [
 
 //障碍物时间轴1
 var time1 = 0.5;
-var timeArray1=[];
+GC.Time_Line1 = [];
 var spaceArray1 = [
     0.0,0.1,0.1,0.1,0.1,
     1.8,0.5,0.5,0.5,1.0,
     0.1,0.4,0.9,0.2,0.2,
     0.2,1.0];
 for(var i=0;i<GC.Barrier_Map1.length;i++){
-    timeArray1[i] = time1 + spaceArray1[i];
-     cc.log("TimeArray"+timeArray1[i]);
-    time1 = timeArray1[i];
+    GC.Time_Line1[i] = time1 + spaceArray1[i];
+//     cc.log("TimeArray"+timeArray1[i]);
+    time1 =  GC.Time_Line1[i];
 }
-GC.Time_Line1 = timeArray1;
 
 //障碍物地图2--18
 GC.Barrier_Map2 = [
@@ -59,18 +58,17 @@ GC.Barrier_Map2 = [
 
 //障碍物时间轴2
 var time2 = 0.5;
-var timeArray2=[];
+GC.Time_Line2=[];
 var spaceArray2 = [
     0.0,0.2,0.2,0.2,1.4,
     0.2,1.8,0.5,0.5,0.5,
     1.0,0.2,0.3,0.5,0.5,
     0.3,0.7,0.5];
 for(var i=0;i<GC.Barrier_Map2.length;i++){
-    timeArray1[i] = time2 + spaceArray2[i];
-    time2 = timeArray2[i];
+    GC.Time_Line2[i] = time2 + spaceArray2[i];
+    time2 = GC.Time_Line2[i];
 }
-GC.Time_Line2 = timeArray2;
-
+//cc.log("TimeArray"+GC.Time_Line2);
 //GC.Time_Line2 = [
 //    0.5, 0.7, 0.9, 1.1, 2.5, 2.7, 4.5, 5.0, 5.5, 6.0, 7.0, 7.2, 7.5, 8, 8.5, 8.8, 9.5, 10.0
 //];
