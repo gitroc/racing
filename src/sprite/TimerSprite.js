@@ -26,13 +26,14 @@ var TimerSprite = cc.Sprite.extend({
 
     //计时精灵刷新
     update:function (dt) {
-        this.totalTime += dt;
-
-        this.timerLabel.attr({
-            x:this.timerX,
-            y:this.timerY
-        });
-        this.timerLabel.setString("Time : " + this.totalTime.toFixed(2));
+        if (GC.Game_Current == GC.Game_Running) {
+            this.totalTime += dt;
+            this.timerLabel.attr({
+                x:this.timerX,
+                y:this.timerY
+            });
+            this.timerLabel.setString("Time : " + this.totalTime.toFixed(2));
+        }
     },
 
     initTimer:function () {

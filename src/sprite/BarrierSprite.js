@@ -176,13 +176,8 @@ var BarrierSprite = cc.Sprite.extend({
 
     //启动定时器
     startTimer:function () {
-        if (this.getParent().gameStatus == GC.Game_Running) {
-            this.setSpeed();
-            this.schedule(this.setBarrier, GC.Game_Timer_Interval, cc.REPEAT_FOREVER, 0);
-        } else {
-            this.stopAllActions();
-            this.unschedule(this.setBarrier);
-        }
+        this.setSpeed();
+        this.schedule(this.setBarrier, GC.Game_Timer_Interval, cc.REPEAT_FOREVER, 0);
     },
 
     //设置纵向移动速度
@@ -230,19 +225,20 @@ var BarrierSprite = cc.Sprite.extend({
 
     //根据地图画障碍物
     setBarrier:function () {
-        this.oneMapTime += GC.Game_Timer_Interval;
-        this.timeAdjustSpeed += GC.Game_Timer_Interval;
+        if (GC.Game_Current == GC.Game_Running) {
+            this.oneMapTime += GC.Game_Timer_Interval;
+            this.timeAdjustSpeed += GC.Game_Timer_Interval;
 
-        if (this.spriteArrays.length > 0) {
-            for (var i = 0; i < this.spriteArrays.length; i++) {
-                if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] * 5) {
-                    this.spriteArrays[i].visible = true;
-                    this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
-
-                } else if (this.oneMapTime > 10 * 5){
-                    this.autoAdjustMap(this.timeAdjustSpeed / 5);
+            if (this.spriteArrays.length > 0) {
+                for (var i = 0; i < this.spriteArrays.length; i++) {
+                    if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] * 5) {
+                        this.spriteArrays[i].visible = true;
+                        this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
+                    } else if (this.oneMapTime > 10 * 5){
+                        this.autoAdjustMap(this.timeAdjustSpeed / 5);
+                    }
+                    this.carCrash(this.spriteArrays[i], this.crashType[i]);
                 }
-                this.carCrash(this.spriteArrays[i], this.crashType[i]);
             }
         }
     },
@@ -308,7 +304,7 @@ var BarrierSprite = cc.Sprite.extend({
                         || crashType == GC.Crash_Only_Hit){
                         target.removeFromParent();
                     } else {
-                        target.getParent().gameStatus = GC.Game_Over;
+                        GC.Game_Current = GC.Game_Over;
                     }
 
                     event.setUserData(eventData);

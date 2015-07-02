@@ -31,15 +31,11 @@ var NewBgSprite = cc.Sprite.extend({
     },
     //循环动画
     update:function(){
-        if (this.getParent().gameStatus == GC.Game_Running) {
+        if (GC.Game_Current == GC.Game_Running) {
             var animation = new cc.Animation(this.bgs, this.onceTime);
             var action = new cc.Animate(animation);
             this.runAction(action);
-        } else {
-            this.stopAllActions();
-            this.unschedule(this.update);
         }
-
     },
     //重启动画,碰到加（减）速道具速度改变
     updateAction:function(oTime,aTime,object){

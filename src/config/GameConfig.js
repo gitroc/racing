@@ -23,6 +23,8 @@ GC.Car_Sprite = 3;
 GC.Stone_Sprite = 4;
 GC.Tree_Sprite = 5;
 GC.Timer_Sprite = 6;
+GC.Loading_Guide = 7;
+GC.Loading_Timer = 8;
 
 //路的图片的最大数
 GC.Road_Png_Max = 4;
@@ -116,6 +118,22 @@ GC.Tree_05_Scale = 0.5;
 GC.Tree_05_X = 600;
 GC.Tree_05_Y = 580;
 
+GC.treeOrg = [
+    cc.p(GC.Tree_01_X, GC.Tree_01_Y),
+    cc.p(GC.Tree_02_X, GC.Tree_02_Y),
+    cc.p(GC.Tree_03_X, GC.Tree_03_Y),
+    cc.p(GC.Tree_04_X, GC.Tree_04_Y),
+    cc.p(GC.Tree_05_X, GC.Tree_05_Y)
+];
+
+GC.treeScale = [
+    GC.Tree_01_Scale,
+    GC.Tree_02_Scale,
+    GC.Tree_03_Scale,
+    GC.Tree_04_Scale,
+    GC.Tree_05_Scale
+];
+
 //随机出现左边石头位置
 GC.Stone_Show_Left_X = 190;
 GC.Stone_Show_Left_Y = 685;
@@ -154,6 +172,20 @@ GC.Stone_03_Y = 485;
 GC.Stone_04_Scale = 1;
 GC.Stone_04_X = 550;
 GC.Stone_04_Y = 630;
+
+GC.stoneOrg = [
+    cc.p(GC.Stone_01_X, GC.Stone_01_Y),
+    cc.p(GC.Stone_02_X, GC.Stone_02_Y),
+    cc.p(GC.Stone_03_X, GC.Stone_03_Y),
+    cc.p(GC.Stone_04_X, GC.Stone_04_Y)
+];
+
+GC.stoneScale = [
+    GC.Stone_01_Scale,
+    GC.Stone_02_Scale,
+    GC.Stone_03_Scale,
+    GC.Stone_04_Scale
+];
 
 //障碍物类型
 GC.Barrier_Type1 = 1;
@@ -203,6 +235,9 @@ GC.Game_Slow_Down = 5;
 GC.Game_Over      = 6;
 GC.Game_Hit       = 7;
 
+//当前游戏状态 可修改
+GC.Game_Current   = GC.Game_Loading;
+
 //游戏难度
 GC.Game_Level_Easy   = 1;
 GC.Game_Level_Normal = 2;
@@ -219,6 +254,9 @@ GC.Speed_High_Once = 0.05;
 GC.Speed_High_All = 0.2;
 GC.Speed_Low_Once = 0.15;
 GC.Speed_Low_All = 0.6;
+
+//ready go 图片个数
+GC.Loading_Guide_Max = 6;
 
 
 

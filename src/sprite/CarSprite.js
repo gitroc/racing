@@ -67,7 +67,7 @@ var CarSprite = cc.Sprite.extend({
 
     //触屏移动汽车精灵
     moveCar:function (target, position) {
-        if (this.getParent().gameStatus == GC.Game_Running) {
+        if (GC.Game_Current == GC.Game_Running) {
             var carX = 0;
             var carY = target.y;
 
@@ -115,6 +115,5 @@ var CarSprite = cc.Sprite.extend({
             this.getParent().runAction(actionBg);
 
         }
-
     }
 });

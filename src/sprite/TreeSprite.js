@@ -59,13 +59,8 @@ var TreeSprite = cc.Sprite.extend({
 
     //启动定时器
     startTimer:function () {
-        if (this.getParent().gameStatus == GC.Game_Running) {
-            this.setSpeed();
-            this.schedule(this.plantTree, 1, cc.REPEAT_FOREVER, 0);
-        } else {
-            this.stopAllActions();
-            this.unschedule(this.plantTree);
-        }
+        this.setSpeed();
+        this.schedule(this.plantTree, 1, cc.REPEAT_FOREVER, 0);
     },
 
     //设置纵向移动速度
@@ -142,27 +137,29 @@ var TreeSprite = cc.Sprite.extend({
 
     //种树
     plantTree:function () {
-        var value = cc.random0To1();
-        var sprite = new cc.Sprite(this.getTreeFrame());
+        if (GC.Game_Current == GC.Game_Running) {
+            var value = cc.random0To1();
+            var sprite = new cc.Sprite(this.getTreeFrame());
 
-        var x = this.getTreeOrg().x;
-        var y = this.getTreeOrg().y;
+            var x = this.getTreeOrg().x;
+            var y = this.getTreeOrg().y;
 
-        sprite.attr({
-            x:x,
-            y:y,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            scale:this.getTreeScale()
-        });
+            sprite.attr({
+                x:x,
+                y:y,
+                anchorX: 0.5,
+                anchorY: 0.5,
+                scale:this.getTreeScale()
+            });
 
-        this.getParent().addChild(sprite, GC.Tree_Sprite);
+            this.getParent().addChild(sprite, GC.Tree_Sprite);
 
-        var track = [
-            cc.p(x, y),
-            this.getParent().getSpriteGoal(cc.p(x, y)),
-        ];
+            var track = [
+                cc.p(x, y),
+                this.getParent().getSpriteGoal(cc.p(x, y)),
+            ];
 
-        this.getParent().moveSprite(sprite, this.verticalMoveTime, track, GC.Tree_Goal_scale);
+            this.getParent().moveSprite(sprite, this.verticalMoveTime, track, GC.Tree_Goal_scale);
+        }
     }
 });

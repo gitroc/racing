@@ -13,23 +13,25 @@
 var MainLayer = cc.Layer.extend({
     //游戏速度
     gameSpeed:GC.Car_Speed_Normal,
-    //游戏状态
-    gameStatus:GC.Game_Loading,
     //游戏时间
     totalTime:0,
     //偏移
     currentX:null,
 
+    //遮罩精灵
+    LoadingBg:null,
+
     //路精灵
     roadSprite:null,
 
     //树精灵
-    currentTree:null,
+    fiveTrees:null,
     treeScale:null,
     treeOrg:null,
     treeGoal:null,
 
     //石头精灵
+    fourStones:null,
     stoneScale:null,
     stoneOrg:null,
     stoneGoal:null,
@@ -48,7 +50,7 @@ var MainLayer = cc.Layer.extend({
     ctor:function () {
         this._super();
 
-        this.Loading();
+        this.loading();
 
         this._drawNode2 = new cc.DrawNode();
         this._drawNode2.setDrawColor(cc.color(255,255,255,255));
@@ -60,18 +62,19 @@ var MainLayer = cc.Layer.extend({
     update:function(dt) {
         this.totalTime += dt;//dt为每一帧执行的时间，把它加起来等于运行了多长时间
 //        cc.log(this.totalTime);
-        if (this.gameStatus == GC.Game_Over) {
+        if (GC.Game_Current == GC.Game_Over) {
             this.getActionManager().pauseAllRunningActions();
             this.unscheduleUpdate();
             this.gameOver();
             return;
-        } else {
+        } else if (GC.Game_Current == GC.Game_Start){
+            this.startGame();
+            return;
         }
     },
 
     //初始化游戏场景
-    Loading:function () {
-
+    loading:function () {
         cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
@@ -79,29 +82,33 @@ var MainLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
         cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
 
-//        this.readyGo();
-        this.startGame();
+        this.addSprite();
+
         this.scheduleUpdate();
     },
 
-    readyGo:function () {
-        this.gameStatus = GC.Game_Start;
+    loadingGuide:function () {
+        if (GC.Game_Current == GC.Game_Loading) {
+            this.LoadingBg = new cc.Sprite(res.LoadingBg_Png);
+            this.LoadingBg.attr ({
+                x: GC.w_2,
+                y: GC.h_2,
+                anchorX: 0.5,
+                anchorY: 0.5
+            });
 
-        var readyGo = new ReadyGoSprite();
-        readyGo.attr ({
-            x: GC.w_2,
-            y: GC.h_2,
-            anchorX: 0.5,
-            anchorY: 0.5
-        });
+            this.addChild(this.LoadingBg, GC.Loading_Guide);
 
-        this.addChild(readyGo);
+            var loadingTimer = new ReadyGoSprite();
+            this.addChild(loadingTimer, GC.Loading_Timer);
+        }
     },
 
     //启动游戏
     startGame:function () {
-        this.gameStatus = GC.Game_Running;
-        this.addSprite();
+        GC.Game_Current = GC.Game_Running;
+        this.startMoveTree();
+        this.startMoveStone();
     },
 
     addSprite:function () {
@@ -110,6 +117,7 @@ var MainLayer = cc.Layer.extend({
         this.addTree();
         this.addBarrier();
         this.addCar();
+        this.loadingGuide();
     },
 
     addNewBackground:function(){
@@ -177,56 +185,56 @@ var MainLayer = cc.Layer.extend({
     },
 
     addTree:function () {
-        this.currentTree = 0;
-        this.treeOrg = [
-            cc.p(GC.Tree_01_X, GC.Tree_01_Y),
-            cc.p(GC.Tree_02_X, GC.Tree_02_Y),
-            cc.p(GC.Tree_03_X, GC.Tree_03_Y),
-            cc.p(GC.Tree_04_X, GC.Tree_04_Y),
-            cc.p(GC.Tree_05_X, GC.Tree_05_Y)
-        ];
-
-        this.treeScale = [
-            GC.Tree_01_Scale,
-            GC.Tree_02_Scale,
-            GC.Tree_03_Scale,
-            GC.Tree_04_Scale,
-            GC.Tree_05_Scale
-        ];
-
-        for (var i = 0; i < this.treeOrg.length; i++) {
-            var str = "main_bg_object_tree" + (i + 1) + ".png";
-            var sprite = cc.spriteFrameCache.getSpriteFrame(str);
-            var tree = new cc.Sprite(sprite);
-
-            this.addTreeSprite(tree, i);
-        }
+        this.plantFiveTree();
 
         this.currentX = 320;
         var treeAnimation = new TreeSprite();
         this.addChild(treeAnimation, GC.Tree_Sprite);
     },
 
-    addTreeSprite:function (tree, index) {
-        var x = this.treeOrg[index].x;
-        var y = this.treeOrg[index].y;
+    plantFiveTree:function () {
+        this.fiveTrees = [];
 
-        tree.attr({
-            x:x,
-            y:y,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            scale:this.treeScale[index]
-        });
+        for (var i = 0; i < GC.treeOrg.length; i++) {
+            var str = "main_bg_object_tree" + (i + 1) + ".png";
+            var sprite = cc.spriteFrameCache.getSpriteFrame(str);
+            var tree = new cc.Sprite(sprite);
+            this.fiveTrees.push(tree);
+        }
 
-        this.addChild(tree, GC.Tree_Sprite);
+        this.addTreeSprite();
+    },
 
-        var track = [
-            cc.p(x, y),
-            this.getSpriteGoal(cc.p(x, y)),
-        ];
+    addTreeSprite:function () {
+        for (var i = 0; i < this.fiveTrees.length; i++) {
+            var x = GC.treeOrg[i].x;
+            var y = GC.treeOrg[i].y;
 
-        this.moveSprite(tree, GC.Tree_Time_Line[index], track, 2);
+            this.fiveTrees[i].attr({
+                x:x,
+                y:y,
+                anchorX: 0.5,
+                anchorY: 0.5,
+                scale:GC.treeScale[i]
+            });
+            this.addChild(this.fiveTrees[i], GC.Tree_Sprite);
+        }
+    },
+
+    startMoveTree:function () {
+        if (GC.Game_Current == GC.Game_Running) {
+            for (var i = 0; i < this.fiveTrees.length; i++) {
+                var x = GC.treeOrg[i].x;
+                var y = GC.treeOrg[i].y;
+
+                var track = [
+                    cc.p(x, y),
+                    this.getSpriteGoal(cc.p(x, y)),
+                ];
+
+                this.moveSprite(this.fiveTrees[i], GC.Tree_Time_Line[i], track, 2);
+            }
+        }
     },
 
     getSpriteGoal:function (Org) {
@@ -264,52 +272,56 @@ var MainLayer = cc.Layer.extend({
     },
 
     addStone:function () {
-        this.stoneOrg = [
-            cc.p(GC.Stone_01_X, GC.Stone_01_Y),
-            cc.p(GC.Stone_02_X, GC.Stone_02_Y),
-            cc.p(GC.Stone_03_X, GC.Stone_03_Y),
-            cc.p(GC.Stone_04_X, GC.Stone_04_Y)
-        ];
 
-        this.stoneScale = [
-            GC.Stone_01_Scale,
-            GC.Stone_02_Scale,
-            GC.Stone_03_Scale,
-            GC.Stone_04_Scale
-        ];
-
-        for (var i = 0; i < this.stoneOrg.length; i++) {
-            var str = "main_bg_object_stone" + (i + 1) + ".png";
-            var sprite = cc.spriteFrameCache.getSpriteFrame(str);
-            var stone = new cc.Sprite(sprite);
-
-            this.addStoneSprite(stone, i);
-        }
+        this.buriedFourStone();
 
         var stoneAnimation = new StoneSprite();
         this.addChild(stoneAnimation, GC.Stone_Sprite);
     },
 
-    addStoneSprite:function (stone, index) {
-        var x = this.stoneOrg[index].x;
-        var y = this.stoneOrg[index].y;
+    buriedFourStone:function () {
+        this.fourStones = [];
+        for (var i = 0; i < GC.stoneOrg.length; i++) {
+            var str = "main_bg_object_stone" + (i + 1) + ".png";
+            var sprite = cc.spriteFrameCache.getSpriteFrame(str);
+            var stone = new cc.Sprite(sprite);
 
-        stone.attr({
-            x:x,
-            y:y,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            scale:this.stoneScale[index]
-        });
+            this.fourStones.push(stone);
+        }
 
-        this.addChild(stone, GC.Stone_Sprite);
+        this.addStoneSprite(stone, i);
+    },
 
-        var track = [
-            cc.p(x, y),
-            this.getSpriteGoal(cc.p(x, y)),
-        ];
+    addStoneSprite:function () {
+        for (var i = 0; i < this.fourStones.length; i++) {
+            var x = GC.stoneOrg[i].x;
+            var y = GC.stoneOrg[i].y;
 
-        this.moveSprite(stone, GC.Stone_Time_Line[index], track, 2);
+            this.fourStones[i].attr({
+                x:x,
+                y:y,
+                anchorX: 0.5,
+                anchorY: 0.5,
+                scale:GC.stoneScale[i]
+            });
+
+            this.addChild(this.fourStones[i], GC.Stone_Sprite);
+        }
+    },
+
+    startMoveStone:function () {
+        if (GC.Game_Current == GC.Game_Running) {
+             for (var i = 0; i < this.fourStones.length; i++) {
+                var x = GC.stoneOrg[i].x;
+                var y = GC.stoneOrg[i].y;
+                var track = [
+                    cc.p(x, y),
+                    this.getSpriteGoal(cc.p(x, y)),
+                ];
+
+                this.moveSprite(this.fourStones[i], GC.Stone_Time_Line[i], track, 2);
+             }
+        }
     },
 
     //添加障碍物精灵

@@ -59,13 +59,8 @@ var StoneSprite = cc.Sprite.extend({
 
     //启动定时器
     startTimer:function () {
-        if (this.getParent().gameStatus == GC.Game_Running) {
-            this.setSpeed();
-            this.schedule(this.buriedStone, 1, cc.REPEAT_FOREVER, 0);
-        } else {
-            this.stopAllActions();
-            this.unschedule(this.buriedStone);
-        }
+        this.setSpeed();
+        this.schedule(this.buriedStone, 1, cc.REPEAT_FOREVER, 0);
     },
 
     //设置纵向移动速度
@@ -142,24 +137,26 @@ var StoneSprite = cc.Sprite.extend({
 
     //埋石头
     buriedStone:function () {
-        var sprite = new cc.Sprite(this.getStoneFrame());
-        var x = this.getStoneOrg().x;
-        var y = this.getStoneOrg().y;
-        sprite.attr({
-            x:x,
-            y:y,
-            anchorX: 0.5,
-            anchorY: 0.5,
-            scale:this.getStoneScale()
-        });
+        if (GC.Game_Current == GC.Game_Running) {
+            var sprite = new cc.Sprite(this.getStoneFrame());
+            var x = this.getStoneOrg().x;
+            var y = this.getStoneOrg().y;
+            sprite.attr({
+                x:x,
+                y:y,
+                anchorX: 0.5,
+                anchorY: 0.5,
+                scale:this.getStoneScale()
+            });
 
-        this.getParent().addChild(sprite, GC.Stone_Sprite);
+            this.getParent().addChild(sprite, GC.Stone_Sprite);
 
-        var track = [
-            cc.p(x, y),
-            this.getParent().getSpriteGoal(cc.p(x, y)),
-        ];
+            var track = [
+                cc.p(x, y),
+                this.getParent().getSpriteGoal(cc.p(x, y)),
+            ];
 
-        this.getParent().moveSprite(sprite, this.verticalMoveTime, track, GC.Stone_Goal_scale);
+            this.getParent().moveSprite(sprite, this.verticalMoveTime, track, GC.Stone_Goal_scale);
+        }
     }
 });
