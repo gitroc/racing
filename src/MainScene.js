@@ -52,9 +52,9 @@ var MainLayer = cc.Layer.extend({
 
         this.loading();
 
-        this._drawNode2 = new cc.DrawNode();
-        this._drawNode2.setDrawColor(cc.color(255,255,255,255));
-        this.addChild(this._drawNode2);
+//        this._drawNode2 = new cc.DrawNode();
+//        this._drawNode2.setDrawColor(cc.color(255,255,255,255));
+//        this.addChild(this._drawNode2);
 
         return true;
     },

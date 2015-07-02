@@ -38,7 +38,7 @@ GC.Stone_Png_Max = 4;
 GC.Barrier_png_Max = 6;
 
 //树的移动角度
-GC.Angle = 60;
+GC.Angle = 75;
 
 //水平移动时间
 GC.Horizontal_Move_Time = 0.1;
@@ -70,7 +70,7 @@ GC.Car_Right_X = 600;
 GC.Car_Right_Y = 275;
 
 //游戏内部timer间隔
-GC.Game_Timer_Interval = 0.1;
+GC.Game_Timer_Interval = 0.05;
 
 //随机出现左边树位置
 GC.Tree_Show_Left_X = 150;
@@ -200,24 +200,24 @@ GC.Barrier_Speed = 300;
 
 //障碍物初始缩放大小及位置坐标
 GC.Barrier_Org_Scale = [
-    0.2, 0.2, 0.2
+    0.1, 0.1, 0.1
 ];
 
 GC.Barrier_Org_Position = [
-    cc.p(250, 690),
-    cc.p(320, 690),
-    cc.p(390, 690),
+    cc.p(250, 700),
+    cc.p(320, 700),
+    cc.p(390, 700),
 ];
 
 //障碍物结束缩放大小及位置坐标
 GC.Barrier_Goal_Scale = [
-    1.5, 1.5, 1,5
+    2.2, 2.2, 2.2
 ];
 
 GC.Barrier_Goal_Position = [
-    cc.p(-160, -150),
+    cc.p(-180, -150),
     cc.p( 320, -150),
-    cc.p( 800, -150),
+    cc.p( 820, -150),
 ];
 
 //碰撞类型

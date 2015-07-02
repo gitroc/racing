@@ -231,11 +231,11 @@ var BarrierSprite = cc.Sprite.extend({
 
             if (this.spriteArrays.length > 0) {
                 for (var i = 0; i < this.spriteArrays.length; i++) {
-                    if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] * 5) {
+                    if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] * 3) {
                         this.spriteArrays[i].visible = true;
                         this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
-                    } else if (this.oneMapTime > 10 * 5){
-                        this.autoAdjustMap(this.timeAdjustSpeed / 5);
+                    } else if (this.oneMapTime > 10 * 3){
+                        this.autoAdjustMap(this.timeAdjustSpeed / 3);
                     }
                     this.carCrash(this.spriteArrays[i], this.crashTypeArrays[i]);
                 }
@@ -245,7 +245,7 @@ var BarrierSprite = cc.Sprite.extend({
 
     //移动障碍物
     moveSprite:function (sprite, time, track, scale) {
-        this.getParent()._drawNode2.drawCatmullRom(track,50, 1);
+//        this.getParent()._drawNode2.drawCatmullRom(track,50, 1);
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
         var seq = cc.sequence(
             spawn,
@@ -345,24 +345,24 @@ var BarrierSprite = cc.Sprite.extend({
             if (this.getBoxRight(barrierRect).x >= this.getBoxLeft(carRect).x
                         &&  this.getBoxRight(barrierRect).x <= this.getBoxCore(carRect).x) {
                 //向左上反弹
-                cc.log("左上");
+//                cc.log("左上");
                 spawn = cc.spawn(cc.rotateBy(0.5, -90), cc.moveBy(0.5, cc.p(-150, 150)));
             } else if (this.getBoxLeft(barrierRect).x <= this.getBoxRight(carRect).x
                         && this.getBoxLeft(barrierRect).x >=  this.getBoxCore(carRect).x){
                 //向右上反弹
-                cc.log("右上");
+//                cc.log("右上");
                 spawn = cc.spawn(cc.rotateBy(0.5, 90), cc.moveBy(0.5, cc.p(150, 150)));
             } else {
                 //向上反弹
-                cc.log("向上");
+//                cc.log("向上");
                 if (this.getBoxCore(carRect).x > GC.Car_Center_X + GC.Car_Range) {
-                    cc.log("右边道路");
+//                    cc.log("右边道路");
                     spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-150, 150)));
                 } else if (this.getBoxCore(carRect).x < GC.Car_Center_X - GC.Car_Range){
-                    cc.log("左边道路");
+//                    cc.log("左边道路");
                     spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(150, 150)));
                 } else {
-                    cc.log("中间道路");
+//                    cc.log("中间道路");
                     if (this.getBoxCore(carRect).x > GC.Car_Center_X) {
                         spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-150, 150)));
                     } else {
@@ -374,22 +374,21 @@ var BarrierSprite = cc.Sprite.extend({
             if (this.getBoxRight(barrierRect).x >= this.getBoxLeft(carRect).x
                 && this.getBoxRight(barrierRect).x <= this.getBoxCore(carRect).x) {
                 //左反弹
-                cc.log("左");
+//                cc.log("左");
                 spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-100, 0)));
             } else if (this.getBoxLeft(barrierRect).x <= this.getBoxRight(carRect).x
                 && this.getBoxLeft(barrierRect).x >= this.getBoxCore(carRect).x) {
                 //右反弹
-                cc.log("右");
+//                cc.log("右");
                 spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(100, 0)));
             } else {
                 //下反弹
-                cc.log("下");
+//                cc.log("下");
                 if (this.getBoxCore(carRect).x > GC.Car_Center_X) {
                     spawn = cc.spawn(cc.rotateBy(0.5, 0), cc.moveBy(0.5, cc.p(100, -100)));
                 } else {
                     spawn = cc.spawn(cc.rotateBy(0.5, 0), cc.moveBy(0.5, cc.p(-100, -100)));
                 }
-
             }
         }
 
