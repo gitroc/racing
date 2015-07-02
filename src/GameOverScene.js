@@ -44,6 +44,7 @@ var OverLayer = cc.Layer.extend({
             function () {
                 cc.log("EndMenu is clicked!");
                 document.title = window.wxFriend.desc = "Again!!";
+                GC.Game_Current = GC.Game_Loading;
                 cc.log(window.wxFriend.desc);
                 cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
             }, this);

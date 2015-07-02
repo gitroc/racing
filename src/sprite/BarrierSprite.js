@@ -18,7 +18,7 @@ var BarrierSprite = cc.Sprite.extend({
     trackArrays:null,
     goalScaleArrays:null,
     timeLineArrays:null,
-    crashType:null,
+    crashTypeArrays:null,
     speedListener:null,
     verticalMoveTime:0,
     timeAdjustSpeed:0,
@@ -58,7 +58,7 @@ var BarrierSprite = cc.Sprite.extend({
         this.trackArrays = [];
         this.goalScaleArrays = [];
         this.timeLineArrays = [];
-        this.crashType = [];
+        this.crashTypeArrays = [];
 
         for (var i = 0; i < GC.Barrier_png_Max; i++) {
             var str = "main_road_barrier" + (i + 1) + ".png";
@@ -101,11 +101,11 @@ var BarrierSprite = cc.Sprite.extend({
         }
 
         this.clearBarrier();
-        this.LoadOneMap(barrierMap, timeLine, GC.Barrier_Org_Position, GC.Barrier_Org_Scale, GC.Barrier_Goal_Position, GC.Barrier_Goal_Scale);
+        this.LoadOneMap(barrierMap, timeLine);
     },
 
     //生成障碍物
-    LoadOneMap:function (Barrier_Map, Time_Line, Barrier_Org_Position, Barrier_Org_Scale, Barrier_Goal_Position, Barrier_Goal_Scale) {
+    LoadOneMap:function (Barrier_Map, Time_Line) {
         for (var i = 0; i < Barrier_Map.length ; i++) { //按列查询
             for (var j = 0; j < Barrier_Map[i].length; j++) {
                 var type = Barrier_Map[i][j];
@@ -114,8 +114,8 @@ var BarrierSprite = cc.Sprite.extend({
 
                     var sprite = new cc.Sprite(this.getBarrierFrame(type));
 
-                    var x = Barrier_Org_Position[j].x;
-                    var y = Barrier_Org_Position[j].y;
+                    var x = GC.Barrier_Org_Position[j].x;
+                    var y = GC.Barrier_Org_Position[j].y;
 
                     sprite.attr({
                         x:x,
@@ -130,22 +130,22 @@ var BarrierSprite = cc.Sprite.extend({
 
                     var track = [
                         cc.p(x, y),
-                        cc.p(Barrier_Goal_Position[j]),
+                        cc.p(GC.Barrier_Goal_Position[j]),
                     ];
 
                     this.spriteArrays.push(sprite);
                     this.trackArrays.push(track);
-                    this.goalScaleArrays.push(Barrier_Goal_Scale[j]);
+                    this.goalScaleArrays.push(GC.Barrier_Goal_Scale[j]);
                     this.timeLineArrays.push(Time_Line[i]);
 
                     if (type == GC.Barrier_Type6) { //加速图片
-                        this.crashType.push(GC.Crash_Speed_Up);
+                        this.crashTypeArrays.push(GC.Crash_Speed_Up);
                     } else if (type == GC.Barrier_Type5) { //减速图片
-                        this.crashType.push(GC.Crash_Slow_Down);
+                        this.crashTypeArrays.push(GC.Crash_Slow_Down);
                     } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2){
-                        this.crashType.push(GC.Crash_Only_Hit);
+                        this.crashTypeArrays.push(GC.Crash_Only_Hit);
                     } else if (type == GC.Barrier_Type3 || type == GC.Barrier_Type4){
-                        this.crashType.push(GC.Crash_Shut_Down);
+                        this.crashTypeArrays.push(GC.Crash_Shut_Down);
                     }
                 }
             }
@@ -160,7 +160,7 @@ var BarrierSprite = cc.Sprite.extend({
                 this.clearBarrierArray(this.trackArrays, i);
                 this.clearBarrierArray(this.goalScaleArrays, i);
                 this.clearBarrierArray(this.timeLineArrays, i);
-                this.clearBarrierArray(this.crashType, i);
+                this.clearBarrierArray(this.crashTypeArrays, i);
                 i = i - 1;
             }
         }
@@ -237,7 +237,7 @@ var BarrierSprite = cc.Sprite.extend({
                     } else if (this.oneMapTime > 10 * 5){
                         this.autoAdjustMap(this.timeAdjustSpeed / 5);
                     }
-                    this.carCrash(this.spriteArrays[i], this.crashType[i]);
+                    this.carCrash(this.spriteArrays[i], this.crashTypeArrays[i]);
                 }
             }
         }
@@ -252,7 +252,7 @@ var BarrierSprite = cc.Sprite.extend({
             cc.callFunc(function () {
                 sprite.removeFromParent();
             })
-        );
+        ).easing(cc.easeSineIn());
 
         sprite.runAction(seq);
     },
@@ -312,16 +312,6 @@ var BarrierSprite = cc.Sprite.extend({
                 })
             ));
         }
-    },
-
-    judgeRemove:function (crashType) {
-        if (crashType == GC.Crash_Speed_Up
-            || crashType == GC.Crash_Slow_Down
-            || crashType == GC.Crash_Only_Hit){
-            return true;
-        }
-
-        return false;
     },
 
     //碰撞检测算法
