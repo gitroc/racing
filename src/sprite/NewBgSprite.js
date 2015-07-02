@@ -15,7 +15,7 @@ var NewBgSprite = cc.Sprite.extend({
         this.allTime = GC.Speed_Normal_All;
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
 //        this.addListener();
-        this.addSpeedListener();
+//        this.addSpeedListener();
     },
     onExit:function(){
         this.unschedule(this.update);
