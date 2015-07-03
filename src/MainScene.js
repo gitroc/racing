@@ -13,13 +13,9 @@
 var MainLayer = cc.Layer.extend({
     //游戏速度
     gameSpeed:GC.Car_Speed_Normal,
-    //游戏时间
-    totalTime:0,
+
     //偏移
     currentX:null,
-
-    //遮罩精灵
-    LoadingBg:null,
 
     //路精灵
     roadSprite:null,
@@ -36,35 +32,23 @@ var MainLayer = cc.Layer.extend({
     stoneOrg:null,
     stoneGoal:null,
 
-    //背景精灵
-    bgSprite:null,
-    prospect:null,
-
     //汽车精灵
     carSprite:null,
 
     //障碍物精灵
     barrierSprite:null,
-    newBgSprite:null,
-    _drawNode2:null,
+    bgSprite:null,
+
+    //前景
+    proLayer:null,
     ctor:function () {
         this._super();
-
         this.loading();
-
-//        this._drawNode2 = new cc.DrawNode();
-//        this._drawNode2.setDrawColor(cc.color(255,255,255,255));
-//        this.addChild(this._drawNode2);
-
         return true;
     },
 
     update:function(dt) {
-        this.totalTime += dt;//dt为每一帧执行的时间，把它加起来等于运行了多长时间
-//        cc.log(this.totalTime);
         if (GC.Game_Current == GC.Game_Over) {
-            this.getActionManager().pauseAllRunningActions();
-            this.unscheduleUpdate();
             this.gameOver();
             return;
         } else if (GC.Game_Current == GC.Game_Start){
@@ -83,21 +67,13 @@ var MainLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
 
         this.addSprite();
-
         this.scheduleUpdate();
     },
 
+    //加载向导倒计时
     loadingGuide:function () {
         if (GC.Game_Current == GC.Game_Loading) {
-            this.LoadingBg = new cc.Sprite(res.LoadingBg_Png);
-            this.LoadingBg.attr ({
-                x: GC.w_2,
-                y: GC.h_2,
-                anchorX: 0.5,
-                anchorY: 0.5
-            });
-
-            this.addChild(this.LoadingBg, GC.Loading_Guide);
+            this.addProLayer();
 
             var loadingTimer = new ReadyGoSprite();
             this.addChild(loadingTimer, GC.Loading_Timer);
@@ -107,8 +83,19 @@ var MainLayer = cc.Layer.extend({
     //启动游戏
     startGame:function () {
         GC.Game_Current = GC.Game_Running;
+
+        this.addProLayer();
+
         this.startMoveTree();
         this.startMoveStone();
+    },
+
+    addProLayer:function () {
+        if (this.proLayer != null) {
+            this.proLayer.removeFromParent();
+        }
+        this.proLayer = new ProspectLayer();
+        this.addChild(this.proLayer, GC.Mask_Layer);
     },
 
     addSprite:function () {
@@ -121,31 +108,14 @@ var MainLayer = cc.Layer.extend({
     },
 
     addNewBackground:function(){
-        this.newBgSprite = new NewBgSprite(res.Road_png);
-        this.newBgSprite.attr({
+        this.bgSprite = new NewBgSprite(res.Road_png);
+        this.bgSprite.attr({
                     x:GC.w_2,
                     y:GC.h_2,
                     anchorX : 0.5,
                     anchorY : 0.5
                 });
-        this.addChild(this.newBgSprite);
-    },
-    //添加背景图片
-    addBackGround:function () {
-        this.bgSprite = new BgSprite(res.BackGround_png, cc.rect(GC.Bg_Center_X, GC.Bg_Center_Y, GC.w, GC.h));
-        this.bgSprite.attr({
-            x: GC.w_2,
-            y: GC.h_2,
-            anchorX: 0.5,
-            anchorY: 0.5
-        });
-
-        this.addChild(this.bgSprite, GC.BackGround_Sprite);
-
-//        var emitter = new cc.ParticleFireworks();
-//        emitter.setTotalParticles(250);
-//        emitter.texture = cc.textureCache.addImage(res.Fire_png);
-//        this.addChild(emitter);
+        this.addChild(this.bgSprite);
     },
 
     //添加汽车
@@ -272,7 +242,6 @@ var MainLayer = cc.Layer.extend({
     },
 
     addStone:function () {
-
         this.buriedFourStone();
 
         var stoneAnimation = new StoneSprite();
@@ -331,21 +300,59 @@ var MainLayer = cc.Layer.extend({
     },
 
     gameOver:function () {
-        cc.log("Game over!");
-        var timeCount = this.getParent().prospect.getLayerTimer().getTimer();
-        GC.Total_Time  = timeCount;
-        cc.log(timeCount+"--");
-        cc.director.runScene(new cc.TransitionFade(1.2, new GameOverScene()));
+        this.getActionManager().pauseAllRunningActions();
+        this.unscheduleUpdate();
+
+        this.addProLayer();
     }
 });
 
 var ProspectLayer = cc.Layer.extend({
+
+    //遮罩精灵
+    maskLayer:null,
+
     //游戏计时
     timer:0,
+
+    //游戏结束
+    sloganSprite:null,
+    word1Sprite:null,
+    timeSprite:0,
+    lineSprite:null,
+    menuSprite:null,
+
     ctor:function () {
         this._super();
-        this.addTimer();
         return true;
+    },
+
+    onEnter:function () {
+        this._super();
+        this.initProLayer();
+    },
+
+    onExit:function () {
+        this._super();
+    },
+
+    initProLayer:function () {
+        switch (GC.Game_Current) {
+            case GC.Game_Loading:
+                this.addMaskLayer();
+            break;
+
+            case GC.Game_Running:
+                this.addTimer();
+            break;
+
+            case GC.Game_Over:
+                this.gameOver();
+            break;
+
+            default:
+            break;
+        }
     },
 
     //初始化计时精灵
@@ -353,21 +360,136 @@ var ProspectLayer = cc.Layer.extend({
         this.timer = new TimerSprite();
         this.addChild(this.timer, GC.Timer_Sprite);
     },
-    getLayerTimer:function(){
-        return this.timer;
+
+    //游戏结束
+    gameOver:function () {
+        cc.log("Game over!");
+        this.addMaskLayer();
+        this.addSlogan();
+        this.addWord();
+        this.addTime(this.timer);
+        this.addLine();
+        this.addMenu(this.addReplay(), this.addShare());
+    },
+
+    //添加遮罩层
+    addMaskLayer:function () {
+        this.maskLayer = new cc.Sprite(res.MaskLayer_Png);
+        this.maskLayer.attr ({
+            x: GC.w_2,
+            y: GC.h_2,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+
+        this.addChild(this.maskLayer, GC.Mask_Layer);
+    },
+
+    //记得晒成绩哦
+    addSlogan:function () {
+        this.sloganSprite = new cc.Sprite(res.Slogan_Png);
+        this.sloganSprite.attr({
+            x:320,
+            y:788,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(this.sloganSprite, GC.Slogan_Sprite);
+    },
+
+    //本轮成绩
+    addWord:function () {
+        this.word1Sprite = new cc.Sprite(res.Word_Png);
+        this.word1Sprite.attr({
+            x:215,
+            y:605,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(this.word1Sprite, GC.Word1_Sprite);
+    },
+
+    //时间
+    addTime:function (totalTime) {
+        this.timeSprite = cc.LabelTTF.create(totalTime+"S", "黑体", 80, cc.TEXT_ALIGNMENT_RIGHT);
+        this.timeSprite.setPosition(cc.p(420,605));
+        this.timeSprite.setFontFillColor(cc.color(255,193,25));
+        this.addChild(this.timeSprite, GC.TotalTime_Sprite);
+    },
+
+    //分割线
+    addLine:function () {
+        this.lineSprite = new cc.Sprite(res.Line_Png);
+        this.lineSprite.attr({
+            x:320,
+            y:495,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(this.lineSprite, GC.Line_Sprite);
+    },
+
+    //再战一轮
+    addReplay:function () {
+        var replayItem = new cc.MenuItemImage(
+            res.Again_png,
+            res.AgainSel_png,
+            function () {
+                cc.log("EndMenu is clicked!");
+                document.title = window.wxFriend.desc = "Again!!";
+
+                cc.log(window.wxFriend.desc);
+                GC.Game_Current = GC.Game_Loading;
+                cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
+            }, this);
+        replayItem.attr({
+            x:190,
+            y:150,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+
+        return replayItem;
+    },
+
+    //分享
+    addShare:function () {
+        var shareItem = new cc.MenuItemImage(
+            res.Share_png,
+            res.ShareSel_png,
+            function () {
+                cc.log("Menu is clicked!");
+                document.title =  window.wxData.desc = "wxData喵星刷屏！喵获得";
+                document.title = window.wxFriend.desc = "wxFriend我拿了分，战胜了个汪，超越了％的好友！你能超过我吗";
+
+                cc.log(window.wxData.desc);
+                cc.log(window.wxFriend.desc);
+            }, this);
+
+        shareItem.attr({
+            x:450,
+            y:150,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+
+        return shareItem;
+    },
+
+    //菜单
+    addMenu:function (menu1, menu2) {
+        this.menuSprite = new cc.Menu(menu1, menu2);
+        this.menuSprite.x = 0;
+        this.menuSprite.y = 150;
+        this.addChild(this.menuSprite, GC.Menu_Sprite);
     }
 });
+
 var MainScene = cc.Scene.extend({
-    prospect:null,
 	onEnter:function () {
 		this._super();
 
 		var layer = new MainLayer();
 		this.addChild(layer);
-
-		this.prospect = new ProspectLayer();
-		this.addChild(this.prospect);
-
-		var timeCount = 0;
 	}
 });

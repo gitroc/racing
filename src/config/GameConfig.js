@@ -23,8 +23,13 @@ GC.Car_Sprite = 3;
 GC.Stone_Sprite = 4;
 GC.Tree_Sprite = 5;
 GC.Timer_Sprite = 6;
-GC.Loading_Guide = 7;
+GC.Mask_Layer = 7;
 GC.Loading_Timer = 8;
+GC.Slogan_Sprite = 9;
+GC.Word1_Sprite = 10;
+GC.TotalTime_Sprite = 11;
+GC.Line_Sprite = 12;
+GC.Menu_Sprite = 13;
 
 //路的图片的最大数
 GC.Road_Png_Max = 4;
@@ -235,9 +240,6 @@ GC.Game_Slow_Down = 5;
 GC.Game_Over      = 6;
 GC.Game_Hit       = 7;
 
-//当前游戏状态 可修改
-GC.Game_Current   = GC.Game_Loading;
-
 //游戏难度
 GC.Game_Level_Easy   = 1;
 GC.Game_Level_Normal = 2;
@@ -257,6 +259,12 @@ GC.Speed_Low_All = 0.6;
 
 //ready go 图片个数
 GC.Loading_Guide_Max = 6;
+
+
+
+//当前游戏状态 可修改
+GC.Game_Current   = GC.Game_Loading;
+
 
 
 

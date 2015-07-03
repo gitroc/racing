@@ -79,7 +79,6 @@ var ReadyGoSprite = cc.Sprite.extend({
                 this.counter ++;
             } else {
                 this.unschedule(this.readyGo);
-                this.getParent().LoadingBg.removeFromParent();
                 GC.Game_Current = GC.Game_Start;
             }
         }

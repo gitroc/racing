@@ -7,7 +7,7 @@ var HomePageLayer = cc.Layer.extend({
 	scoreLabel:null,
 	ctor:function () {
 		this._super();
-        this._sptBg = new cc.Sprite("res/image/loading_bg.jpg");
+        this._sptBg = new cc.Sprite(res.LoadingBg_Png);
         this._sptBg.attr({
             anchorX : 0.5,
             anchorY : 0.5,
