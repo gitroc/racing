@@ -20,6 +20,7 @@
         "src/PlayScene.js",
         "src/GameOverScene.js",
 
+        "src/sprite/PlayButtonSprite.js",
         "src/sprite/DemoSprite.js",
         "src/sprite/TimerSprite.js",
         "src/sprite/BarrierSprite.js",

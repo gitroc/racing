@@ -4,6 +4,7 @@
 */
 var HomePageLayer = cc.Layer.extend({
 	bgSprite:null,
+	buttonSprite:null,
 	scoreLabel:null,
 	ctor:function () {
 		this._super();
@@ -14,25 +15,16 @@ var HomePageLayer = cc.Layer.extend({
             x: GC.w_2,
             y: GC.h_2
         });
-        this.addChild(this._sptBg);
+        this.addChild(this._sptBg,1);
 
-        var startItem = new cc.MenuItemImage(
-            res.Play_S_png,
-            res.Play_N_png,
-            function () {
-                cc.log("PlayMenu is clicked!");
-                cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
-            }, this);
-        startItem.attr({
-			x: 450,
-			y: 150,
-			anchorX: 0.5,
-			anchorY: 0.5
-		});
-        var menu = new cc.Menu(startItem);
-        menu.x = 0;
-        menu.y = 0;
-        this.addChild(menu, 1);
+        this.buttonSprite = new PlayButtonSprite(res.Play_N_png);
+        this.buttonSprite.attr({
+            x: 450,
+            y: 150,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+        this.addChild(this.buttonSprite,2);
     }
 });
 var HomePageScene = cc.Scene.extend({
