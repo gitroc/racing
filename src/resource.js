@@ -1,4 +1,6 @@
 var res = {
+    Again_png : "res/image/end_btn_replay.png",
+    Share_png : "res/image/end_btn_share.png",
     Play_N_png:"res/image/loading_btn_on.jpg",
     Play_S_png:"res/image/loading_btn_off.jpg",
     Tree_plist : "res/main/main_bg_object_tree.plist",

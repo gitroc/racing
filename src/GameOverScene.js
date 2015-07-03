@@ -10,21 +10,70 @@ var OverLayer = cc.Layer.extend({
         this.initSprite();
     },
     initSprite:function(){
-        var title = cc.LabelTTF.create("GAME OVER","黑体",50);
-        var lb = cc.LabelTTF.create("最终时间：", "黑体", 20, cc.size(225,105), cc.TEXT_ALIGNMENT_LEFT);
-        var time = cc.LabelTTF.create(GC.Total_Time+"!!", "黑体", 50, cc.TEXT_ALIGNMENT_RIGHT);
-        lb.strokeStyle = cc.color(0,0,0);
-        title.setPosition(cc.p(GC.w_2,GC.h_2+100));
-        lb.setPosition(cc.p(GC.w_2,GC.h_2));
-        time.setPosition(cc.p(GC.w_2,GC.h_2-100));
-        time.strokeStyle = cc.color(0,0,0);
-        this.addChild(title);
-        this.addChild(lb);
+        //遮罩
+        var endGuide = new cc.Sprite("res/image/end_guide_bg.png");
+        endGuide.attr({
+            x:GC.w_2,
+            y:GC.h_2,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(endGuide);
+        //记得晒成绩哦
+        var sloganImage = new cc.Sprite("res/image/end_icon_slogan.png");
+        sloganImage.attr({
+            x:320,
+            y:788,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(sloganImage);
+        //本轮成绩
+        var word1 = new cc.Sprite("res/image/end_icon_word1.png");
+        word1.attr({
+            x:215,
+            y:605,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(word1);
+        //时间
+        var time = cc.LabelTTF.create(GC.Total_Time+"S", "黑体", 80, cc.TEXT_ALIGNMENT_RIGHT);
+        time.setPosition(cc.p(420,605));
+        time.setFontFillColor(cc.color(255,193,25));
+//        time.strokeStyle = cc.color(232,115,20);
         this.addChild(time);
 
-        var startItem = new cc.MenuItemImage(
-            res.Start_N_png,
-            res.Start_S_png,
+        //分割线
+        var line = new cc.Sprite("res/image/end_icon_line.png");
+        line.attr({
+            x:320,
+            y:495,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(line);
+        //再战一轮
+        var replayItem = new cc.MenuItemImage(
+            res.Again_png,
+            res.Again_png,
+            function () {
+                cc.log("EndMenu is clicked!");
+                document.title = window.wxFriend.desc = "Again!!";
+                GC.Game_Current = GC.Game_Loading;
+                cc.log(window.wxFriend.desc);
+                cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
+            }, this);
+        replayItem.attr({
+            x:190,
+            y:150,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+       //分享
+        var shareItem = new cc.MenuItemImage(
+            res.Share_png,
+            res.Share_png,
             function () {
                 cc.log("Menu is clicked!");
                 document.title =  window.wxData.desc = "wxData喵星刷屏！喵获得";
@@ -33,31 +82,17 @@ var OverLayer = cc.Layer.extend({
                 cc.log(window.wxData.desc);
                 cc.log(window.wxFriend.desc);
             }, this);
-       startItem.attr({
-            x:GC.w_2-200,
-            y:GC.h_2-100
+        shareItem.attr({
+            x:450,
+            y:150,
+            anchorX : 0.5,
+            anchorY : 0.5
         });
 
-       var againItem = new cc.MenuItemImage(
-            res.Start_N_png,
-            res.Start_S_png,
-            function () {
-                cc.log("EndMenu is clicked!");
-                document.title = window.wxFriend.desc = "Again!!";
-                GC.Game_Current = GC.Game_Loading;
-                cc.log(window.wxFriend.desc);
-                cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
-            }, this);
-       againItem.attr({
-            x:GC.w_2+200,
-            y:GC.h_2-100
-       });
-
-        var menu = new cc.Menu(startItem,againItem);
-        menu.alignItemsInColumns(1,1);
-        menu.x = GC.w_2;
-        menu.y = 200;
-        this.addChild(menu, 1);
+        var menu = new cc.Menu(replayItem,shareItem);
+        menu.x = 0;
+        menu.y = 150;
+        this.addChild(menu);
     }
 });
 
