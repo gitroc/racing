@@ -31,7 +31,6 @@ var ReadyGoSprite = cc.Sprite.extend({
             var frame = cc.spriteFrameCache.getSpriteFrame(str);
             this.frames.push(frame);
         }
-
         this.startTimer();
     },
 

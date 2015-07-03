@@ -46,9 +46,5 @@ var TimerSprite = cc.Sprite.extend({
         this.addChild(this.timerLabel, GC.Timer_Sprite);
 
         this.scheduleUpdate();
-    },
-
-    resetTimer:function (offset) {
-        this.timerX = this.timerX + offset;
     }
 });

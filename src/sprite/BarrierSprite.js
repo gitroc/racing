@@ -84,7 +84,7 @@ var BarrierSprite = cc.Sprite.extend({
         } else if (value == 0) {
             value += 1;
         }
-        cc.log(value);
+        cc.log("LoadingMaps = ", value);
         switch (level) {
             case GC.Game_Level_Easy:
                 barrierMap = GC.Barrier_Map[value][0];

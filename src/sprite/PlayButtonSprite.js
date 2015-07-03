@@ -44,7 +44,6 @@ var PlayButtonSprite = cc.Sprite.extend({
                             return;
                         }
                         var target = event.getCurrentTarget();
-                        cc.log("PlayMenu is clicked!");
                         cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
                     }
                 }),
