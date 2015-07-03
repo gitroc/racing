@@ -17,7 +17,7 @@ var HomePageLayer = cc.Layer.extend({
         });
         this.addChild(this._sptBg,1);
 
-        this.buttonSprite = new PlayButtonSprite(res.Play_N_png);
+        this.buttonSprite = new PlayButtonSprite(res.PlayOn_png);
         this.buttonSprite.attr({
             x: 450,
             y: 150,

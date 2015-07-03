@@ -249,7 +249,7 @@ GC.Game_Level_Hard   = 3;
 GC.Game_Easy_To_Normal = 30;
 GC.Game_Normal_To_Hard = 60;
 
-GC.Total_Time=0;//显示总时间
+GC.Total_Time = 0;//显示总时间
 GC.Speed_Normal_Once = 0.1;
 GC.Speed_Normal_All = 0.4;
 GC.Speed_High_Once = 0.05;

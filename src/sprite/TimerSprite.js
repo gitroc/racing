@@ -12,7 +12,6 @@
  ****************************************************************************/
 var TimerSprite = cc.Sprite.extend({
     timerLabel:null,
-    totalTime:0,
     timerX:100,
     timerY:GC.h - 40,
     onEnter:function () {
@@ -21,23 +20,24 @@ var TimerSprite = cc.Sprite.extend({
     },
 
     onExit:function () {
+
         this._super();
     },
 
     //计时精灵刷新
     update:function (dt) {
         if (GC.Game_Current == GC.Game_Running) {
-            this.totalTime += dt;
+            GC.Total_Time += dt;
             this.timerLabel.attr({
                 x:this.timerX,
                 y:this.timerY
             });
-            this.timerLabel.setString("Time : " + this.totalTime.toFixed(2));
+            this.timerLabel.setString("Time : " + GC.Total_Time.toFixed(2));
         }
     },
 
     initTimer:function () {
-        this.timerLabel = new cc.LabelTTF("Time : " + this.totalTime.toFixed(2), "Tahoma", 32);
+        this.timerLabel = new cc.LabelTTF("Time : " + GC.Total_Time.toFixed(2), "Tahoma", 32);
         this.timerLabel.attr({
             x:this.timerX,
             y:this.timerY
@@ -50,10 +50,5 @@ var TimerSprite = cc.Sprite.extend({
 
     resetTimer:function (offset) {
         this.timerX = this.timerX + offset;
-    },
-
-    getTimer:function () {
-        this.unscheduleUpdate();
-        return this.totalTime.toFixed(2);
     }
 });

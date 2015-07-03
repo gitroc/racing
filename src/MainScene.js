@@ -91,7 +91,7 @@ var MainLayer = cc.Layer.extend({
     },
 
     addProLayer:function () {
-        if (this.proLayer != null) {
+        if (this.proLayer != null && GC.Game_Current == GC.Game_Running) {
             this.proLayer.removeFromParent();
         }
         this.proLayer = new ProspectLayer();
@@ -313,7 +313,7 @@ var ProspectLayer = cc.Layer.extend({
     maskLayer:null,
 
     //游戏计时
-    timer:0,
+    timer:null,
 
     //游戏结束
     sloganSprite:null,
@@ -367,7 +367,7 @@ var ProspectLayer = cc.Layer.extend({
         this.addMaskLayer();
         this.addSlogan();
         this.addWord();
-        this.addTime(this.timer);
+        this.addTime(GC.Total_Time.toFixed(2));
         this.addLine();
         this.addMenu(this.addReplay(), this.addShare());
     },
@@ -410,8 +410,8 @@ var ProspectLayer = cc.Layer.extend({
     },
 
     //时间
-    addTime:function (totalTime) {
-        this.timeSprite = cc.LabelTTF.create(totalTime+"S", "黑体", 80, cc.TEXT_ALIGNMENT_RIGHT);
+    addTime:function (counter) {
+        this.timeSprite = cc.LabelTTF.create(counter+"S", "黑体", 80, cc.TEXT_ALIGNMENT_RIGHT);
         this.timeSprite.setPosition(cc.p(420,605));
         this.timeSprite.setFontFillColor(cc.color(255,193,25));
         this.addChild(this.timeSprite, GC.TotalTime_Sprite);
