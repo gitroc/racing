@@ -21,60 +21,92 @@
     </style>
 </head>
 <body style="padding:0; margin: 0; background: #000;">
+<canvas id="gameCanvas" width="800" height="450"></canvas>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone"></a><a href="#" class="bds_tsina" data-cmd="tsina"></a><a href="#" class="bds_tqq" data-cmd="tqq"></a><a href="#" class="bds_renren" data-cmd="renren"></a><a href="#" class="bds_weixin" data-cmd="weixin"></a></div>
+<script></script>
 <script>
-    function setFontsize() {
-        document.querySelector('html').style.fontSize = (document.body.clientWidth / 320 * 14 + 'px');
-    }
-    setFontsize();
-    window.onresize = function() {
-        setFontsize();
-    }
-</script>
-
-<canvas id="gameCanvas"></canvas>
-
-<script type="text/javascript" src="src/WeixinApi.js"></script>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?91f4361e83cf34ffe3b6dd0471ee205a";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-
+    window.wxReady = false;
     window.wxData = {
-        "appId": "", // 服务号可以填写appId
-        "imgUrl":'http://app9.download.anzhuoshangdian.com/cat/icon.png',
-        "link":'http://app9.download.anzhuoshangdian.com/cat/',
-        "desc":"最近微信刷屏的游戏，喵的太贱了，快来感受下吧",
-        "title":"最近微信刷屏的游戏，喵的太贱了，快来感受下吧"
+        "desc":"超级耐力赛车",
+        "title":"超级耐力赛车"
     };
     window.wxFriend = {
-        "appId": "", // 服务号可以填写appId
-        "imgUrl":'http://app9.download.anzhuoshangdian.com/cat/icon.png',
-        "link":'http://app9.download.anzhuoshangdian.com/cat/',
-        "desc":'最近微信刷屏的游戏，喵的太贱了，快来感受下吧',
-        "title":"最近微信刷屏的游戏《来自喵星的你》，喵的太贱了，快来感受下吧"
+        "desc":"超级耐力赛车",
+        "title":"超级耐力赛车"
     };
-    WeixinApi.ready(function(Api) {
-        var wxCallbacks = {
-            ready : function() {
-            },
-            cancel : function(resp) {
-            },
-            fail : function(resp) {
-            },
-            confirm : function(resp) {
-            },
-            all : function(resp) {
-            }
+
+    (function(ws){
+        ws.shareMessage = function(title, message){
+            title = title || wxFriend.title;
+            message = message || wxFriend.desc;
+            wx.onMenuShareTimeline({
+                title: title, // 分享标题
+                link: 'http://w.pre.chexiang.com/game/index.html', // 分享链接
+                imgUrl: 'http://w.pre.chexiang.com/game/res/favicon.ico', // 分享图标
+                trigger: function (res) {
+                    // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+                    alert('用户点击分享到朋友圈');
+                },
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                    alert('已分享');
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                    alert("cancel");
+                }
+            });
         };
-        Api.shareToFriend(wxFriend, wxCallbacks);
-        Api.shareToTimeline(wxData, wxCallbacks);
-        Api.shareToWeibo(wxData, wxCallbacks);
+    })(window);
+    wx.config({
+        debug: true,
+        appId: 'wxdd50ee3fac8f6f66',
+        timestamp: 1420870884,
+        nonceStr: 'VQhYOUJRz6RolHqN',
+        signature: '892c2861b8bdb0cd42e45d7884fc44c7a2374d5e',
+        jsApiList: [
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'closeWindow'
+        ]
     });
-    </script>
+
+    wx.ready(function(){
+        //
+        window.wxReady = true;
+        <!--wx.getNetworkType({-->
+            <!--success: function (res) {-->
+                <!--var query = "您使用的是什么网络？";-->
+                <!--switch(res.networkType) {-->
+                    <!--case '2g':-->
+                        <!--query = "您在使用2g网络, 是否继续访问游戏？";-->
+                    <!--break;-->
+
+                    <!--case '3g':-->
+                        <!--query = "您在使用3g网络, 是否继续访问游戏？";-->
+                    <!--break;-->
+
+                    <!--case '4g':-->
+                        <!--query = "您在使用4g网络, 是否继续访问游戏？";-->
+                    <!--break;-->
+
+                    <!--case 'wifi':-->
+                        <!--query = "您在使用wifi, 是否继续访问游戏？";-->
+                    <!--break;-->
+                <!--}-->
+            <!--}-->
+        <!--});-->
+    });
+
+
+
+    wx.error(function(res){
+        //
+        <!--alert("wx.error");-->
+    });
+</script>
 
 <script src="frameworks/cocos2d-html5/CCBoot.js"></script>
 <script cocos src="main.js"></script>

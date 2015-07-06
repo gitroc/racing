@@ -480,10 +480,7 @@ var ProspectLayer = cc.Layer.extend({
             res.Again_png,
             res.AgainSel_png,
             function () {
-                cc.log("EndMenu is clicked!");
-                document.title = window.wxFriend.desc = "Again!!";
-
-                cc.log(window.wxFriend.desc);
+                cc.log("replay game!");
                 this.removeAll();
                 cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
             }, this);
@@ -503,12 +500,10 @@ var ProspectLayer = cc.Layer.extend({
             res.Share_png,
             res.ShareSel_png,
             function () {
-                cc.log("Menu is clicked!");
-                document.title =  window.wxData.desc = "wxData喵星刷屏！喵获得";
-                document.title = window.wxFriend.desc = "wxFriend我拿了分，战胜了个汪，超越了％的好友！你能超过我吗";
-
-                cc.log(window.wxData.desc);
-                cc.log(window.wxFriend.desc);
+                cc.log("share game!");
+                document.title = window.wxData.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
+                document.title = window.wxFriend.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
+                window.shareMessage();
             }, this);
 
         shareItem.attr({

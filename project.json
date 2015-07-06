@@ -12,6 +12,7 @@
 
     "jsList" : [
         "src/resource.js",
+        "src/Loading.js",
         "src/config/Map.js",
         "src/config/GameConfig.js",
         "src/HomePageScene.js",
