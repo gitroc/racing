@@ -4,13 +4,14 @@
 */
 var PlayButtonSprite = cc.Sprite.extend({
     bgs:null,
+    speedListener:null,
     onEnter:function(){
         this._super();
         cc.spriteFrameCache.addSpriteFrames(res.Loading_btn_plist);
         this.initSprite();
 
         this.schedule(this.update, 1, cc.REPEAT_FOREVER, 0);
-        this.addListener();
+//        this.addListener();
     },
 
     initSprite:function(){
@@ -60,6 +61,7 @@ var PlayButtonSprite = cc.Sprite.extend({
             }, this);
         }
     },
+
 
     removeListener:function() {
         cc.eventManager.removeListener(this.touchListener);
