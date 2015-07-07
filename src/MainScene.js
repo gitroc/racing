@@ -327,6 +327,10 @@ var ProspectLayer = cc.Layer.extend({
     menuSprite:null,
 
     statusChangeListener:null,
+    touchListener:null,
+
+    explain:null,
+    arrow:null,
 
     ctor:function () {
         this._super();
@@ -336,10 +340,12 @@ var ProspectLayer = cc.Layer.extend({
     onEnter:function () {
         this._super();
         this.addListener();
+        this.addTouchListener();
     },
 
     onExit:function () {
         this.removeListener();
+        this.removeTouchListener();
         this._super();
     },
 
@@ -362,11 +368,41 @@ var ProspectLayer = cc.Layer.extend({
         cc.eventManager.removeListener(this.statusChangeListener);
     },
 
+    addTouchListener:function() {
+        if('touches' in cc.sys.capabilities) { //支持触摸事件
+            this.touchListener = cc.eventManager.addListener(
+                cc.EventListener.create({
+                    event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+                    onTouchesEnded:function (touches, event) {
+                        if (touches.length <= 0) {
+                            return;
+                        }
+                        var target = event.getCurrentTarget();
+                        target.removeArrow();
+                    }
+                }),
+                this
+            );
+        } else if ('mouse' in cc.sys.capabilities) { //支持鼠标事件
+            this.touchListener = cc.eventManager.addListener({
+                event: cc.EventListener.MOUSE,
+                onMouseUp: function (event) {
+                    var target = event.getCurrentTarget();
+                    target.removeArrow();
+                }
+            }, this);
+        }
+    },
+
+    removeTouchListener:function() {
+        cc.eventManager.removeListener(this.touchListener);
+    },
+
     showProLayer:function (status) {
         switch (status) {
             case GC.Game_Loading:
                 cc.log("GC.Game_Loading");
-                this.addMaskLayer();
+                this.addMaskLayer(GC.Mask_Layer_Main);
             break;
 
             case GC.Game_Running:
@@ -393,7 +429,7 @@ var ProspectLayer = cc.Layer.extend({
     //游戏结束
     gameOver:function () {
         cc.log("Game over!");
-        this.addMaskLayer();
+        this.addMaskLayer(GC.Mask_Layer_Main);
         this.addSlogan();
         this.addWord();
         this.addTime(GC.Total_Time.toFixed(2));
@@ -417,7 +453,7 @@ var ProspectLayer = cc.Layer.extend({
     },
 
     //添加遮罩层
-    addMaskLayer:function () {
+    addMaskLayer:function (layerIndex) {
         cc.log("addMaskLayer");
         this.maskLayer = new cc.Sprite(res.MaskLayer_Png);
         this.maskLayer.attr ({
@@ -427,7 +463,7 @@ var ProspectLayer = cc.Layer.extend({
             anchorY: 0.5
         });
 
-        this.addChild(this.maskLayer, GC.Mask_Layer);
+        this.addChild(this.maskLayer, layerIndex);
     },
 
     //记得晒成绩哦
@@ -480,9 +516,11 @@ var ProspectLayer = cc.Layer.extend({
             res.Again_png,
             res.AgainSel_png,
             function () {
-                cc.log("replay game!");
-                this.removeAll();
-                cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
+                if (GC.Game_Current == GC.Game_Over) {
+                    cc.log("replay game!");
+                    this.removeAll();
+                    cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
+                }
             }, this);
         replayItem.attr({
             x:190,
@@ -500,10 +538,14 @@ var ProspectLayer = cc.Layer.extend({
             res.Share_png,
             res.ShareSel_png,
             function () {
-                cc.log("share game!");
-                document.title = window.wxData.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
-                document.title = window.wxFriend.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
-                window.shareMessage();
+                if (GC.Game_Current == GC.Game_Over) {
+                    cc.log("share game!");
+                    document.title = window.wxData.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
+                    document.title = window.wxFriend.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
+                    window.shareMessage();
+                    this.addArrow();
+                    this.addMaskLayer(GC.Mask_Layer_Share);
+                }
             }, this);
 
         shareItem.attr({
@@ -522,6 +564,56 @@ var ProspectLayer = cc.Layer.extend({
         this.menuSprite.x = 0;
         this.menuSprite.y = 150;
         this.addChild(this.menuSprite, GC.Menu_Sprite);
+    },
+
+    //添加箭头
+    addArrow:function () {
+        this.explain = new cc.Sprite(res.Explain_png);
+        this.explain.attr({
+            x:320,
+            y:970,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(this.explain, GC.Share_Sprite);
+
+        this.startAction(this.explain);
+
+        this.arrow = new cc.Sprite(res.Arrow_png);
+        this.arrow.attr({
+            x:557,
+            y:1050,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(this.arrow, GC.Share_Sprite);
+    },
+
+    startAction:function (sprite) {
+        var action;
+
+        action = cc.spawn(action = cc.blink(1, 2), cc.scaleBy(1, 1.1));
+
+        var action_back = action.reverse();
+//        var seq = cc.sequence(action, action_back);
+
+        sprite.runAction(cc.sequence(
+                action,
+                action_back,
+                cc.callFunc(function () {
+                    GC.Game_Current = GC.Game_Share;
+                })
+            )
+        );
+    },
+
+    removeArrow:function () {
+        if (GC.Game_Current == GC.Game_Share) {
+            this.explain.removeFromParent();
+            this.arrow.removeFromParent();
+            this.maskLayer.removeFromParent();
+            GC.Game_Current = GC.Game_Over;
+        }
     }
 });
 

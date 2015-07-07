@@ -19,6 +19,9 @@
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
     </style>
+    <div id='wx_pic' style='margin:0 auto;display:none;'>
+        <img id="imgwx" src='res/logo.png' />
+    </div>
 </head>
 <body style="padding:0; margin: 0; background: #000;">
 <canvas id="gameCanvas" width="800" height="450"></canvas>
@@ -26,7 +29,24 @@
 <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone"></a><a href="#" class="bds_tsina" data-cmd="tsina"></a><a href="#" class="bds_tqq" data-cmd="tqq"></a><a href="#" class="bds_renren" data-cmd="renren"></a><a href="#" class="bds_weixin" data-cmd="weixin"></a></div>
 <script></script>
 <script>
+    function init() {
+        var href = window.location.href;
+        base = href;
+        lastpt = href.lastIndexOf(".");
+        last = href.lastIndexOf("/");
+
+        if (last != -1 && lastpt > last) {
+            base = base.substr(0, last);
+        }
+
+        var path = base + "/res/logo.png";
+
+        document.getElementById("imgwx").src = path;
+    };
+
+    window.onload = init;
     window.wxReady = false;
+
     window.wxData = {
         "desc":"超级耐力赛车",
         "title":"超级耐力赛车"
@@ -43,7 +63,7 @@
             wx.onMenuShareTimeline({
                 title: title, // 分享标题
                 link: 'http://w.pre.chexiang.com/game/index.html', // 分享链接
-                imgUrl: 'http://w.pre.chexiang.com/game/res/favicon.ico', // 分享图标
+                imgUrl: 'http://w.pre.chexiang.com/game/res/logo.png', // 分享图标
                 trigger: function (res) {
                     // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
                     alert('用户点击分享到朋友圈');
@@ -55,6 +75,42 @@
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
                     alert("cancel");
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: title, // 分享标题
+                link: 'http://w.pre.chexiang.com/game/index.html', // 分享链接
+                imgUrl: 'http://w.pre.chexiang.com/game/res/logo.png', // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+            wx.onMenuShareQQ({
+                title: title, // 分享标题
+                link: 'http://w.pre.chexiang.com/game/index.html', // 分享链接
+                imgUrl: 'http://w.pre.chexiang.com/game/res/logo.png', // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+            wx.onMenuShareWeibo({
+                title: title, // 分享标题
+                link: 'http://w.pre.chexiang.com/game/index.html', // 分享链接
+                imgUrl: 'http://w.pre.chexiang.com/game/res/logo.png', // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
                 }
             });
         };
@@ -69,6 +125,8 @@
             'checkJsApi',
             'onMenuShareTimeline',
             'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
             'closeWindow'
         ]
     });
@@ -76,28 +134,6 @@
     wx.ready(function(){
         //
         window.wxReady = true;
-        <!--wx.getNetworkType({-->
-            <!--success: function (res) {-->
-                <!--var query = "您使用的是什么网络？";-->
-                <!--switch(res.networkType) {-->
-                    <!--case '2g':-->
-                        <!--query = "您在使用2g网络, 是否继续访问游戏？";-->
-                    <!--break;-->
-
-                    <!--case '3g':-->
-                        <!--query = "您在使用3g网络, 是否继续访问游戏？";-->
-                    <!--break;-->
-
-                    <!--case '4g':-->
-                        <!--query = "您在使用4g网络, 是否继续访问游戏？";-->
-                    <!--break;-->
-
-                    <!--case 'wifi':-->
-                        <!--query = "您在使用wifi, 是否继续访问游戏？";-->
-                    <!--break;-->
-                <!--}-->
-            <!--}-->
-        <!--});-->
     });
 
 

@@ -49,13 +49,13 @@ var ReadyGoSprite = cc.Sprite.extend({
                 if (this.counter % 2 == 0) {
                     sprite.scale = 0.1;
                 } else {
-                    sprite.scale = 0.8;
+                    sprite.scale = 0.7;
                 }
 
                 this.getParent().addChild(sprite, GC.Loading_Timer);
 
                 if (this.counter % 2 == 0) {
-                    var action = cc.scaleTo(0.5, 0.8);
+                    var action = cc.scaleTo(0.5, 0.7);
 
                     var seq = cc.sequence(
                         action,

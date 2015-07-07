@@ -11,6 +11,8 @@ var res = {
     PlayOn_png:"res/image/loading_btn_on.png",
     Car_png : "res/main/main_car_back.png",
     Road_png : "res/main/main_bg_road1.png",
+    Arrow_png : "res/image/end_icon_arrow.png",
+    Explain_png : "res/image/end_icon_word.png",
     Loading_btn_plist:"res/image/loading_btn.plist",
     Tree_plist : "res/main/main_bg_object_tree.plist",
     Stone_plist : "res/main/main_bg_object_stone.plist",
