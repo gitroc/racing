@@ -143,9 +143,7 @@ var BarrierSprite = cc.Sprite.extend({
                         this.crashTypeArrays.push(GC.Crash_Speed_Up);
                     } else if (type == GC.Barrier_Type5) { //减速图片
                         this.crashTypeArrays.push(GC.Crash_Slow_Down);
-//                    } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2){
-//                        this.crashTypeArrays.push(GC.Crash_Only_Hit);
-                    } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2||type == GC.Barrier_Type3 || type == GC.Barrier_Type4){
+                    } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2 || type == GC.Barrier_Type3 || type == GC.Barrier_Type4){
                         this.crashTypeArrays.push(GC.Crash_Shut_Down);
                     }
                 }
@@ -201,10 +199,6 @@ var BarrierSprite = cc.Sprite.extend({
             case GC.Game_Over:
                 this.stopAllActions();
                 this.unschedule(this.setBarrier);
-            break;
-
-            case GC.Game_Hit:
-                //
             break;
 
             default:
@@ -276,10 +270,6 @@ var BarrierSprite = cc.Sprite.extend({
             var eventData = -1;
 
             switch (crashType) {
-                case GC.Crash_Only_Hit: // 简单碰撞
-                    effect = this.getCrashEffect(target);
-                    eventData = GC.Game_Hit;
-                break;
 
                 case GC.Crash_Shut_Down: //游戏停止
                     effect = this.getCrashEffect(target);
@@ -301,8 +291,7 @@ var BarrierSprite = cc.Sprite.extend({
                 effect,
                 cc.callFunc(function () {
                     if (crashType == GC.Crash_Speed_Up
-                        || crashType == GC.Crash_Slow_Down
-                        || crashType == GC.Crash_Only_Hit){
+                        || crashType == GC.Crash_Slow_Down){
                         target.removeFromParent();
                     } else {
                         GC.Game_Current = GC.Game_Over;

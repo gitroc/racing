@@ -241,7 +241,7 @@ GC.Game_Running   = 4;
 GC.Game_Speed_Up  = 5;
 GC.Game_Slow_Down = 6;
 GC.Game_Over      = 7;
-GC.Game_Hit       = 8;
+GC.Game_Pause     = 8;
 GC.Game_Share     = 9;
 
 //游戏难度

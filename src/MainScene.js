@@ -587,6 +587,7 @@ var ProspectLayer = cc.Layer.extend({
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
                     cc.log("share game!");
+                    GC.Game_Current = GC.Game_Pause;
                     document.title = window.wxData.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     document.title = window.wxFriend.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     window.shareMessage();
