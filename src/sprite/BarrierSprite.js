@@ -84,6 +84,7 @@ var BarrierSprite = cc.Sprite.extend({
         } else if (value == 0) {
             value += 1;
         }
+//        value =1;
         cc.log("LoadingMaps = ", value);
         switch (level) {
             case GC.Game_Level_Easy:
@@ -142,9 +143,9 @@ var BarrierSprite = cc.Sprite.extend({
                         this.crashTypeArrays.push(GC.Crash_Speed_Up);
                     } else if (type == GC.Barrier_Type5) { //减速图片
                         this.crashTypeArrays.push(GC.Crash_Slow_Down);
-                    } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2){
-                        this.crashTypeArrays.push(GC.Crash_Only_Hit);
-                    } else if (type == GC.Barrier_Type3 || type == GC.Barrier_Type4){
+//                    } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2){
+//                        this.crashTypeArrays.push(GC.Crash_Only_Hit);
+                    } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2||type == GC.Barrier_Type3 || type == GC.Barrier_Type4){
                         this.crashTypeArrays.push(GC.Crash_Shut_Down);
                     }
                 }
@@ -231,11 +232,11 @@ var BarrierSprite = cc.Sprite.extend({
 
             if (this.spriteArrays.length > 0) {
                 for (var i = 0; i < this.spriteArrays.length; i++) {
-                    if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] * 3) {
+                    if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] ) {
                         this.spriteArrays[i].visible = true;
                         this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
                     } else if (this.oneMapTime > 10 * 3){
-                        this.autoAdjustMap(this.timeAdjustSpeed / 3);
+                        this.autoAdjustMap(this.timeAdjustSpeed );
                     }
                     this.carCrash(this.spriteArrays[i], this.crashTypeArrays[i]);
                 }
