@@ -36,7 +36,7 @@ var ReadyGoSprite = cc.Sprite.extend({
 
     //缩放动画
     readyGo:function () {
-        if (GC.Game_Current == GC.Game_Loading) {
+        if (GC.Game_Current == GC.Game_ReadyGo) {
             if (this.counter < GC.Loading_Guide_Max) {
                 var sprite = new cc.Sprite(this.frames[this.counter]);
                 sprite.attr({

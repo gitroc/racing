@@ -20,15 +20,19 @@
         }
     </style>
     <div id='wx_pic' style='margin:0 auto;display:none;'>
-        <img id="imgwx" src='res/logo.png' />
+        <img src='res/logo.png' />
     </div>
 </head>
 <body style="padding:0; margin: 0; background: #000;">
 <canvas id="gameCanvas" width="800" height="450"></canvas>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone"></a><a href="#" class="bds_tsina" data-cmd="tsina"></a><a href="#" class="bds_tqq" data-cmd="tqq"></a><a href="#" class="bds_renren" data-cmd="renren"></a><a href="#" class="bds_weixin" data-cmd="weixin"></a></div>
-<script></script>
+<script src="frameworks/cocos2d-html5/CCBoot.js"></script>
+<script cocos src="main.js"></script>
 <script>
+    $(document).ready(function(){
+        init();
+        initWeixin();
+    });
     function init() {
         var href = window.location.href;
         base = href;
@@ -41,11 +45,19 @@
 
         var path = base + "/res/logo.png";
 
-        document.getElementById("imgwx").src = path;
+        $("img").attr("src", path);
     };
 
-    window.onload = init;
-    window.wxReady = false;
+    function initWeixin() {
+        $.post(
+            "http://******",
+            {
+            "url":window.location.href},
+            function(data,status){
+            data=eval("("+data+")");
+
+        });
+    };
 
     window.wxData = {
         "desc":"超级耐力赛车",
@@ -143,9 +155,5 @@
         <!--alert("wx.error");-->
     });
 </script>
-
-<script src="frameworks/cocos2d-html5/CCBoot.js"></script>
-<script cocos src="main.js"></script>
-
 </body>
 </html>

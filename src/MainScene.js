@@ -39,17 +39,21 @@ var MainLayer = cc.Layer.extend({
     barrierSprite:null,
     bgSprite:null,
 
-    //倒计时
-    readyGoSprite:null,
+    //遮罩精灵
+    maskLayerSprite:null,
 
     ctor:function () {
         this._super();
-        this.loading();
+        this.scheduleUpdate();
+        this.loadingGame();
         return true;
     },
 
     update:function(dt) {
-        if (GC.Game_Current == GC.Game_Over) {
+        if (GC.Game_Current == GC.Game_Loading) {
+            this.startReadyGo();
+            return;
+        } else if (GC.Game_Current == GC.Game_Over) {
             this.gameOver();
             return;
         } else if (GC.Game_Current == GC.Game_Start){
@@ -59,37 +63,25 @@ var MainLayer = cc.Layer.extend({
     },
 
     //初始化游戏场景
-    loading:function () {
+    loadingGame:function () {
         cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
 
         this.addSprite();
-        this.scheduleUpdate();
     },
 
-    //加载向导倒计时
-    loadingGuide:function () {
-        if (GC.Game_Current == GC.Game_Loading) {
-            this.readyGoSprite = new ReadyGoSprite(res.MaskLayer_Png);
-            this.readyGoSprite.attr({
-                 x:GC.w_2,
-                 y:GC.h_2,
-                 anchorX : 0.5,
-                 anchorY : 0.5
-            });
-            this.addChild(this.readyGoSprite, GC.Loading_Timer);
-        }
+    startReadyGo:function () {
+        this.showProLayer();
     },
 
     //启动游戏
     startGame:function () {
         GC.Game_Current = GC.Game_Running;
 
-        this.readyGoSprite.removeFromParent();
+        this.maskLayerSprite.removeFromParent();
 
         this.showProLayer();
         this.startMoveTree();
@@ -108,7 +100,19 @@ var MainLayer = cc.Layer.extend({
         this.addTree();
         this.addBarrier();
         this.addCar();
-        this.loadingGuide();
+        this.addMaskLayer();
+    },
+
+    addMaskLayer:function () {
+        this.maskLayerSprite = new cc.Sprite(res.MaskLayer_Png);
+        this.maskLayerSprite.attr ({
+            x: GC.w_2,
+            y: GC.h_2,
+            anchorX: 0.5,
+            anchorY: 0.5
+        });
+
+        this.addChild(this.maskLayerSprite, GC.Mask_Layer_Main);
     },
 
     addNewBackground:function(){
@@ -314,10 +318,13 @@ var MainLayer = cc.Layer.extend({
 var ProspectLayer = cc.Layer.extend({
 
     //遮罩精灵
-    maskLayer:null,
+    maskLayerSprite:null,
+
+    //倒计时
+    readyGoSprite:null,
 
     //游戏计时
-    timer:null,
+    counterSprite:null,
 
     //游戏结束
     sloganSprite:null,
@@ -334,6 +341,7 @@ var ProspectLayer = cc.Layer.extend({
 
     ctor:function () {
         this._super();
+        this.LoadingPro();
         return true;
     },
 
@@ -347,6 +355,10 @@ var ProspectLayer = cc.Layer.extend({
         this.removeListener();
         this.removeTouchListener();
         this._super();
+    },
+
+    LoadingPro:function () {
+        cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
     },
 
     addListener:function() {
@@ -402,7 +414,7 @@ var ProspectLayer = cc.Layer.extend({
         switch (status) {
             case GC.Game_Loading:
                 cc.log("GC.Game_Loading");
-                this.addMaskLayer(GC.Mask_Layer_Main);
+                this.addReadyGo();
             break;
 
             case GC.Game_Running:
@@ -422,8 +434,24 @@ var ProspectLayer = cc.Layer.extend({
 
     //初始化计时精灵
     addTimer:function () {
-        this.timer = new TimerSprite();
-        this.addChild(this.timer, GC.Timer_Sprite);
+        this.removeProspect();
+        this.counterSprite = new TimerSprite();
+        this.addChild(this.counterSprite, GC.Timer_Sprite);
+    },
+
+    //添加ReadyGo
+    addReadyGo:function () {
+        if (GC.Game_Current == GC.Game_Loading) {
+            GC.Game_Current = GC.Game_ReadyGo;
+            this.readyGoSprite = new ReadyGoSprite();
+            this.readyGoSprite.attr({
+                 x:GC.w_2,
+                 y:GC.h_2,
+                 anchorX : 0.5,
+                 anchorY : 0.5
+            });
+            this.addChild(this.readyGoSprite, GC.Loading_Timer);
+        }
     },
 
     //游戏结束
@@ -437,33 +465,52 @@ var ProspectLayer = cc.Layer.extend({
         this.addMenu(this.addReplay(), this.addShare());
     },
 
-    removeAll:function () {
-        GC.Game_Current = GC.Game_Loading;
+    removeProspect:function () {
+        if (GC.Game_Current == GC.Game_Running) {
+            this.removeSprite(this.maskLayerSprite);
+            this.removeSprite(this.readyGoSprite);
+        } else if (GC.Game_Current == GC.Game_Over){
+            GC.Game_Current = GC.Game_Loading;
+            GC.Total_Time = 0;
 
-        GC.Total_Time = 0;
+            this.removeSprite(this.counterSprite);
+            this.removeSprite(this.maskLayerSprite);
+            this.removeSprite(this.sloganSprite);
+            this.removeSprite(this.word1Sprite);
+            this.removeSprite(this.timeSprite);
+            this.removeSprite(this.lineSprite);
+            this.removeSprite(this.menuSprite);
+        }
+    },
 
-        this.timer.removeFromParent();
+    removeArrow:function () {
+        if (GC.Game_Current == GC.Game_Share) {
+            this.removeSprite(this.explain);
+            this.removeSprite(this.arrow);
+            this.removeSprite(this.maskLayerSprite);
 
-        this.maskLayer.removeFromParent();
-        this.sloganSprite.removeFromParent();
-        this.word1Sprite.removeFromParent();
-        this.timeSprite.removeFromParent();
-        this.lineSprite.removeFromParent();
-        this.menuSprite.removeFromParent();
+            GC.Game_Current = GC.Game_Over;
+        }
+    },
+
+    removeSprite:function (sprite) {
+        if (sprite != null) {
+            sprite.removeFromParent();
+        }
     },
 
     //添加遮罩层
     addMaskLayer:function (layerIndex) {
         cc.log("addMaskLayer");
-        this.maskLayer = new cc.Sprite(res.MaskLayer_Png);
-        this.maskLayer.attr ({
+        this.maskLayerSprite = new cc.Sprite(res.MaskLayer_Png);
+        this.maskLayerSprite.attr ({
             x: GC.w_2,
             y: GC.h_2,
             anchorX: 0.5,
             anchorY: 0.5
         });
 
-        this.addChild(this.maskLayer, layerIndex);
+        this.addChild(this.maskLayerSprite, layerIndex);
     },
 
     //记得晒成绩哦
@@ -518,7 +565,7 @@ var ProspectLayer = cc.Layer.extend({
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
                     cc.log("replay game!");
-                    this.removeAll();
+                    this.removeProspect();
                     cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
                 }
             }, this);
@@ -543,8 +590,8 @@ var ProspectLayer = cc.Layer.extend({
                     document.title = window.wxData.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     document.title = window.wxFriend.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     window.shareMessage();
-                    this.addArrow();
                     this.addMaskLayer(GC.Mask_Layer_Share);
+                    this.addArrow();
                 }
             }, this);
 
@@ -595,7 +642,6 @@ var ProspectLayer = cc.Layer.extend({
         action = cc.spawn(action = cc.blink(1, 2), cc.scaleBy(1, 1.1));
 
         var action_back = action.reverse();
-//        var seq = cc.sequence(action, action_back);
 
         sprite.runAction(cc.sequence(
                 action,
@@ -605,15 +651,6 @@ var ProspectLayer = cc.Layer.extend({
                 })
             )
         );
-    },
-
-    removeArrow:function () {
-        if (GC.Game_Current == GC.Game_Share) {
-            this.explain.removeFromParent();
-            this.arrow.removeFromParent();
-            this.maskLayer.removeFromParent();
-            GC.Game_Current = GC.Game_Over;
-        }
     }
 });
 

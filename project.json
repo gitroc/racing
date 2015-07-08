@@ -17,9 +17,10 @@
         "src/config/GameConfig.js",
         "src/HomePageScene.js",
         "src/MainScene.js",
+        "src/jquery-1.7.2.min.js",
 
         "src/sprite/PlayButtonSprite.js",
-        "src/sprite/TimerSprite.js",
+        "src/sprite/CounterSprite.js",
         "src/sprite/BarrierSprite.js",
         "src/sprite/CarSprite.js",
         "src/sprite/StoneSprite.js",

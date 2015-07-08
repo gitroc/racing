@@ -235,13 +235,14 @@ GC.Crash_Slow_Down = 3; //减速
 
 //游戏主界面状态机
 GC.Game_Loading   = 1;
-GC.Game_Start     = 2;
-GC.Game_Running   = 3;
-GC.Game_Speed_Up  = 4;
-GC.Game_Slow_Down = 5;
-GC.Game_Over      = 6;
-GC.Game_Hit       = 7;
-GC.Game_Share     = 8;
+GC.Game_ReadyGo   = 2;
+GC.Game_Start     = 3;
+GC.Game_Running   = 4;
+GC.Game_Speed_Up  = 5;
+GC.Game_Slow_Down = 6;
+GC.Game_Over      = 7;
+GC.Game_Hit       = 8;
+GC.Game_Share     = 9;
 
 //游戏难度
 GC.Game_Level_Easy   = 1;
