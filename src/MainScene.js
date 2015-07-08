@@ -413,17 +413,17 @@ var ProspectLayer = cc.Layer.extend({
     showProLayer:function (status) {
         switch (status) {
             case GC.Game_Loading:
-                cc.log("GC.Game_Loading");
+//                cc.log("GC.Game_Loading");
                 this.addReadyGo();
             break;
 
             case GC.Game_Running:
-                cc.log("GC.Game_Running");
+//                cc.log("GC.Game_Running");
                 this.addTimer();
             break;
 
             case GC.Game_Over:
-                cc.log("GC.Game_Over");
+//                cc.log("GC.Game_Over");
                 this.gameOver();
             break;
 
@@ -456,7 +456,7 @@ var ProspectLayer = cc.Layer.extend({
 
     //游戏结束
     gameOver:function () {
-        cc.log("Game over!");
+//        cc.log("Game over!");
         this.addMaskLayer(GC.Mask_Layer_Main);
         this.addSlogan();
         this.addWord();
@@ -564,7 +564,7 @@ var ProspectLayer = cc.Layer.extend({
             res.AgainSel_png,
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
-                    cc.log("replay game!");
+//                    cc.log("replay game!");
                     this.removeProspect();
                     cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
                 }
@@ -586,7 +586,7 @@ var ProspectLayer = cc.Layer.extend({
             res.ShareSel_png,
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
-                    cc.log("share game!");
+//                    cc.log("share game!");
                     GC.Game_Current = GC.Game_Pause;
                     document.title = window.wxData.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     document.title = window.wxFriend.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";

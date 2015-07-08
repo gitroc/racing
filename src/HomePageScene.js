@@ -36,7 +36,7 @@ var HomePageLayer = cc.Layer.extend({
                 var s = target.getContentSize();
                 var rect = cc.rect(0, 0, s.width, s.height);
                 if (cc.rectContainsPoint(rect, locationInNode)) {       // 点击范围判断检测
-                    cc.log("sprite began... x = " + locationInNode.x + ", y = " + locationInNode.y);
+//                    cc.log("sprite began... x = " + locationInNode.x + ", y = " + locationInNode.y);
                     cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
                     target.opacity = 180;
                     return true;

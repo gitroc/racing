@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>超级耐力赛车</title>
     <link rel="icon" type="image/GIF" href="res/favicon.ico"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="full-screen" content="yes"/>
     <meta name="screen-orientation" content="portrait"/>
@@ -20,21 +19,17 @@
         }
     </style>
     <div id='wx_pic' style='margin:0 auto;display:none;'>
-        <img src='res/logo.png' />
+        <img id='img' src='res/logo.png' />
     </div>
 </head>
 <body style="padding:0; margin: 0; background: #000;">
-<canvas id="gameCanvas" width="800" height="450"></canvas>
+<canvas id="gameCanvas" width="640" height="1136"></canvas>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script src="src/jquery-1.7.2.min.js"></script>
 <script src="frameworks/cocos2d-html5/CCBoot.js"></script>
 <script cocos src="main.js"></script>
 <script>
-    $(document).ready(function(){
-        init();
-        initWeixin();
-    });
-    function init() {
+
+    window.onload = function() {
         var href = window.location.href;
         base = href;
         lastpt = href.lastIndexOf(".");
@@ -46,18 +41,9 @@
 
         var path = base + "/res/logo.png";
 
-        $("img").attr("src", path);
-    };
+        document.getElementById("img").src = path;
 
-    function initWeixin() {
-        $.post(
-            "http://******",
-            {
-            "url":window.location.href},
-            function(data,status){
-            data=eval("("+data+")");
-
-        });
+        <!--$("img").attr("src", path);-->
     };
 
     window.wxData = {
@@ -129,19 +115,19 @@
         };
     })(window);
     wx.config({
-        debug: true,
-        appId: 'wxdd50ee3fac8f6f66',
-        timestamp: 1420870884,
-        nonceStr: 'VQhYOUJRz6RolHqN',
-        signature: '892c2861b8bdb0cd42e45d7884fc44c7a2374d5e',
-        jsApiList: [
-            'checkJsApi',
-            'onMenuShareTimeline',
-            'onMenuShareAppMessage',
-            'onMenuShareQQ',
-            'onMenuShareWeibo',
-            'closeWindow'
-        ]
+        <!--debug: true,-->
+        <!--appId: 'wxdd50ee3fac8f6f66',-->
+        <!--timestamp: 1420870884,-->
+        <!--nonceStr: 'VQhYOUJRz6RolHqN',-->
+        <!--signature: '892c2861b8bdb0cd42e45d7884fc44c7a2374d5e',-->
+        <!--jsApiList: [-->
+            <!--'checkJsApi',-->
+            <!--'onMenuShareTimeline',-->
+            <!--'onMenuShareAppMessage',-->
+            <!--'onMenuShareQQ',-->
+            <!--'onMenuShareWeibo',-->
+            <!--'closeWindow'-->
+        <!--]-->
     });
 
     wx.ready(function(){
