@@ -164,8 +164,8 @@ GC.Barrier_Map5 = [
 var time5 = 0.5;
 GC.Time_Line5=[];
 var spaceArray5 = [
-    0.0,2.0,1.0,1.0,2.0,
-    1.0,1.0,2.0,1.0,2.0,
+    0.0,1.0,1.0,1.0,2.0,
+    1.0,1.0,1.0,1.0,2.0,
     1.0,2.0,1.0,1.0,2.0,
     1.0,1.0];
 for(var i=0;i<GC.Barrier_Map5.length;i++){
@@ -201,9 +201,9 @@ var time6 = 0.5;
 GC.Time_Line6=[];
 var spaceArray6 = [
     0.5,1.0,1.0,2.0,1.0,
-    1.0,2.0,2.0,1.0,2.0,
+    1.0,1.0,2.0,1.0,2.0,
     1.0,2.0,1.0,1.0,2.0,
-    1.0,2.0,1.0];
+    1.0,1.0,1.0];
 
 for(var i=0;i<GC.Barrier_Map6.length;i++){
     GC.Time_Line6[i] = time6 + spaceArray6[i];
@@ -236,8 +236,8 @@ var time7 = 0.5;
 GC.Time_Line7=[];
 var spaceArray7 = [
     0.5,1.0,1.0,2.0,1.0,
-    1.0,2.0,2.0,1.0,2.0,
     1.0,2.0,1.0,1.0,2.0,
+    1.0,1.0,1.0,1.0,2.0,
     1.0,2.0,1.0];
 
 for(var i=0;i<GC.Barrier_Map7.length;i++){
@@ -252,18 +252,18 @@ GC.Barrier_Map8 = [
     [0, 3, 4],
     [1, 0, 0],
     [0, 3, 4],
-    [0, 0, 1],
-    [0, 1, 0],
-    [0, 2, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 0, 1],
+    [1, 0, 1],
+    [0, 1, 1],
+    [2, 2, 0],
+    [1, 0, 1],
+    [0, 2, 2],
+    [3, 0, 3],
     [1, 0, 6],
     [4, 3, 0],
     [1, 2, 0],
     [4, 0, 3],
-    [3, 0, 0],
-    [0, 3, 0],
+    [3, 4, 0],
+    [0, 3, 4],
     [2, 0, 2],
     [1, 4, 0],
 ];
@@ -286,19 +286,19 @@ for(var i=0;i<GC.Barrier_Map8.length;i++){
 GC.Barrier_Map9 = [
     [1, 0, 0],
     [0, 3, 0],
-    [3, 0, 0],
-    [4, 0, 0],
-    [0, 0, 1],
-    [0, 1, 0],
+    [3, 0, 3],
+    [4, 4, 0],
+    [1, 0, 1],
+    [0, 1, 1],
     [0, 2, 0],
     [6, 1, 0],
-    [0, 1, 0],
+    [0, 2, 1],
     [0, 0, 1],
     [1, 0, 0],
     [4, 3, 0],
     [1, 2, 0],
-    [4, 0, 0],
-    [3, 0, 0],
+    [4, 0, 4],
+    [3, 3, 0],
     [0, 3, 0],
     [0, 2, 0],
     [1, 4, 0],
@@ -309,8 +309,8 @@ var time9 = 0.5;
 GC.Time_Line9=[];
 var spaceArray9 = [
     0.5,1.0,1.0,2.0,1.0,
-    1.0,2.0,2.0,1.0,2.0,
-    1.0,2.0,1.0,1.0,2.0,
+    1.0,1.0,1.0,1.0,1.0,
+    1.0,1.0,1.0,1.0,1.0,
     1.0,2.0,1.0];
 
 for(var i=0;i<GC.Barrier_Map9.length;i++){
@@ -324,13 +324,13 @@ GC.Barrier_Map10 = [
     [0, 3, 0],
     [3, 0, 0],
     [4, 0, 0],
-    [0, 0, 1],
-    [0, 1, 0],
-    [0, 2, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 0, 1],
-    [1, 0, 0],
+    [0, 2, 1],
+    [0, 1, 2],
+    [1, 2, 0],
+    [1, 0, 2],
+    [3, 3, 0],
+    [3, 3, 0],
+    [1, 0, 4],
     [4, 3, 0],
     [1, 0, 2],
     [0, 4, 0],
@@ -344,10 +344,10 @@ GC.Barrier_Map10 = [
 var time10 = 0.5;
 GC.Time_Line10=[];
 var spaceArray10 = [
-    0.5,1.0,1.0,2.0,1.0,
-    1.0,2.0,2.0,1.0,2.0,
-    1.0,2.0,1.0,1.0,2.0,
-    1.0,2.0,1.0];
+    0.5,1.0,1.0,1.0,1.0,
+    1.0,1.0,1.0,1.0,1.0,
+    1.0,1.0,1.0,1.0,1.0,
+    1.0,1.0,1.0];
 
 for(var i=0;i<GC.Barrier_Map10.length;i++){
     GC.Time_Line10[i] = time10 + spaceArray10[i];
@@ -365,12 +365,12 @@ GC.Barrier_Map = [
    [GC.Barrier_Map2,  GC.Time_Line2],
    [GC.Barrier_Map3,  GC.Time_Line3],
    [GC.Barrier_Map4,  GC.Time_Line4],
-   [GC.Barrier_Map5,  GC.Time_Line5],
-   [GC.Barrier_Map6,  GC.Time_Line6],
-   [GC.Barrier_Map7,  GC.Time_Line7],
-   [GC.Barrier_Map8,  GC.Time_Line8],
-   [GC.Barrier_Map9,  GC.Time_Line9],
-   [GC.Barrier_Map10,  GC.Time_Line10],
+   [GC.Barrier_Map1,  GC.Time_Line1],
+   [GC.Barrier_Map2,  GC.Time_Line2],
+   [GC.Barrier_Map3,  GC.Time_Line3],
+   [GC.Barrier_Map4,  GC.Time_Line4],
+   [GC.Barrier_Map3,  GC.Time_Line3],
+   [GC.Barrier_Map4,  GC.Time_Line4],
    [GC.Barrier_Map5, GC.Time_Line5],
    [GC.Barrier_Map6, GC.Time_Line6],
    [GC.Barrier_Map7, GC.Time_Line7],
