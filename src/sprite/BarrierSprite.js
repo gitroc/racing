@@ -231,11 +231,11 @@ var BarrierSprite = cc.Sprite.extend({
 
             if (this.spriteArrays.length > 0) {
                 for (var i = 0; i < this.spriteArrays.length; i++) {
-                    if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] * 3) {
+                    if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i] ) {
                         this.spriteArrays[i].visible = true;
                         this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
                     } else if (this.oneMapTime > 10 * 3){
-                        this.autoAdjustMap(this.timeAdjustSpeed / 3);
+                        this.autoAdjustMap(this.timeAdjustSpeed );
                     }
                     this.carCrash(this.spriteArrays[i], this.crashTypeArrays[i]);
                 }
