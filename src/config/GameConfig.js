@@ -228,10 +228,11 @@ GC.Barrier_Goal_Position = [
 ];
 
 //碰撞类型
-GC.Crash_Shut_Down = 0; //停车
-GC.Crash_Only_Hit  = 1; //碰撞
-GC.Crash_Speed_Up  = 2; //加速
-GC.Crash_Slow_Down = 3; //减速
+GC.Crash_Unknown   = 0; //未知
+GC.Crash_Shut_Down = 1; //停车
+GC.Crash_Only_Hit  = 2; //碰撞
+GC.Crash_Speed_Up  = 3; //加速
+GC.Crash_Slow_Down = 4; //减速
 
 //游戏主界面状态机
 GC.Game_Loading   = 1;

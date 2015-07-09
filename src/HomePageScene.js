@@ -52,9 +52,10 @@ var HomePageLayer = cc.Layer.extend({
     playMusic:function(){
         if (GC.SOUND_ON){
             if (cc.audioEngine.isMusicPlaying()){
-                return;
+                cc.audioEngine.stopAllEffects();
+                cc.audioEngine.stopMusic();
             }
-            cc.audioEngine.playMusic("res/music/music.mp3", true);
+            cc.audioEngine.playMusic(res.Game_Start, true);
         }
     }
 });

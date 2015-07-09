@@ -84,6 +84,6 @@ var ReadyGoSprite = cc.Sprite.extend({
     },
 
     startTimer:function () {
-        this.schedule(this.readyGo, 0.45, cc.REPEAT_FOREVER, 0);
+        this.schedule(this.readyGo, 0.3, cc.REPEAT_FOREVER, 0);
     }
 });

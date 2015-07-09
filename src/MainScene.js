@@ -412,17 +412,17 @@ var ProspectLayer = cc.Layer.extend({
     showProLayer:function (status) {
         switch (status) {
             case GC.Game_Loading:
-//                cc.log("GC.Game_Loading");
                 this.addReadyGo();
+                this.readyGoMusic();
             break;
 
             case GC.Game_Running:
-//                cc.log("GC.Game_Running");
+                this.playBgMusic();
                 this.addTimer();
             break;
 
             case GC.Game_Over:
-//                cc.log("GC.Game_Over");
+                this.gameOverMusic();
                 this.gameOver();
             break;
 
@@ -562,9 +562,7 @@ var ProspectLayer = cc.Layer.extend({
             res.AgainSel_png,
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
-//                    cc.log("replay game!");
                     this.removeProspect();
-                    this.stopMusic();
                     cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
                 }
             }, this);
@@ -585,14 +583,12 @@ var ProspectLayer = cc.Layer.extend({
             res.ShareSel_png,
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
-//                    cc.log("share game!");
                     GC.Game_Current = GC.Game_Pause;
                     document.title = window.wxData.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     document.title = window.wxFriend.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     window.shareMessage();
                     this.addMaskLayer(GC.Mask_Layer_Share);
                     this.addArrow();
-                    this.stopMusic();
                 }
             }, this);
 
@@ -654,9 +650,41 @@ var ProspectLayer = cc.Layer.extend({
         );
     },
 
-    stopMusic:function () {
-        cc.audioEngine.stopAllEffects();
-        cc.audioEngine.stopMusic();
+    //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
+    playBgMusic:function(){
+        if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying()){
+                this.stopBgMusic();
+            }
+            cc.audioEngine.playMusic(res.Game_Music, true);
+        }
+    },
+
+    //停止背景音乐
+    stopBgMusic:function () {
+        if (cc.audioEngine.isMusicPlaying()){
+            cc.audioEngine.stopAllEffects();
+            cc.audioEngine.stopMusic();
+        }
+    },
+
+    //倒计时音乐
+    readyGoMusic:function () {
+        if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying()){
+                this.stopBgMusic();
+            }
+            cc.audioEngine.playMusic(res.Ready_Go, false);
+        }
+    },
+
+    gameOverMusic:function () {
+        if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying()){
+                this.stopBgMusic();
+            }
+            cc.audioEngine.playMusic(res.Game_Over, false);
+        }
     }
 });
 

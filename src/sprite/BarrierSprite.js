@@ -22,6 +22,7 @@ var BarrierSprite = cc.Sprite.extend({
     speedListener:null,
     verticalMoveTime:0,
     timeAdjustSpeed:0,
+    isBgMusicOn:true,
     onEnter:function () {
         this._super();
         this.initSprites();
@@ -150,6 +151,8 @@ var BarrierSprite = cc.Sprite.extend({
                         this.crashTypeArrays.push(GC.Crash_Slow_Down);
                     } else if (type == GC.Barrier_Type1 || type == GC.Barrier_Type2 || type == GC.Barrier_Type3 || type == GC.Barrier_Type4){
                         this.crashTypeArrays.push(GC.Crash_Shut_Down);
+                    } else {
+                        this.crashTypeArrays.push(GC.Crash_Unknown);
                     }
                 }
             }
@@ -274,20 +277,28 @@ var BarrierSprite = cc.Sprite.extend({
             var eventData = -1;
 
             switch (crashType) {
-
                 case GC.Crash_Shut_Down: //游戏停止
                     effect = this.getCrashEffect(target);
+                    this.crashMusic();
                     eventData = GC.Game_Over;
                 break;
 
                 case GC.Crash_Speed_Up: //加速
                     effect = this.getSpeedChangeEffect(target);
+                    this.speedUpMusic();
                     eventData = GC.Game_Speed_Up;
                 break;
 
                 case GC.Crash_Slow_Down: //减速
                     effect = this.getSpeedChangeEffect(target);
                     eventData = GC.Game_Slow_Down;
+                break;
+
+                case GC.Crash_Unknown: //未知
+                    this.playBgMusic();
+                break;
+
+                default:
                 break;
             }
 
@@ -305,6 +316,8 @@ var BarrierSprite = cc.Sprite.extend({
                     cc.eventManager.dispatchEvent(event);
                 })
             ));
+        } else {
+            this.playBgMusic();
         }
     },
 
@@ -326,6 +339,41 @@ var BarrierSprite = cc.Sprite.extend({
             return true;
         }
         return false;
+    },
+
+    //添加碰撞音效
+    crashMusic:function () {
+        if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying() && this.isBgMusicOn){
+                cc.audioEngine.stopAllEffects();
+                cc.audioEngine.stopMusic();
+
+                this.isBgMusicOn = false;
+            }
+            cc.audioEngine.playMusic(res.Car_Crash, false);
+        }
+    },
+
+    //加速音效
+    speedUpMusic:function () {
+        if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying() && this.isBgMusicOn){
+                this.isBgMusicOn = false;
+            }
+            cc.audioEngine.playMusic(res.Speed_Up, false);
+        }
+    },
+
+    //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
+    playBgMusic:function(){
+        if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying() && !this.isBgMusicOn){
+                cc.audioEngine.stopAllEffects();
+                cc.audioEngine.stopMusic();
+                this.isBgMusicOn = true;
+            }
+            cc.audioEngine.playMusic(res.Game_Music, true);
+        }
     },
 
     //碰撞特效算法
