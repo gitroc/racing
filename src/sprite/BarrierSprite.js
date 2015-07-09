@@ -85,7 +85,7 @@ var BarrierSprite = cc.Sprite.extend({
             value += 1;
         }
 //        value =0;
-//        cc.log("LoadingMaps = ", value);
+        cc.log("LoadingMaps = ", value);
         switch (level) {
             case GC.Game_Level_Easy:
                 barrierMap = GC.Barrier_Map[value][0];
@@ -139,7 +139,6 @@ var BarrierSprite = cc.Sprite.extend({
                     this.goalScaleArrays.push(GC.Barrier_Goal_Scale[j]);
                     var timeS = Time_Line[i];
                     if(isSpeed){
-                        Time_Line[i] = Time_Line[i]*0.8;
                         timeS = Time_Line[i]*0.6;
                         cc.log("Add Speed"+Time_Line[i]+"||"+timeS);
                     }
