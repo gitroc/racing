@@ -246,11 +246,6 @@ var BarrierSprite = cc.Sprite.extend({
 
     //移动障碍物
     moveSprite:function (sprite, time, track, scale) {
-<<<<<<< HEAD
-=======
-        cc.log("scale = ", scale);
-//        this.getParent()._drawNode2.drawCatmullRom(track,50, 1);
->>>>>>> 加速调整
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
         var seq = cc.sequence(
             spawn,
