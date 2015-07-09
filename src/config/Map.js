@@ -3,7 +3,7 @@ var GC = GC || {};
 GC.Barrier_Map1 = [
     [0, 1, 0],
     [0, 2, 0],
-    [0, 0, 5],
+    [0, 0, 3],
     [1, 0, 2],
     [0, 0, 3],
     [0, 6, 0],
@@ -37,7 +37,7 @@ for(var i=0;i<GC.Barrier_Map1.length;i++){
 GC.Barrier_Map2 = [
     [0, 3, 0],
     [0, 1, 0],
-    [0, 2, 0],
+    [1, 0, 2],
     [0, 3, 0],
     [1, 0, 2],
     [0, 0, 3],
@@ -246,7 +246,7 @@ for(var i=0;i<GC.Barrier_Map7.length;i++){
 
 //障碍物地图8
 GC.Barrier_Map8 = [
-    [0, 2, 0],
+    [2, 0, 0],
     [0, 3, 4],
     [1, 0, 0],
     [0, 3, 4],
@@ -271,9 +271,9 @@ var time8 = 0.5;
 GC.Time_Line8=[];
 var spaceArray8 = [
     0.5,1.0,1.0,1.0,1.0,
-    1.0,1.0,1.0,1.0,1.0,
+    1.0,1.5,1.0,1.0,1.0,
     1.0,3.0,1.0,1.0,1.0,
-    1.0,1.0,1.0];
+    1.5,1.0,1.0];
 
 for(var i=0;i<GC.Barrier_Map8.length;i++){
     GC.Time_Line8[i] = time8 + spaceArray8[i];
@@ -288,7 +288,7 @@ GC.Barrier_Map9 = [
     [4, 4, 0],
     [1, 0, 1],
     [0, 1, 1],
-    [0, 2, 0],
+    [0, 2, 2],
     [6, 1, 0],
     [2, 0, 1],
     [0, 3, 1],
@@ -297,8 +297,8 @@ GC.Barrier_Map9 = [
     [1, 2, 0],
     [4, 0, 4],
     [3, 3, 0],
-    [0, 3, 0],
-    [0, 2, 0],
+    [3, 0, 3],
+    [0, 2, 2],
     [1, 4, 0],
 ];
 
@@ -307,9 +307,9 @@ var time9 = 0.5;
 GC.Time_Line9=[];
 var spaceArray9 = [
     0.5,1.0,1.0,1.0,1.0,
-    1.0,1.0,1.0,3.0,1.0,
-    1.0,1.0,1.0,1.0,1.0,
-    1.0,1.0,1.0];
+    1.0,1.0,1.5,3.0,1.0,
+    1.5,1.0,1.0,1.0,1.0,
+    1.0,1.0,1.5];
 
 for(var i=0;i<GC.Barrier_Map9.length;i++){
     GC.Time_Line9[i] = time9 + spaceArray9[i];
@@ -318,7 +318,7 @@ for(var i=0;i<GC.Barrier_Map9.length;i++){
 
 //障碍物地图10
 GC.Barrier_Map10 = [
-    [0, 1, 0],
+    [1, 0, 0],
     [0, 3, 1],
     [3, 0, 1],
     [4, 1, 0],
@@ -342,10 +342,10 @@ GC.Barrier_Map10 = [
 var time10 = 0.5;
 GC.Time_Line10=[];
 var spaceArray10 = [
-    0.5,1.0,1.0,1.0,1.0,
+    0.5,1.0,1.0,1.0,1.5,
+    1.0,1.5,1.0,1.0,1.0,
     1.0,1.0,1.0,1.0,1.0,
-    1.0,1.0,1.0,1.0,1.0,
-    1.0,3.0,1.0];
+    1.5,3.0,1.0];
 
 for(var i=0;i<GC.Barrier_Map10.length;i++){
     GC.Time_Line10[i] = time10 + spaceArray10[i];
@@ -367,8 +367,8 @@ GC.Barrier_Map = [
    [GC.Barrier_Map2,  GC.Time_Line2],
    [GC.Barrier_Map3,  GC.Time_Line3],
    [GC.Barrier_Map4,  GC.Time_Line4],
-   [GC.Barrier_Map3,  GC.Time_Line3],
-   [GC.Barrier_Map4,  GC.Time_Line4],
+   [GC.Barrier_Map1,  GC.Time_Line1],
+   [GC.Barrier_Map2,  GC.Time_Line2],
    [GC.Barrier_Map5, GC.Time_Line5],
    [GC.Barrier_Map6, GC.Time_Line6],
    [GC.Barrier_Map7, GC.Time_Line7],
