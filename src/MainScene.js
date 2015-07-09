@@ -566,6 +566,7 @@ var ProspectLayer = cc.Layer.extend({
                 if (GC.Game_Current == GC.Game_Over) {
 //                    cc.log("replay game!");
                     this.removeProspect();
+                    this.stopMusic();
                     cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
                 }
             }, this);
@@ -593,6 +594,7 @@ var ProspectLayer = cc.Layer.extend({
                     window.shareMessage();
                     this.addMaskLayer(GC.Mask_Layer_Share);
                     this.addArrow();
+                    this.stopMusic();
                 }
             }, this);
 
@@ -652,6 +654,11 @@ var ProspectLayer = cc.Layer.extend({
                 })
             )
         );
+    },
+
+    stopMusic:function () {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.stopMusic();
     }
 });
 

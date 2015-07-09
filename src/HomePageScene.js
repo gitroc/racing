@@ -8,6 +8,7 @@ var HomePageLayer = cc.Layer.extend({
 	scoreLabel:null,
 	ctor:function () {
 		this._super();
+		this.playMusic();
         this._sptBg = new cc.Sprite(res.LoadingBg_Png);
         this._sptBg.attr({
             anchorX : 0.5,
@@ -47,6 +48,15 @@ var HomePageLayer = cc.Layer.extend({
         cc.eventManager.addListener(listener1, this.buttonSprite);
     },
 
+    //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
+    playMusic:function(){
+        if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying()){
+                return;
+            }
+            cc.audioEngine.playMusic("res/music/music.mp3", true);
+        }
+    }
 });
 var HomePageScene = cc.Scene.extend({
 	onEnter:function () {
@@ -54,6 +64,5 @@ var HomePageScene = cc.Scene.extend({
 
 		var layer = new HomePageLayer();
 		this.addChild(layer);
-
 	}
 });

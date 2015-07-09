@@ -13,7 +13,7 @@ GC.w_2 = GC.winSize.width / 2 ;
 
 GC.h_2 = GC.winSize.height / 2;
 
-GC.SOUND_ON = false;
+GC.SOUND_ON = true;
 
 //精灵添加到场景的次序
 GC.BackGround_Sprite = 0;
