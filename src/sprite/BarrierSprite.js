@@ -137,11 +137,13 @@ var BarrierSprite = cc.Sprite.extend({
                     this.spriteArrays.push(sprite);
                     this.trackArrays.push(track);
                     this.goalScaleArrays.push(GC.Barrier_Goal_Scale[j]);
+                    var timeS = Time_Line[i];
                     if(isSpeed){
-//                         cc.log("Add Speed"+Time_Line[i]+"||"+Time_Line[i]*0.8);
                         Time_Line[i] = Time_Line[i]*0.8;
+                        timeS = Time_Line[i]*0.6;
+                        cc.log("Add Speed"+Time_Line[i]+"||"+timeS);
                     }
-                    this.timeLineArrays.push(Time_Line[i]);
+                    this.timeLineArrays.push(timeS);
 
                     if (type == GC.Barrier_Type6) { //加速图片
                         this.crashTypeArrays.push(GC.Crash_Speed_Up);
@@ -244,6 +246,11 @@ var BarrierSprite = cc.Sprite.extend({
 
     //移动障碍物
     moveSprite:function (sprite, time, track, scale) {
+<<<<<<< HEAD
+=======
+        cc.log("scale = ", scale);
+//        this.getParent()._drawNode2.drawCatmullRom(track,50, 1);
+>>>>>>> 加速调整
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
         var seq = cc.sequence(
             spawn,
