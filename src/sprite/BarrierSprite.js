@@ -85,7 +85,7 @@ var BarrierSprite = cc.Sprite.extend({
             value += 1;
         }
 //        value =0;
-        cc.log("LoadingMaps = ", value);
+//        cc.log("LoadingMaps = ", value);
         switch (level) {
             case GC.Game_Level_Easy:
                 barrierMap = GC.Barrier_Map[value][0];
@@ -138,9 +138,8 @@ var BarrierSprite = cc.Sprite.extend({
                     this.trackArrays.push(track);
                     this.goalScaleArrays.push(GC.Barrier_Goal_Scale[j]);
                     if(isSpeed){
-                         cc.log("Add Speed"+Time_Line[i]+"||"+Time_Line[i]*0.8);
+//                         cc.log("Add Speed"+Time_Line[i]+"||"+Time_Line[i]*0.8);
                         Time_Line[i] = Time_Line[i]*0.8;
-
                     }
                     this.timeLineArrays.push(Time_Line[i]);
 
@@ -245,7 +244,6 @@ var BarrierSprite = cc.Sprite.extend({
 
     //移动障碍物
     moveSprite:function (sprite, time, track, scale) {
-//        this.getParent()._drawNode2.drawCatmullRom(track,50, 1);
         var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
         var seq = cc.sequence(
             spawn,
@@ -335,30 +333,24 @@ var BarrierSprite = cc.Sprite.extend({
         var carRect = this.getParent().carSprite.getBoundingBox();
         var barrierRect = target.getBoundingBox();
 
-        if (this.getBoxBottom(barrierRect).y <=  this.getBoxTop(carRect).y
-            && this.getBoxBottom(barrierRect).y > this.getBoxCore(carRect).y) {
-            if (this.getBoxRight(barrierRect).x >= this.getBoxLeft(carRect).x
-                        &&  this.getBoxRight(barrierRect).x <= this.getBoxCore(carRect).x) {
+        if (cc.rectGetMinY(barrierRect) <=  cc.rectGetMaxY(carRect)
+            && cc.rectGetMinY(barrierRect) > cc.rectGetMidY(carRect)) {
+            if (cc.rectGetMaxX(barrierRect) >= cc.rectGetMinX(carRect)
+                        &&  cc.rectGetMaxX(barrierRect) <= cc.rectGetMidX(carRect)) {
                 //向左上反弹
-//                cc.log("左上");
                 spawn = cc.spawn(cc.rotateBy(0.5, -90), cc.moveBy(0.5, cc.p(-150, 150)));
-            } else if (this.getBoxLeft(barrierRect).x <= this.getBoxRight(carRect).x
-                        && this.getBoxLeft(barrierRect).x >=  this.getBoxCore(carRect).x){
+            } else if (cc.rectGetMinX(barrierRect) <= cc.rectGetMaxX(carRect)
+                        && cc.rectGetMinX(barrierRect) >=  cc.rectGetMidX(carRect)){
                 //向右上反弹
-//                cc.log("右上");
                 spawn = cc.spawn(cc.rotateBy(0.5, 90), cc.moveBy(0.5, cc.p(150, 150)));
             } else {
                 //向上反弹
-//                cc.log("向上");
-                if (this.getBoxCore(carRect).x > GC.Car_Center_X + GC.Car_Range) {
-//                    cc.log("右边道路");
+                if (cc.rectGetMidX(carRect) > GC.Car_Center_X + GC.Car_Range) {
                     spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-150, 150)));
-                } else if (this.getBoxCore(carRect).x < GC.Car_Center_X - GC.Car_Range){
-//                    cc.log("左边道路");
+                } else if (cc.rectGetMidX(carRect) < GC.Car_Center_X - GC.Car_Range){
                     spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(150, 150)));
                 } else {
-//                    cc.log("中间道路");
-                    if (this.getBoxCore(carRect).x > GC.Car_Center_X) {
+                    if (cc.rectGetMidX(carRect) > GC.Car_Center_X) {
                         spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-150, 150)));
                     } else {
                         spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(150, 150)));
@@ -366,20 +358,17 @@ var BarrierSprite = cc.Sprite.extend({
                 }
             }
         } else {
-            if (this.getBoxRight(barrierRect).x >= this.getBoxLeft(carRect).x
-                && this.getBoxRight(barrierRect).x <= this.getBoxCore(carRect).x) {
+            if (cc.rectGetMaxX(barrierRect) >= cc.rectGetMinX(carRect)
+                && cc.rectGetMaxX(barrierRect) <= cc.rectGetMidX(carRect)) {
                 //左反弹
-//                cc.log("左");
                 spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-100, 0)));
-            } else if (this.getBoxLeft(barrierRect).x <= this.getBoxRight(carRect).x
-                && this.getBoxLeft(barrierRect).x >= this.getBoxCore(carRect).x) {
+            } else if (cc.rectGetMinX(barrierRect) <= cc.rectGetMaxX(carRect)
+                && cc.rectGetMinX(barrierRect) >= cc.rectGetMidX(carRect)) {
                 //右反弹
-//                cc.log("右");
                 spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(100, 0)));
             } else {
                 //下反弹
-//                cc.log("下");
-                if (this.getBoxCore(carRect).x > GC.Car_Center_X) {
+                if (cc.rectGetMidX(carRect) > GC.Car_Center_X) {
                     spawn = cc.spawn(cc.rotateBy(0.5, 0), cc.moveBy(0.5, cc.p(100, -100)));
                 } else {
                     spawn = cc.spawn(cc.rotateBy(0.5, 0), cc.moveBy(0.5, cc.p(-100, -100)));
@@ -395,14 +384,11 @@ var BarrierSprite = cc.Sprite.extend({
         var spawn = null;
         var carRect = this.getParent().carSprite.getBoundingBox();
         var barrierRect = target.getBoundingBox();
-        if (this.getBoxCore(carRect).x > GC.Car_Center_X + GC.Car_Range) {
-            cc.log("右边道路加减速");
+        if (cc.rectGetMidX(carRect) > GC.Car_Center_X + GC.Car_Range) {
             spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.moveBy(0.5, cc.p(-50, 0)));
-        } else if (this.getBoxCore(carRect).x < GC.Car_Center_X - GC.Car_Range){
-            cc.log("左边道路加减速");
+        } else if (cc.rectGetMidX(carRect) < GC.Car_Center_X - GC.Car_Range){
             spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.moveBy(0.5, cc.p(50, 0)));
         } else {
-            cc.log("中间道路加减速");
             spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5));
         }
         return spawn;

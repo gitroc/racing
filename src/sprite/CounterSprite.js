@@ -42,7 +42,7 @@ var TimerSprite = cc.Sprite.extend({
             x:this.timerX,
             y:this.timerY
         });
-        this.timerLabel.setFontFillColor(cc.color(100,149,237));
+        this.timerLabel.setFontFillColor(cc.color(0,0,255));
         this.addChild(this.timerLabel, GC.Timer_Sprite);
 
         this.scheduleUpdate();

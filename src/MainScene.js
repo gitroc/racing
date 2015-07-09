@@ -368,7 +368,6 @@ var ProspectLayer = cc.Layer.extend({
                 eventName: "status_change",
                 callback: function(event){
                     var target = event.getCurrentTarget();
-                    cc.log("status_change = ", event.getUserData());
                     target.showProLayer(event.getUserData());
                 }
             }),
@@ -501,7 +500,6 @@ var ProspectLayer = cc.Layer.extend({
 
     //添加遮罩层
     addMaskLayer:function (layerIndex) {
-        cc.log("addMaskLayer");
         this.maskLayerSprite = new cc.Sprite(res.MaskLayer_Png);
         this.maskLayerSprite.attr ({
             x: GC.w_2,
