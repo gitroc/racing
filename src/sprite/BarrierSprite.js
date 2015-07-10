@@ -94,6 +94,7 @@ var BarrierSprite = cc.Sprite.extend({
             case GC.Game_Level_Normal:
                 barrierMap = GC.Barrier_Map[value + 10][0];
                 timeLine = GC.Barrier_Map[value + 10][1];
+                cc.log(timeLine);
             break;
             case GC.Game_Level_Hard:
                 barrierMap = GC.Barrier_Map[value + 20][0];
@@ -107,6 +108,7 @@ var BarrierSprite = cc.Sprite.extend({
 
     //生成障碍物
     LoadOneMap:function (Barrier_Map, Time_Line,isSpeed) {
+        cc.log("MapTotalTime = ", Time_Line[Time_Line.length - 1]);
         for (var i = 0; i < Barrier_Map.length ; i++) { //按列查询
             for (var j = 0; j < Barrier_Map[i].length; j++) {
                 var type = Barrier_Map[i][j];
@@ -218,9 +220,9 @@ var BarrierSprite = cc.Sprite.extend({
     autoAdjustMap:function (time,isSpeed) {
         if (time >=0 && time < GC.Game_Easy_To_Normal) {
             this.LoadingMaps(GC.Game_Level_Easy,isSpeed);
-        } else if (time >= GC.Game_Easy_To_Normal && time < GC.Game_Easy_To_Normal) {
+        } else if (time >= GC.Game_Easy_To_Normal && time < GC.Game_Normal_To_Hard) {
             this.LoadingMaps(GC.Game_Level_Normal,isSpeed);
-        } else if (time > GC.Game_Easy_To_Normal) {
+        } else if (time > GC.Game_Normal_To_Hard) {
             this.LoadingMaps(GC.Game_Level_Hard,isSpeed);
         }
     },
