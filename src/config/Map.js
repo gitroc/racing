@@ -2,8 +2,8 @@ var GC = GC || {};
 //障碍物地图1--17
 GC.Barrier_Map1 = [
     [0, 1, 0],
-    [0, 2, 0],
-    [0, 0, 3],
+    [2, 0, 0],
+    [0, 3, 0],
     [1, 0, 2],
     [0, 0, 3],
     [0, 6, 0],
@@ -71,7 +71,7 @@ for(var i=0;i<GC.Barrier_Map2.length;i++){
 //障碍物地图3--18
 GC.Barrier_Map3 = [
     [0, 2, 0],
-    [0, 3, 0],
+    [0, 0, 2],
     [0, 2, 0],
     [0, 0, 6],
     [3, 0, 2],
@@ -139,8 +139,8 @@ for(var i=0;i<GC.Barrier_Map4.length;i++){
     time4 = GC.Time_Line4[i];
 }
 
-//障碍物地图5
-GC.Barrier_Map5 = [
+//障碍物地图11
+GC.Barrier_Map11 = [
     [0, 3, 0],
     [0, 1, 2],
     [0, 1, 2],
@@ -159,21 +159,21 @@ GC.Barrier_Map5 = [
     [0, 2, 0],
     [0, 0, 3],
 ];
-//障碍物时间轴5
-var time5 = 0.5;
-GC.Time_Line5=[];
-var spaceArray5 = [
-    0.0,1.0,1.0,1.0,2.0,
+//障碍物时间轴11
+var time11 = 0.5;
+GC.Time_Line11=[];
+var spaceArray11 = [
+    0.0,2.0,1.0,1.0,2.0,
     1.0,1.0,1.0,1.0,2.0,
     1.0,2.0,1.0,1.0,3.0,
     1.0,1.0];
-for(var i=0;i<GC.Barrier_Map5.length;i++){
-    GC.Time_Line5[i] = time5 + spaceArray5[i];
-    time5 = GC.Time_Line5[i];
+for(var i=0;i<GC.Barrier_Map11.length;i++){
+    GC.Time_Line11[i] = time11 + spaceArray11[i];
+    time11 = GC.Time_Line11[i];
 }
 
-//障碍物地图6
-GC.Barrier_Map6 = [
+//障碍物地图12
+GC.Barrier_Map12 = [
     [0, 2, 0],
     [0, 2, 0],
     [0, 0, 3],
@@ -194,22 +194,22 @@ GC.Barrier_Map6 = [
     [0, 2, 0],
 ];
 
-//障碍物时间轴6
-var time6 = 0.5;
-GC.Time_Line6=[];
-var spaceArray6 = [
+//障碍物时间轴12
+var time12 = 0.5;
+GC.Time_Line12=[];
+var spaceArray12 = [
     0.5,1.0,1.0,1.0,1.0,
     1.0,1.0,3.0,1.0,2.0,
     1.0,2.0,1.0,1.0,2.0,
     1.0,1.0,1.0];
 
-for(var i=0;i<GC.Barrier_Map6.length;i++){
-    GC.Time_Line6[i] = time6 + spaceArray6[i];
-    time6 = GC.Time_Line6[i];
+for(var i=0;i<GC.Barrier_Map12.length;i++){
+    GC.Time_Line12[i] = time12 + spaceArray12[i];
+    time12 = GC.Time_Line12[i];
 }
 
-//障碍物地图7
-GC.Barrier_Map7 = [
+//障碍物地图13
+GC.Barrier_Map13 = [
     [1, 0, 0],
     [4, 3, 0],
     [1, 2, 0],
@@ -230,24 +230,24 @@ GC.Barrier_Map7 = [
     [0, 0, 1],
 ];
 //障碍物时间轴7
-var time7 = 0.5;
-GC.Time_Line7=[];
-var spaceArray7 = [
+var time13 = 0.5;
+GC.Time_Line13=[];
+var spaceArray13 = [
     0.5,1.0,1.0,2.0,1.0,
     1.0,2.0,1.0,1.0,2.0,
     1.0,1.0,1.0,1.0,2.0,
     1.0,2.0,3.0];
 
-for(var i=0;i<GC.Barrier_Map7.length;i++){
-    GC.Time_Line7[i] = time7 + spaceArray7[i];
-    time7 = GC.Time_Line7[i];
+for(var i=0;i<GC.Barrier_Map13.length;i++){
+    GC.Time_Line13[i] = time13 + spaceArray13[i];
+    time13 = GC.Time_Line13[i];
 }
 
 
-//障碍物地图8
-GC.Barrier_Map8 = [
+//障碍物地图21
+GC.Barrier_Map21 = [
     [2, 0, 0],
-    [0, 3, 4],
+    [4, 3, 0],
     [1, 0, 0],
     [0, 3, 4],
     [1, 0, 1],
@@ -266,22 +266,22 @@ GC.Barrier_Map8 = [
     [1, 4, 0],
 ];
 
-//障碍物时间轴8
-var time8 = 0.5;
-GC.Time_Line8=[];
-var spaceArray8 = [
+//障碍物时间轴21
+var time21 = 0.5;
+GC.Time_Line21=[];
+var spaceArray21 = [
     0.5,1.0,1.0,1.0,1.0,
     1.0,1.5,1.0,1.0,1.0,
     1.0,3.0,1.0,1.0,1.0,
     1.5,1.0,1.0];
 
-for(var i=0;i<GC.Barrier_Map8.length;i++){
-    GC.Time_Line8[i] = time8 + spaceArray8[i];
-    time8 = GC.Time_Line8[i];
+for(var i=0;i<GC.Barrier_Map21.length;i++){
+    GC.Time_Line21[i] = time21 + spaceArray21[i];
+    time21 = GC.Time_Line21[i];
 }
 
-//障碍物地图9
-GC.Barrier_Map9 = [
+//障碍物地图22
+GC.Barrier_Map22 = [
     [0, 1, 0],
     [0, 3, 0],
     [3, 0, 3],
@@ -303,23 +303,23 @@ GC.Barrier_Map9 = [
 ];
 
 //障碍物时间轴9
-var time9 = 0.5;
-GC.Time_Line9=[];
-var spaceArray9 = [
+var time22= 0.5;
+GC.Time_Line22=[];
+var spaceArray22 = [
     0.5,1.0,1.0,1.0,1.0,
     1.0,1.0,1.5,3.0,1.0,
     1.5,1.0,1.0,1.0,1.0,
     1.0,1.0,1.5];
 
-for(var i=0;i<GC.Barrier_Map9.length;i++){
-    GC.Time_Line9[i] = time9 + spaceArray9[i];
-    time9 = GC.Time_Line9[i];
+for(var i=0;i<GC.Barrier_Map22.length;i++){
+    GC.Time_Line22[i] = time22 + spaceArray22[i];
+    time22 = GC.Time_Line22[i];
 }
 
-//障碍物地图10
-GC.Barrier_Map10 = [
+//障碍物地图23
+GC.Barrier_Map23 = [
     [1, 0, 0],
-    [0, 3, 1],
+    [1, 3, 0],
     [3, 0, 1],
     [4, 1, 0],
     [0, 2, 1],
@@ -338,18 +338,18 @@ GC.Barrier_Map10 = [
     [1, 0, 4],
 ];
 
-//障碍物时间轴10
-var time10 = 0.5;
-GC.Time_Line10=[];
-var spaceArray10 = [
+//障碍物时间轴23
+var time23 = 0.5;
+GC.Time_Line23=[];
+var spaceArray23 = [
     0.5,1.0,1.0,1.0,1.5,
     1.0,1.5,1.0,1.0,1.0,
     1.0,1.0,1.0,1.0,1.0,
     1.5,3.0,1.0];
 
-for(var i=0;i<GC.Barrier_Map10.length;i++){
-    GC.Time_Line10[i] = time10 + spaceArray10[i];
-    time10 = GC.Time_Line10[i];
+for(var i=0;i<GC.Barrier_Map23.length;i++){
+    GC.Time_Line23[i] = time23 + spaceArray23[i];
+    time23 = GC.Time_Line23[i];
 }
 
 //地图切换时间
@@ -369,24 +369,24 @@ GC.Barrier_Map = [
    [GC.Barrier_Map4,  GC.Time_Line4],
    [GC.Barrier_Map1,  GC.Time_Line1],
    [GC.Barrier_Map2,  GC.Time_Line2],
-   [GC.Barrier_Map5, GC.Time_Line5],
-   [GC.Barrier_Map6, GC.Time_Line6],
-   [GC.Barrier_Map7, GC.Time_Line7],
-   [GC.Barrier_Map5, GC.Time_Line5],
-   [GC.Barrier_Map6, GC.Time_Line6],
-   [GC.Barrier_Map7, GC.Time_Line7],
-   [GC.Barrier_Map5, GC.Time_Line5],
-   [GC.Barrier_Map6, GC.Time_Line6],
-   [GC.Barrier_Map7, GC.Time_Line7],
-   [GC.Barrier_Map5, GC.Time_Line5],
-   [GC.Barrier_Map8,  GC.Time_Line8],
-   [GC.Barrier_Map9,  GC.Time_Line9],
-   [GC.Barrier_Map10, GC.Time_Line10],
-   [GC.Barrier_Map8,  GC.Time_Line8],
-   [GC.Barrier_Map9,  GC.Time_Line9],
-   [GC.Barrier_Map10, GC.Time_Line10],
-   [GC.Barrier_Map8,  GC.Time_Line8],
-   [GC.Barrier_Map9,  GC.Time_Line9],
-   [GC.Barrier_Map10, GC.Time_Line10],
-   [GC.Barrier_Map8,  GC.Time_Line8],
+   [GC.Barrier_Map11, GC.Time_Line11],
+   [GC.Barrier_Map12, GC.Time_Line12],
+   [GC.Barrier_Map13, GC.Time_Line13],
+   [GC.Barrier_Map11, GC.Time_Line11],
+   [GC.Barrier_Map12, GC.Time_Line12],
+   [GC.Barrier_Map13, GC.Time_Line13],
+   [GC.Barrier_Map11, GC.Time_Line11],
+   [GC.Barrier_Map12, GC.Time_Line12],
+   [GC.Barrier_Map13, GC.Time_Line13],
+   [GC.Barrier_Map11, GC.Time_Line11],
+   [GC.Barrier_Map21,  GC.Time_Line21],
+   [GC.Barrier_Map22,  GC.Time_Line22],
+   [GC.Barrier_Map23, GC.Time_Line23],
+   [GC.Barrier_Map21,  GC.Time_Line21],
+   [GC.Barrier_Map22,  GC.Time_Line22],
+   [GC.Barrier_Map23, GC.Time_Line23],
+   [GC.Barrier_Map21,  GC.Time_Line21],
+   [GC.Barrier_Map22,  GC.Time_Line22],
+   [GC.Barrier_Map23, GC.Time_Line23],
+   [GC.Barrier_Map21,  GC.Time_Line21],
 ];
