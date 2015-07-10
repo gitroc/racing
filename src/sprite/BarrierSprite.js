@@ -340,6 +340,9 @@ var BarrierSprite = cc.Sprite.extend({
     //添加碰撞音效
     crashMusic:function () {
         if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying()){
+                cc.audioEngine.stopAllEffects();
+            }
             cc.audioEngine.playEffect(res.Car_Crash);
         }
     },
@@ -347,6 +350,9 @@ var BarrierSprite = cc.Sprite.extend({
     //加速音效
     speedUpMusic:function () {
         if (GC.SOUND_ON){
+            if (cc.audioEngine.isMusicPlaying()){
+                cc.audioEngine.stopAllEffects();
+            }
             cc.audioEngine.playEffect(res.Speed_Up);
         }
     },

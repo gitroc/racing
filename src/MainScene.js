@@ -116,7 +116,7 @@ var MainLayer = cc.Layer.extend({
     },
 
     addNewBackground:function(){
-        this.bgSprite = new NewBgSprite(res.Road_png);
+        this.bgSprite = new NewBgSprite(cc.spriteFrameCache.getSpriteFrame("main_bg_road1.png"));
         this.bgSprite.attr({
             x:GC.w_2,
             y:GC.h_2,
