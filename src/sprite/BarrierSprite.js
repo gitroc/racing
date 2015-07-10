@@ -139,7 +139,7 @@ var BarrierSprite = cc.Sprite.extend({
                     this.goalScaleArrays.push(GC.Barrier_Goal_Scale[j]);
                     var timeS = Time_Line[i];
                     if(isSpeed){
-                        timeS = Time_Line[i]*0.6;
+                        timeS = Time_Line[i]*0.8;
                         cc.log("Add Speed"+Time_Line[i]+"||"+timeS);
                     }
                     this.timeLineArrays.push(timeS);
