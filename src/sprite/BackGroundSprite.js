@@ -3,7 +3,7 @@
 * Created by Daiyan on 15-06-16
 */
 var currentBg = GC.Car_Center_X;
-var NewBgSprite = cc.Sprite.extend({
+var BackGroundSprite = cc.Sprite.extend({
     onceTime:null,
     allTime:null,
     bgs:null,
@@ -14,8 +14,6 @@ var NewBgSprite = cc.Sprite.extend({
         this.onceTime =GC.Speed_Normal_Once;
         this.allTime = GC.Speed_Normal_All;
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
-//        this.addListener();
-//        this.addSpeedListener();
     },
     onExit:function(){
         this.unschedule(this.update);
@@ -43,7 +41,6 @@ var NewBgSprite = cc.Sprite.extend({
         this.onceTime = oTime;
         this.allTime=aTime;
         cc.log("Once:"+this.onceTime+"--All:"+this.allTime);
-//        this.update(this.schedule);
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
         this.runAction(cc.Sequence.create( cc.DelayTime.create(3), cc.CallFunc.create(function () {
             object.origin();
@@ -53,22 +50,6 @@ var NewBgSprite = cc.Sprite.extend({
         this.unschedule(this.update);
         this.onceTime = GC.Speed_Normal_Once;
         this.schedule(this.update, GC.Speed_Normal_All, cc.REPEAT_FOREVER, 0);
-    },
-    addSpeedListener:function(){
-        this.speedListener = cc.eventManager.addListener(
-             cc.EventListener.create({
-                event: cc.EventListener.CUSTOM,
-                eventName: "car_crash",
-                callback: function(event){
-                    var target = event.getCurrentTarget();
-                    target.updateSpeed(event.getUserData(),target);
-                }
-            }),
-            this
-        );
-    },
-    removeSpeedListener:function(){
-         cc.eventManager.removeListener(this.speedListener);
     },
 
     updateSpeed:function(gameStatus,target){
@@ -95,29 +76,6 @@ var NewBgSprite = cc.Sprite.extend({
             break;
         }
     },
-    addListener:function() {
-        if('touches' in cc.sys.capabilities) { //支持触摸事件
-            this.touchListener = cc.eventManager.addListener(
-                cc.EventListener.create({
-                    event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-                    onTouchesEnded:function (touches, event) {
-                        if (touches.length <= 0) {
-                            return;
-                        }
-                        var target = event.getCurrentTarget();
-//                            target.move(target, touches[0].getLocation());
-                    }
-                }),this);
-        } else if ('mouse' in cc.sys.capabilities) { //支持鼠标事件
-            this.touchListener = cc.eventManager.addListener({
-                event: cc.EventListener.MOUSE,
-                onMouseUp: function (event) {
-                    var target = event.getCurrentTarget();
-//                        target.move(target, event.getLocation());
-                }
-            }, this);
-        }
-        },
 
     move:function(target,position){
         var positionX = Math.round(position.x);
@@ -128,7 +86,7 @@ var NewBgSprite = cc.Sprite.extend({
 
         //移动改变中心点x方向
         var centerX = 0;
-//        cc.log("New--positionX"+positionX+"--currentBg"+currentBg+"--centerX"+centerX);
+
         if (positionX > currentBg - GC.Car_Range && positionX < currentBg + GC.Car_Range) { //避开汽车范围
             return;
         }
@@ -157,7 +115,6 @@ var NewBgSprite = cc.Sprite.extend({
             }
         }
 
-//        cc.log("End--positionX"+positionX+"--currentBg"+currentBg+"--centerX"+centerX);
         var actionMove = cc.moveTo(0.5,cc.p(centerX,GC.h_2));//moveTo or moveBy
         this.runAction(actionMove);
     }

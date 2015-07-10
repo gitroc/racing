@@ -95,7 +95,7 @@ var MainLayer = cc.Layer.extend({
     },
 
     addSprite:function () {
-        this.addNewBackground();
+        this.addBackground();
         this.addStone();
         this.addTree();
         this.addBarrier();
@@ -115,8 +115,8 @@ var MainLayer = cc.Layer.extend({
         this.addChild(this.maskLayerSprite, GC.Mask_Layer_Main);
     },
 
-    addNewBackground:function(){
-        this.bgSprite = new NewBgSprite(cc.spriteFrameCache.getSpriteFrame("main_bg_road1.png"));
+    addBackground:function(){
+        this.bgSprite = new BackGroundSprite(cc.spriteFrameCache.getSpriteFrame("main_bg_road1.png"));
         this.bgSprite.attr({
             x:GC.w_2,
             y:GC.h_2,
@@ -148,18 +148,6 @@ var MainLayer = cc.Layer.extend({
         } else {
             return cc.spriteFrameCache.getSpriteFrame("main_car_back.png");
         }
-    },
-
-    addRoad:function () {
-        cc.spriteFrameCache.addSpriteFrames(res.Road_plist);
-        this.roadSprite = new RoadSprite();
-        this.roadSprite.attr({
-            x: GC.w_2,
-            y: GC.h_2,
-            anchorX: 0.5,
-            anchorY: 0.5
-        });
-        this.addChild(this.roadSprite, GC.Road_Sprite);
     },
 
     addTree:function () {
