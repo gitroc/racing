@@ -22,7 +22,6 @@ var BarrierSprite = cc.Sprite.extend({
     speedListener:null,
     verticalMoveTime:0,
     timeAdjustSpeed:0,
-    isBgMusicOn:true,
     onEnter:function () {
         this._super();
         this.initSprites();
@@ -295,7 +294,6 @@ var BarrierSprite = cc.Sprite.extend({
                 break;
 
                 case GC.Crash_Unknown: //未知
-                    this.playBgMusic();
                 break;
 
                 default:
@@ -316,8 +314,6 @@ var BarrierSprite = cc.Sprite.extend({
                     cc.eventManager.dispatchEvent(event);
                 })
             ));
-        } else {
-            this.playBgMusic();
         }
     },
 
@@ -344,35 +340,14 @@ var BarrierSprite = cc.Sprite.extend({
     //添加碰撞音效
     crashMusic:function () {
         if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying() && this.isBgMusicOn){
-                cc.audioEngine.stopAllEffects();
-                cc.audioEngine.stopMusic();
-
-                this.isBgMusicOn = false;
-            }
-            cc.audioEngine.playMusic(res.Car_Crash, false);
+            cc.audioEngine.playEffect(res.Car_Crash);
         }
     },
 
     //加速音效
     speedUpMusic:function () {
         if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying() && this.isBgMusicOn){
-                this.isBgMusicOn = false;
-            }
-            cc.audioEngine.playMusic(res.Speed_Up, false);
-        }
-    },
-
-    //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
-    playBgMusic:function(){
-        if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying() && !this.isBgMusicOn){
-                cc.audioEngine.stopAllEffects();
-                cc.audioEngine.stopMusic();
-                this.isBgMusicOn = true;
-            }
-            cc.audioEngine.playMusic(res.Game_Music, true);
+            cc.audioEngine.playEffect(res.Speed_Up);
         }
     },
 

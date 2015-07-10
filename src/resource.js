@@ -21,7 +21,7 @@ var res = {
     Background_plist : "res/main/main_bg_road.plist",
     ReadyGo_plist : "res/image/loading_guide.plist",
     Game_Start : "res/music/start.mp3",
-    Game_Music : "res/music/music.wav",
+    Game_Music : "res/music/music.mp3",
     Ready_Go : "res/music/readygo.mp3",
     Game_Over : "res/music/gameover.mp3",
     Car_Crash : "res/music/crush.mp3",
