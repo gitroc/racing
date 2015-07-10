@@ -306,8 +306,10 @@ var BarrierSprite = cc.Sprite.extend({
                     if (crashType == GC.Crash_Speed_Up
                         || crashType == GC.Crash_Slow_Down){
                         target.removeFromParent();
+                        cc.audioEngine.playMusic(res.Game_Music, true);
                     } else {
                         GC.Game_Current = GC.Game_Over;
+                        cc.audioEngine.playMusic(res.Game_Music, true);
                     }
 
                     event.setUserData(eventData);
@@ -340,20 +342,14 @@ var BarrierSprite = cc.Sprite.extend({
     //添加碰撞音效
     crashMusic:function () {
         if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying()){
-                cc.audioEngine.stopAllEffects();
-            }
-            cc.audioEngine.playEffect(res.Car_Crash);
+            cc.audioEngine.playMusic(res.Car_Crash, false);
         }
     },
 
     //加速音效
     speedUpMusic:function () {
         if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying()){
-                cc.audioEngine.stopAllEffects();
-            }
-            cc.audioEngine.playEffect(res.Speed_Up);
+            cc.audioEngine.playMusic(res.Speed_Up, false);
         }
     },
 

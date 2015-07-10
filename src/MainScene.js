@@ -641,9 +641,7 @@ var ProspectLayer = cc.Layer.extend({
     //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
     playBgMusic:function(){
         if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying()){
-                this.stopBgMusic();
-            }
+            this.stopBgMusic();
             cc.audioEngine.playMusic(res.Game_Music, true);
         }
     },
@@ -659,18 +657,14 @@ var ProspectLayer = cc.Layer.extend({
     //倒计时音乐
     readyGoMusic:function () {
         if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying()){
-                this.stopBgMusic();
-            }
+            this.stopBgMusic();
             cc.audioEngine.playMusic(res.Ready_Go, false);
         }
     },
 
     gameOverMusic:function () {
         if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying()){
-                this.stopBgMusic();
-            }
+            this.stopBgMusic();
             cc.audioEngine.playMusic(res.Game_Over, false);
         }
     }

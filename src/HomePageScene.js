@@ -66,10 +66,6 @@ var HomePageLayer = cc.Layer.extend({
     //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
     playMusic:function(){
         if (GC.SOUND_ON){
-            if (cc.audioEngine.isMusicPlaying()){
-                cc.audioEngine.stopAllEffects();
-                cc.audioEngine.stopMusic();
-            }
             cc.audioEngine.playMusic(res.Game_Start, true);
         }
     }
