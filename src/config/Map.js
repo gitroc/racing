@@ -6,11 +6,11 @@ GC.Barrier_Map1 = [
     [0, 3, 0],
     [1, 0, 2],
     [0, 0, 3],
-    [0, 6, 0],
+    [0, 1, 0],
     [3, 0, 0],
     [3, 0, 3],
     [0, 1, 0],
-    [1, 0, 0],
+    [1, 0, 6],
     [2, 0, 0],
     [0, 0, 3],
     [0, 3, 0],
@@ -25,7 +25,7 @@ var time1 = 0;
 GC.Time_Line1 = [];
 var spaceArray1 = [
     1.0,1.5,1.5,1.5,1.5,
-    1.0,3.0,2.0,1.5,2.0,
+    1.0,1.0,2.0,1.5,2.0,
     3.0,1.0,2.0,1.0,2.0,
     1.0,2.0];
 for(var i=0;i<GC.Barrier_Map1.length;i++){
@@ -37,7 +37,7 @@ for(var i=0;i<GC.Barrier_Map1.length;i++){
 GC.Barrier_Map2 = [
     [0, 3, 0],
     [0, 1, 0],
-    [1, 0, 2],
+    [2, 0, 1],
     [0, 3, 0],
     [1, 0, 2],
     [0, 0, 3],
@@ -126,17 +126,40 @@ GC.Barrier_Map4 = [
     [0, 0, 4],
 ];
 
+//障碍物地图5--19
+GC.Barrier_Map5 = [
+    [0, 4, 0],
+    [1, 0, 1],
+    [0, 1, 0],
+    [1, 0, 1],
+    [0, 6, 0],
+    [0, 2, 0],
+    [2, 0, 0],
+    [0, 3, 0],
+    [0, 3, 0],
+    [2, 0, 2],
+    [1, 0, 0],
+    [1, 0, 0],
+    [0, 0, 2],
+    [0, 0, 2],
+    [0, 3, 3],
+    [0, 3, 3],
+    [4, 0, 0],
+    [0, 4, 0],
+    [0, 0, 4],
+];
+
 //障碍物时间轴4
-var time4 = 0;
-GC.Time_Line4=[];
-var spaceArray4 = [
+var time5 = 0;
+GC.Time_Line5=[];
+var spaceArray5 = [
     1.0,2.0,1.0,1.0,2.0,
-    1.0,1.0,2.0,1.0,2.0,
     3.0,1.0,2.0,1.0,2.0,
+    1.0,1.0,2.0,1.0,2.0,
     1.0,2.0,1.0,1.0];
-for(var i=0;i<GC.Barrier_Map4.length;i++){
-    GC.Time_Line4[i] = time4 + spaceArray4[i];
-    time4 = GC.Time_Line4[i];
+for(var i=0;i<GC.Barrier_Map5.length;i++){
+    GC.Time_Line5[i] = time5 + spaceArray5[i];
+    time5 = GC.Time_Line5[i];
 }
 
 //障碍物地图11
@@ -395,12 +418,12 @@ GC.Barrier_Map = [
    [GC.Barrier_Map2,  GC.Time_Line2],
    [GC.Barrier_Map3,  GC.Time_Line3],
    [GC.Barrier_Map4,  GC.Time_Line4],
-   [GC.Barrier_Map1,  GC.Time_Line1],
+   [GC.Barrier_Map5,  GC.Time_Line5],
    [GC.Barrier_Map2,  GC.Time_Line2],
    [GC.Barrier_Map3,  GC.Time_Line3],
    [GC.Barrier_Map4,  GC.Time_Line4],
    [GC.Barrier_Map1,  GC.Time_Line1],
-   [GC.Barrier_Map2,  GC.Time_Line2],
+   [GC.Barrier_Map5,  GC.Time_Line5],
    [GC.Barrier_Map11, GC.Time_Line11],
    [GC.Barrier_Map12, GC.Time_Line12],
    [GC.Barrier_Map13, GC.Time_Line13],
