@@ -42,8 +42,6 @@
         var path = base + "/res/logo.png";
 
         document.getElementById("img").src = path;
-
-        <!--$("img").attr("src", path);-->
     };
 
     window.wxData = {
@@ -114,33 +112,6 @@
             });
         };
     })(window);
-    wx.config({
-        <!--debug: true,-->
-        <!--appId: 'wxdd50ee3fac8f6f66',-->
-        <!--timestamp: 1420870884,-->
-        <!--nonceStr: 'VQhYOUJRz6RolHqN',-->
-        <!--signature: '892c2861b8bdb0cd42e45d7884fc44c7a2374d5e',-->
-        <!--jsApiList: [-->
-            <!--'checkJsApi',-->
-            <!--'onMenuShareTimeline',-->
-            <!--'onMenuShareAppMessage',-->
-            <!--'onMenuShareQQ',-->
-            <!--'onMenuShareWeibo',-->
-            <!--'closeWindow'-->
-        <!--]-->
-    });
-
-    wx.ready(function(){
-        //
-        window.wxReady = true;
-    });
-
-
-
-    wx.error(function(res){
-        //
-        <!--alert("wx.error");-->
-    });
 </script>
 <script>
 var _hmt = _hmt || [];

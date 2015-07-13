@@ -13,6 +13,16 @@ var HomePageLayer = cc.Layer.extend({
         this.addLoadingBg();
         this.addButtonSprite();
         this.addListener();
+        this.loadResource();
+    },
+
+    loadResource:function () {
+        cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
     },
 
     addLoadingBg:function () {
@@ -52,6 +62,7 @@ var HomePageLayer = cc.Layer.extend({
                 var rect = cc.rect(0, 0, s.width, s.height);
                 if (cc.rectContainsPoint(rect, locationInNode)) {     // 点击范围判断检测
                     cc.eventManager.removeListener(this.touchListener);
+                    cc.audioEngine.stopMusic();
                     cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
                     target.opacity = 180;
                     return true;
@@ -63,7 +74,6 @@ var HomePageLayer = cc.Layer.extend({
         cc.eventManager.addListener(this.touchListener, this.buttonSprite);
     },
 
-    //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
     playMusic:function(){
         if (GC.SOUND_ON){
             cc.audioEngine.playMusic(res.Game_Start, true);

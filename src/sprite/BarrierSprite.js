@@ -306,12 +306,12 @@ var BarrierSprite = cc.Sprite.extend({
                     if (crashType == GC.Crash_Speed_Up
                         || crashType == GC.Crash_Slow_Down){
                         target.removeFromParent();
-                        cc.audioEngine.playMusic(res.Game_Music, true);
                     } else {
                         GC.Game_Current = GC.Game_Over;
-                        cc.audioEngine.playMusic(res.Game_Music, true);
                     }
 
+                    cc.audioEngine.playMusic(res.Game_Music, true);
+                    
                     event.setUserData(eventData);
                     cc.eventManager.dispatchEvent(event);
                 })
