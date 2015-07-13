@@ -18,11 +18,6 @@ var HomePageLayer = cc.Layer.extend({
 
     loadResource:function () {
         cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
     },
 
     addLoadingBg:function () {

@@ -64,6 +64,11 @@ var MainLayer = cc.Layer.extend({
 
     //初始化游戏场景
     loadingGame:function () {
+        cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
         this.addSprite();
     },
 
@@ -323,6 +328,7 @@ var ProspectLayer = cc.Layer.extend({
 
     ctor:function () {
         this._super();
+        this.LoadingPro();
         return true;
     },
 
@@ -336,6 +342,10 @@ var ProspectLayer = cc.Layer.extend({
         this.removeListener();
         this.removeTouchListener();
         this._super();
+    },
+
+    LoadingPro:function () {
+        cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
     },
 
     addListener:function() {
