@@ -71,34 +71,68 @@ var BarrierSprite = cc.Sprite.extend({
         this.startTimer();
     },
 
+    getEasyIndex:function () {
+        var value = 10 * cc.random0To1().toFixed(1);
+
+        if (value >= 0 && value < 5) {
+            return value;
+        } else if (value >= 5 && value < 10){
+            return value - 5;
+        } else {
+            return 0;
+        }
+    },
+
+    getNormalIndex:function () {
+        var value = 10 * cc.random0To1().toFixed(1);
+
+        if (value >= 0 && value < 3) {
+            return value;
+        } else if (value >= 3 && value < 6) {
+            return value - 3;
+        } else if (value >= 6 && value < 9) {
+            return value - 6;
+        } else {
+            return value - 9;
+        }
+    },
+
+    getHardIndex:function () {
+        var value = 10 * cc.random0To1().toFixed(1);
+
+        if (value >= 0 && value < 4) {
+            return value;
+        } else if (value >= 4 && value < 8) {
+            return value - 4;
+        } else {
+            return value - 8;
+        }
+    },
+
     //根据游戏难度加载相关难度地图
-    LoadingMaps:function (level,isSpeed) {
+    LoadingMaps:function (level, isSpeed) {
         var value = 10 * cc.random0To1().toFixed(1);
         var barrierMap = [];
         var timeLine = [];
 
-        if (value + 20 > GC.Barrier_Map_Max || value < 0) {
-            return;
-        } else if (value + 20 == GC.Barrier_Map_Max) {
-            value -= 1;
-        }
-//        value =0;
-        cc.log("LoadingMaps = ", value);
+        var index = -1;
+
         switch (level) {
             case GC.Game_Level_Easy:
-                barrierMap = GC.Barrier_Map[value][0];
-                timeLine = GC.Barrier_Map[value][1];
+                index = this.getEasyIndex();
             break;
             case GC.Game_Level_Normal:
-                barrierMap = GC.Barrier_Map[value + 10][0];
-                timeLine = GC.Barrier_Map[value + 10][1];
-                cc.log(timeLine);
+                index = this.getNormalIndex() + 5;
             break;
             case GC.Game_Level_Hard:
-                barrierMap = GC.Barrier_Map[value + 20][0];
-                timeLine = GC.Barrier_Map[value + 20][1];
+                index = this.getHardIndex() + 5 + 3;
             break;
         }
+
+        cc.log("LoadingMaps = ", index);
+
+        barrierMap = GC.Barrier_Map[index][0];
+        timeLine = GC.Barrier_Map[index][1];
 
         this.clearBarrier();
         this.LoadOneMap(barrierMap, timeLine,isSpeed);

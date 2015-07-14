@@ -9,14 +9,20 @@ var HomePageLayer = cc.Layer.extend({
     touchListener:null,
     ctor:function () {
         this._super();
-        this.playMusic();
         this.addLoadingBg();
         this.addButtonSprite();
         this.addListener();
         this.loadResource();
+        this.playMusic();
     },
 
     loadResource:function () {
+        cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.ReadyGo_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Stone_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
     },
 
