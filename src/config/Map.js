@@ -125,7 +125,18 @@ GC.Barrier_Map4 = [
     [0, 4, 0],
     [0, 0, 4],
 ];
-
+//障碍物时间轴4
+var time4 = 0;
+GC.Time_Line4=[];
+var spaceArray4 = [
+    1.0,2.0,1.0,1.0,2.0,
+    1.0,1.0,2.0,1.0,2.0,
+    3.0,1.0,2.0,1.0,2.0,
+    1.0,2.0,1.0,1.0];
+for(var i=0;i<GC.Barrier_Map4.length;i++){
+    GC.Time_Line4[i] = time4 + spaceArray4[i];
+    time4 = GC.Time_Line4[i];
+}
 //障碍物地图5--19
 GC.Barrier_Map5 = [
     [0, 4, 0],
@@ -149,7 +160,7 @@ GC.Barrier_Map5 = [
     [0, 0, 4],
 ];
 
-//障碍物时间轴4
+//障碍物时间轴5
 var time5 = 0;
 GC.Time_Line5=[];
 var spaceArray5 = [
