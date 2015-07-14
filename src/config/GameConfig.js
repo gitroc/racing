@@ -50,7 +50,7 @@ GC.Angle = 75;
 //水平移动时间
 GC.Horizontal_Move_Time = 0.1;
 //竖直移动时间
-GC.Vertical_Move_Time = 5;
+GC.Vertical_Move_Time = 3;
 
 //截最左边背景截图
 GC.Bg_Left_Offset_X = 100;
