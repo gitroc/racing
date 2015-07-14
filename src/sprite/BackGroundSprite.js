@@ -14,6 +14,7 @@ var BackGroundSprite = cc.Sprite.extend({
         this.onceTime =GC.Speed_Normal_Once;
         this.allTime = GC.Speed_Normal_All;
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
+        this.addSpeedListener();
     },
     onExit:function(){
         this.unschedule(this.update);
@@ -42,9 +43,9 @@ var BackGroundSprite = cc.Sprite.extend({
         this.allTime=aTime;
         cc.log("Once:"+this.onceTime+"--All:"+this.allTime);
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
-        this.runAction(cc.Sequence.create( cc.DelayTime.create(3), cc.CallFunc.create(function () {
-            object.origin();
-        })));
+//        this.runAction(cc.Sequence.create( cc.DelayTime.create(3), cc.CallFunc.create(function () {
+//            object.origin();
+//        })));
     },
     origin:function(){
         this.unschedule(this.update);
@@ -75,6 +76,22 @@ var BackGroundSprite = cc.Sprite.extend({
                 this.updateAction(GC.Speed_Normal_Once, GC.Speed_Normal_All,target);
             break;
         }
+    },
+    addSpeedListener:function(){
+        this.speedListener = cc.eventManager.addListener(
+             cc.EventListener.create({
+                event: cc.EventListener.CUSTOM,
+                eventName: "car_crash",
+                callback: function(event){
+                    var target = event.getCurrentTarget();
+                    target.updateSpeed(event.getUserData(),target);
+                }
+            }),
+            this
+        );
+    },
+    removeSpeedListener:function(){
+         cc.eventManager.removeListener(this.speedListener);
     },
 
     move:function(target,position){
