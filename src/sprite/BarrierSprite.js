@@ -21,7 +21,7 @@ var BarrierSprite = cc.Sprite.extend({
     crashTypeArrays:null,
     speedListener:null,
     verticalMoveTime:0,
-    timeAdjustSpeed:0,
+    timeTotal:0,
     onEnter:function () {
         this._super();
         this.initSprites();
@@ -66,7 +66,7 @@ var BarrierSprite = cc.Sprite.extend({
             this.barrierSprites.push(frame);
         }
 
-        this.autoAdjustMap(this.timeAdjustSpeed,false);
+        this.LoadingMaps(GC.Game_Level_Easy, false);
 
         this.startTimer();
     },
@@ -109,7 +109,7 @@ var BarrierSprite = cc.Sprite.extend({
         }
     },
 
-    //根据游戏难度加载相关难度地图
+    //根据游戏难度加载相关难度地图, 并且加减速
     LoadingMaps:function (level, isSpeed) {
         var barrierMap = [];
         var timeLine = [];
@@ -134,11 +134,11 @@ var BarrierSprite = cc.Sprite.extend({
         timeLine = GC.Barrier_Map[index][1];
 
         this.clearBarrier();
-        this.LoadOneMap(barrierMap, timeLine,isSpeed);
+        this.LoadOneMap(barrierMap, timeLine, isSpeed);
     },
 
     //生成障碍物
-    LoadOneMap:function (Barrier_Map, Time_Line,isSpeed) {
+    LoadOneMap:function (Barrier_Map, Time_Line, isSpeed) {
         cc.log("MapTotalTime = ", Time_Line[Time_Line.length - 1]);
         for (var i = 0; i < Barrier_Map.length ; i++) { //按列查询
             for (var j = 0; j < Barrier_Map[i].length; j++) {
@@ -172,8 +172,8 @@ var BarrierSprite = cc.Sprite.extend({
                     this.goalScaleArrays.push(GC.Barrier_Goal_Scale[j]);
                     var timeS = Time_Line[i];
                     if(isSpeed){
-                        timeS = Time_Line[i]*0.8;
-                        cc.log("Add Speed"+Time_Line[i]+"||"+timeS);
+                        timeS = Time_Line[i] * 0.8;
+//                        cc.log("Add Speed"+Time_Line[i]+"||"+timeS);
                     }
                     this.timeLineArrays.push(timeS);
 
@@ -233,7 +233,7 @@ var BarrierSprite = cc.Sprite.extend({
 
             case GC.Game_Speed_Up:
                 this.verticalMoveTime = GC.Vertical_Move_Time / 2;
-                this.autoAdjustMap(this.timeAdjustSpeed,true);
+                this.autoAdjustMaps(this.timeTotal, true);
             break;
 
             case GC.Game_Over:
@@ -247,34 +247,36 @@ var BarrierSprite = cc.Sprite.extend({
         }
     },
 
-    //自动速度调整
-    autoAdjustMap:function (time,isSpeed) {
-        if (time >=0 && time < GC.Game_Easy_To_Normal) {
-            this.LoadingMaps(GC.Game_Level_Easy,isSpeed);
-        } else if (time >= GC.Game_Easy_To_Normal && time < GC.Game_Normal_To_Hard) {
-            this.LoadingMaps(GC.Game_Level_Normal,isSpeed);
-        } else if (time > GC.Game_Normal_To_Hard) {
-            this.LoadingMaps(GC.Game_Level_Hard,isSpeed);
-        }
-    },
-
     //根据地图画障碍物
     setBarrier:function () {
         if (GC.Game_Current == GC.Game_Running) {
             this.oneMapTime += GC.Game_Timer_Interval;
-            this.timeAdjustSpeed += GC.Game_Timer_Interval;
 
             if (this.spriteArrays.length > 0) {
                 for (var i = 0; i < this.spriteArrays.length; i++) {
                     if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i].toFixed(1) ) {
                         this.spriteArrays[i].visible = true;
                         this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
-                    } else if (this.oneMapTime > 10 * 2){
-                        this.autoAdjustMap(this.timeAdjustSpeed,false);
+                    } else if (this.oneMapTime > GC.Game_Easy_To_Normal + 1){
+                        this.timeTotal += this.oneMapTime;
+//                        cc.log("timeTotal = ", this.timeTotal);
+                        this.autoAdjustMaps(this.timeTotal, true);
+                        return;
                     }
+
                     this.carCrash(this.spriteArrays[i], this.crashTypeArrays[i]);
                 }
             }
+        }
+    },
+
+    //自动调整速度
+    autoAdjustMaps:function (time, isSpeed) {
+//        cc.log("time = ", time);
+        if (time > GC.Game_Normal_To_Hard){
+            this.LoadingMaps(GC.Game_Level_Hard, isSpeed);
+        } else if (time > GC.Game_Easy_To_Normal) {
+            this.LoadingMaps(GC.Game_Level_Normal, isSpeed);
         }
     },
 
