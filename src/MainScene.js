@@ -98,7 +98,7 @@ var MainLayer = cc.Layer.extend({
     },
 
     addMaskLayer:function () {
-        this.maskLayerSprite = new cc.Sprite(res.MaskLayer_Png);
+        this.maskLayerSprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("mask_layer.png"));
         this.maskLayerSprite.attr ({
             x: GC.w_2,
             y: GC.h_2,
@@ -117,7 +117,7 @@ var MainLayer = cc.Layer.extend({
             anchorX : 0.5,
             anchorY : 0.5
         });
-        this.addChild(this.bgSprite);
+        this.addChild(this.bgSprite, GC.BackGround_Sprite);
     },
 
     //添加汽车
@@ -482,7 +482,7 @@ var ProspectLayer = cc.Layer.extend({
 
     //添加遮罩层
     addMaskLayer:function (layerIndex) {
-        this.maskLayerSprite = new cc.Sprite(res.MaskLayer_Png);
+        this.maskLayerSprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("mask_layer.png"));
         this.maskLayerSprite.attr ({
             x: GC.w_2,
             y: GC.h_2,
@@ -495,7 +495,7 @@ var ProspectLayer = cc.Layer.extend({
 
     //记得晒成绩哦
     addSlogan:function () {
-        this.sloganSprite = new cc.Sprite(res.Slogan_Png);
+        this.sloganSprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("end_icon_slogan.png"));
         this.sloganSprite.attr({
             x:320,
             y:788,
@@ -507,7 +507,7 @@ var ProspectLayer = cc.Layer.extend({
 
     //本轮成绩
     addWord:function () {
-        this.word1Sprite = new cc.Sprite(res.Word_Png);
+        this.word1Sprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("end_icon_word1.png"));
         this.word1Sprite.attr({
             x:215,
             y:605,
@@ -527,7 +527,7 @@ var ProspectLayer = cc.Layer.extend({
 
     //分割线
     addLine:function () {
-        this.lineSprite = new cc.Sprite(res.Line_Png);
+        this.lineSprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("end_icon_line.png"));
         this.lineSprite.attr({
             x:320,
             y:495,
@@ -540,8 +540,8 @@ var ProspectLayer = cc.Layer.extend({
     //再战一轮
     addReplay:function () {
         var replayItem = new cc.MenuItemImage(
-            res.Again_png,
-            res.AgainSel_png,
+            cc.spriteFrameCache.getSpriteFrame("end_btn_replay.png"),
+            cc.spriteFrameCache.getSpriteFrame("end_btn_replay_sel.png"),
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
                     this.removeProspect();
@@ -561,8 +561,8 @@ var ProspectLayer = cc.Layer.extend({
     //分享
     addShare:function () {
         var shareItem = new cc.MenuItemImage(
-            res.Share_png,
-            res.ShareSel_png,
+            cc.spriteFrameCache.getSpriteFrame("end_btn_share.png"),
+            cc.spriteFrameCache.getSpriteFrame("end_btn_share_sel.png"),
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
                     GC.Game_Current = GC.Game_Pause;
@@ -594,7 +594,7 @@ var ProspectLayer = cc.Layer.extend({
 
     //添加箭头
     addArrow:function () {
-        this.explain = new cc.Sprite(res.Explain_png);
+        this.explain = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("end_icon_word.png"));
         this.explain.attr({
             x:320,
             y:970,
@@ -605,7 +605,7 @@ var ProspectLayer = cc.Layer.extend({
 
         this.startAction(this.explain);
 
-        this.arrow = new cc.Sprite(res.Arrow_png);
+        this.arrow = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("end_icon_arrow.png"));
         this.arrow.attr({
             x:557,
             y:1050,

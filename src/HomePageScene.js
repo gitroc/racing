@@ -23,7 +23,7 @@ var HomePageLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames(res.Tree_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Barrier_plist);
         cc.spriteFrameCache.addSpriteFrames(res.Car_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.Background_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.GameOver_plist);
     },
 
     addLoadingBg:function () {
@@ -38,8 +38,7 @@ var HomePageLayer = cc.Layer.extend({
     },
 
     addButtonSprite:function () {
-        cc.spriteFrameCache.addSpriteFrames(res.Loading_btn_plist);
-        this.buttonSprite = new PlayButtonSprite(cc.spriteFrameCache.getSpriteFrame("loading_btn_off.png"));
+        this.buttonSprite = new cc.Sprite(res.LoadingBtOff_Png);
         this.buttonSprite.attr({
             x : 450,
             y : 150,
@@ -47,6 +46,20 @@ var HomePageLayer = cc.Layer.extend({
             anchorY : 0.5
         });
         this.addChild(this.buttonSprite, 2);
+
+        this.startAnimation();
+    },
+
+    startAnimation:function(){
+        var frames =[];
+        var frameOn = new cc.SpriteFrame(res.LoadingBtOn_Png, cc.rect(0, 0, 290, 160));
+        var frameOff = new cc.SpriteFrame(res.LoadingBtOff_Png, cc.rect(0, 0, 290, 160));
+        frames.push(frameOn);
+        frames.push(frameOff);
+
+        var animation = new cc.Animation(frames, 0.15);
+        var action = new cc.Animate(animation).repeatForever();
+        this.buttonSprite.runAction(action);
     },
 
     //添加监听
