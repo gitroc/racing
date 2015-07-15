@@ -111,7 +111,6 @@ var BarrierSprite = cc.Sprite.extend({
 
     //根据游戏难度加载相关难度地图
     LoadingMaps:function (level, isSpeed) {
-        var value = 10 * cc.random0To1().toFixed(1);
         var barrierMap = [];
         var timeLine = [];
 

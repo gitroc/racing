@@ -3,7 +3,6 @@ var res = {
     LoadingBtOn_Png : "res/image/loading_btn_on.png",
     LoadingBtOff_Png : "res/image/loading_btn_off.png",
     GameOver_plist : "res/image/game_over.plist",
-    Loading_btn_plist:"res/image/loading_btn.plist",
     Tree_plist : "res/main/main_bg_object_tree.plist",
     Stone_plist : "res/main/main_bg_object_stone.plist",
     Car_plist : "res/main/main_car.plist",
