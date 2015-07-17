@@ -270,6 +270,9 @@ GC.Loading_Guide_Max = 6;
 //当前游戏状态 可修改
 GC.Game_Current   = GC.Game_Loading;
 
+//碰撞音效播放完成
+GC.Music_Playing = true;
+
 
 
 

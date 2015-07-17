@@ -40,7 +40,7 @@ var BarrierSprite = cc.Sprite.extend({
                 eventName: "car_crash",
                 callback: function(event){
                     var target = event.getCurrentTarget();
-                    target.resetSpeed(event.getUserData());
+                    target.resetSpeed(event.getUserData(), target);
                 }
             }),
             this
@@ -69,6 +69,12 @@ var BarrierSprite = cc.Sprite.extend({
         this.LoadingMaps(GC.Game_Level_Easy, false);
 
         this.startTimer();
+    },
+
+    getBoundingBox:function () {
+        var carRect = this.getParent().carSprite.getBoundingBox();
+
+        return new cc.Rect(carRect.x, carRect.y + 137, carRect.width, carRect.height - 137);
     },
 
     getEasyIndex:function () {
@@ -225,18 +231,26 @@ var BarrierSprite = cc.Sprite.extend({
     },
 
     //重新设置纵向移动速度
-    resetSpeed:function (gameStatus) {
+    resetSpeed:function (gameStatus, target) {
         switch (gameStatus) {
             case GC.Game_Slow_Down:
                 this.verticalMoveTime = GC.Vertical_Move_Time * 2;
+                GC.Music_Playing = true;
+                cc.audioEngine.playMusic(res.Game_Music, true);
+//                target.removeFromParent();
             break;
 
             case GC.Game_Speed_Up:
                 this.verticalMoveTime = GC.Vertical_Move_Time / 2;
-                this.autoAdjustMaps(this.timeTotal, true);
+                this.autoAdjustMaps(target.timeTotal, true);
+                GC.Music_Playing = true;
+                cc.audioEngine.playMusic(res.Game_Music, true);
+//                target.removeFromParent();
             break;
 
             case GC.Game_Over:
+                GC.Game_Current = GC.Game_Over;
+                GC.Music_Playing = true;
                 this.stopAllActions();
                 this.unschedule(this.setBarrier);
             break;
@@ -257,7 +271,7 @@ var BarrierSprite = cc.Sprite.extend({
                     if (this.oneMapTime.toFixed(1) == this.timeLineArrays[i].toFixed(1) ) {
                         this.spriteArrays[i].visible = true;
                         this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
-                    } else if (this.oneMapTime > GC.Game_Easy_To_Normal + 1){
+                    } else if (this.oneMapTime > GC.Game_Easy_To_Normal){
                         this.timeTotal += this.oneMapTime;
 //                        cc.log("timeTotal = ", this.timeTotal);
                         this.autoAdjustMaps(this.timeTotal, true);
@@ -277,6 +291,8 @@ var BarrierSprite = cc.Sprite.extend({
             this.LoadingMaps(GC.Game_Level_Hard, isSpeed);
         } else if (time > GC.Game_Easy_To_Normal) {
             this.LoadingMaps(GC.Game_Level_Normal, isSpeed);
+        } else {
+            this.LoadingMaps(GC.Game_Level_Easy, isSpeed);
         }
     },
 
@@ -304,27 +320,29 @@ var BarrierSprite = cc.Sprite.extend({
 
     //障碍物碰撞检测
     carCrash:function(target, crashType) {
-        if(this.judgeCrash(target)){
+        var rect = this.getBoundingBox();
+        if(this.judgeCrash(target, rect)){
             target.stopAllActions();
+
             var effect = null;
             var event = new cc.EventCustom("car_crash");
             var eventData = -1;
 
             switch (crashType) {
                 case GC.Crash_Shut_Down: //游戏停止
-                    effect = this.getCrashEffect(target);
+                    effect = this.getCrashEffect(target, rect);
                     this.crashMusic();
                     eventData = GC.Game_Over;
                 break;
 
                 case GC.Crash_Speed_Up: //加速
-                    effect = this.getSpeedChangeEffect(target);
+                    effect = this.getSpeedChangeEffect(target, rect);
                     this.speedUpMusic();
                     eventData = GC.Game_Speed_Up;
                 break;
 
                 case GC.Crash_Slow_Down: //减速
-                    effect = this.getSpeedChangeEffect(target);
+                    effect = this.getSpeedChangeEffect(target, rect);
                     eventData = GC.Game_Slow_Down;
                 break;
 
@@ -338,15 +356,6 @@ var BarrierSprite = cc.Sprite.extend({
             target.runAction(cc.sequence(
                 effect,
                 cc.callFunc(function () {
-                    if (crashType == GC.Crash_Speed_Up
-                        || crashType == GC.Crash_Slow_Down){
-                        target.removeFromParent();
-                        cc.audioEngine.playMusic(res.Game_Music, true);
-                    } else {
-                        GC.Game_Current = GC.Game_Over;
-                        cc.audioEngine.playMusic(res.Game_Music, true);
-                    }
-
                     event.setUserData(eventData);
                     cc.eventManager.dispatchEvent(event);
                 })
@@ -355,21 +364,23 @@ var BarrierSprite = cc.Sprite.extend({
     },
 
     //碰撞检测算法
-    judgeCrash:function (target) {
-        var carRect = this.getParent().carSprite.getBoundingBox();
+    judgeCrash:function (target, rect) {
         var barrierRect = target.getBoundingBox();
 
-        if (cc.rectContainsPoint(carRect, this.getBoxTop(barrierRect))
-            ||cc.rectContainsPoint(carRect, this.getBoxLeft(barrierRect))
-            ||cc.rectContainsPoint(carRect, this.getBoxRight(barrierRect))
-            ||cc.rectContainsPoint(carRect, this.getBoxBottom(barrierRect))
-            ||cc.rectContainsPoint(carRect, this.getBoxLT(barrierRect))
-            ||cc.rectContainsPoint(carRect, this.getBoxRT(barrierRect))
-            ||cc.rectContainsPoint(carRect, this.getBoxLB(barrierRect))
-            ||cc.rectContainsPoint(carRect, this.getBoxRB(barrierRect))
-            ||cc.rectIntersectsRect(carRect, barrierRect)
+        if (cc.rectContainsPoint(rect, this.getBoxTop(barrierRect))
+            ||cc.rectContainsPoint(rect, this.getBoxLeft(barrierRect))
+            ||cc.rectContainsPoint(rect, this.getBoxRight(barrierRect))
+            ||cc.rectContainsPoint(rect, this.getBoxBottom(barrierRect))
+            ||cc.rectContainsPoint(rect, this.getBoxLT(barrierRect))
+            ||cc.rectContainsPoint(rect, this.getBoxRT(barrierRect))
+            ||cc.rectContainsPoint(rect, this.getBoxLB(barrierRect))
+            ||cc.rectContainsPoint(rect, this.getBoxRB(barrierRect))
+            ||cc.rectIntersectsRect(rect, barrierRect)
             ) {
-            return true;
+            if (GC.Music_Playing) {
+                GC.Music_Playing = false;
+                return true;
+            }
         }
         return false;
     },
@@ -389,29 +400,28 @@ var BarrierSprite = cc.Sprite.extend({
     },
 
     //碰撞特效算法
-    getCrashEffect:function (target) {
+    getCrashEffect:function (target, rect) {
         var spawn = null;
-        var carRect = this.getParent().carSprite.getBoundingBox();
         var barrierRect = target.getBoundingBox();
 
-        if (cc.rectGetMinY(barrierRect) <=  cc.rectGetMaxY(carRect)
-            && cc.rectGetMinY(barrierRect) > cc.rectGetMidY(carRect)) {
-            if (cc.rectGetMaxX(barrierRect) >= cc.rectGetMinX(carRect)
-                        &&  cc.rectGetMaxX(barrierRect) <= cc.rectGetMidX(carRect)) {
+        if (cc.rectGetMinY(barrierRect) <=  cc.rectGetMaxY(rect)
+            && cc.rectGetMinY(barrierRect) > cc.rectGetMidY(rect)) {
+            if (cc.rectGetMaxX(barrierRect) >= cc.rectGetMinX(rect)
+                        &&  cc.rectGetMaxX(barrierRect) <= cc.rectGetMidX(rect)) {
                 //向左上反弹
                 spawn = cc.spawn(cc.rotateBy(0.5, -90), cc.moveBy(0.5, cc.p(-150, 150)));
-            } else if (cc.rectGetMinX(barrierRect) <= cc.rectGetMaxX(carRect)
-                        && cc.rectGetMinX(barrierRect) >=  cc.rectGetMidX(carRect)){
+            } else if (cc.rectGetMinX(barrierRect) <= cc.rectGetMaxX(rect)
+                        && cc.rectGetMinX(barrierRect) >=  cc.rectGetMidX(rect)){
                 //向右上反弹
                 spawn = cc.spawn(cc.rotateBy(0.5, 90), cc.moveBy(0.5, cc.p(150, 150)));
             } else {
                 //向上反弹
-                if (cc.rectGetMidX(carRect) > GC.Car_Center_X + GC.Car_Range) {
+                if (cc.rectGetMidX(rect) > GC.Car_Center_X + GC.Car_Range) {
                     spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-150, 150)));
-                } else if (cc.rectGetMidX(carRect) < GC.Car_Center_X - GC.Car_Range){
+                } else if (cc.rectGetMidX(rect) < GC.Car_Center_X - GC.Car_Range){
                     spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(150, 150)));
                 } else {
-                    if (cc.rectGetMidX(carRect) > GC.Car_Center_X) {
+                    if (cc.rectGetMidX(rect) > GC.Car_Center_X) {
                         spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-150, 150)));
                     } else {
                         spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(150, 150)));
@@ -419,17 +429,17 @@ var BarrierSprite = cc.Sprite.extend({
                 }
             }
         } else {
-            if (cc.rectGetMaxX(barrierRect) >= cc.rectGetMinX(carRect)
-                && cc.rectGetMaxX(barrierRect) <= cc.rectGetMidX(carRect)) {
+            if (cc.rectGetMaxX(barrierRect) >= cc.rectGetMinX(rect)
+                && cc.rectGetMaxX(barrierRect) <= cc.rectGetMidX(rect)) {
                 //左反弹
                 spawn = cc.spawn(cc.rotateBy(0.5, -60), cc.moveBy(0.5, cc.p(-100, 0)));
-            } else if (cc.rectGetMinX(barrierRect) <= cc.rectGetMaxX(carRect)
-                && cc.rectGetMinX(barrierRect) >= cc.rectGetMidX(carRect)) {
+            } else if (cc.rectGetMinX(barrierRect) <= cc.rectGetMaxX(rect)
+                && cc.rectGetMinX(barrierRect) >= cc.rectGetMidX(rect)) {
                 //右反弹
                 spawn = cc.spawn(cc.rotateBy(0.5, 60), cc.moveBy(0.5, cc.p(100, 0)));
             } else {
                 //下反弹
-                if (cc.rectGetMidX(carRect) > GC.Car_Center_X) {
+                if (cc.rectGetMidX(rect) > GC.Car_Center_X) {
                     spawn = cc.spawn(cc.rotateBy(0.5, 0), cc.moveBy(0.5, cc.p(100, -100)));
                 } else {
                     spawn = cc.spawn(cc.rotateBy(0.5, 0), cc.moveBy(0.5, cc.p(-100, -100)));
@@ -441,13 +451,12 @@ var BarrierSprite = cc.Sprite.extend({
     },
 
     //加速特效算法
-    getSpeedChangeEffect:function (target) {
+    getSpeedChangeEffect:function (target, rect) {
         var spawn = null;
-        var carRect = this.getParent().carSprite.getBoundingBox();
         var barrierRect = target.getBoundingBox();
-        if (cc.rectGetMidX(carRect) > GC.Car_Center_X + GC.Car_Range) {
+        if (cc.rectGetMidX(rect) > GC.Car_Center_X + GC.Car_Range) {
             spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.moveBy(0.5, cc.p(-50, 0)));
-        } else if (cc.rectGetMidX(carRect) < GC.Car_Center_X - GC.Car_Range){
+        } else if (cc.rectGetMidX(rect) < GC.Car_Center_X - GC.Car_Range){
             spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.moveBy(0.5, cc.p(50, 0)));
         } else {
             spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5));
