@@ -199,6 +199,7 @@ var BarrierSprite = cc.Sprite.extend({
 
     //清理一张地图的障碍物
     clearBarrier:function () {
+        this.clearSprite();
         if (this.spriteArrays.length > 0) {
             for (var i = 0; i < this.spriteArrays.length; i++) {
                 this.clearBarrierArray(this.spriteArrays, i);
@@ -211,6 +212,16 @@ var BarrierSprite = cc.Sprite.extend({
         }
 
         this.oneMapTime = 0;
+    },
+
+    clearSprite:function () {
+        if (this.spriteArrays.length > 0) {
+            for (var i = 0; i < this.spriteArrays.length; i++) {
+                if (this.spriteArrays[i].getParent() != null) {
+                    this.spriteArrays[i].removeFromParent();
+                }
+            }
+        }
     },
 
     //定点清理障碍物
