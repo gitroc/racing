@@ -30,6 +30,7 @@ var BarrierSprite = cc.Sprite.extend({
 
     onExit:function () {
         this.removeListener();
+	this.unschedule(this.setBarrier);
         this._super();
     },
 

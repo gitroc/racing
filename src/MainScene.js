@@ -192,7 +192,7 @@ var MainLayer = cc.Layer.extend({
                     this.getSpriteGoal(cc.p(x, y)),
                 ];
 
-                this.moveSprite(this.fiveTrees[i], GC.Tree_Time_Line[i], track, 2);
+                this.moveSprite(this.fiveTrees[i], GC.Tree_Time_Line[i], track, 1);
             }
         }
     },
