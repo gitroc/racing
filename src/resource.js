@@ -14,7 +14,8 @@ var res = {
     Ready_Go : "res/music/readygo.mp3",
     Game_Over : "res/music/gameover.mp3",
     Car_Crash : "res/music/crush.mp3",
-    Speed_Up : "res/music/speed.mp3"
+    Speed_Up : "res/music/speed.mp3",
+    Game_All : "res/music/pass_all.wav"
 };
 
 var g_resources = [];
