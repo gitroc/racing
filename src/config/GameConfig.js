@@ -27,11 +27,13 @@ GC.Mask_Layer_Main = 7;
 GC.Loading_Timer = 8;
 GC.Slogan_Sprite = 9;
 GC.Word1_Sprite = 10;
-GC.TotalTime_Sprite = 11;
-GC.Line_Sprite = 12;
-GC.Menu_Sprite = 13;
-GC.Mask_Layer_Share = 14;
-GC.Share_Sprite = 15;
+GC.Word2_Sprite = 11;
+GC.TotalTime_Sprite = 12;
+GC.Line_Sprite = 13;
+GC.Menu_Sprite = 14;
+GC.Mask_Layer_Share = 15;
+GC.Share_Sprite = 16;
+
 
 //路的图片的最大数
 GC.Road_Png_Max = 4;
@@ -272,6 +274,9 @@ GC.Game_Current   = GC.Game_Loading;
 
 //碰撞音效播放完成
 GC.Music_Playing = true;
+
+//通关时间
+GC.Pass_All_Time = 300;
 
 
 

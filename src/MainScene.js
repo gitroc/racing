@@ -46,10 +46,16 @@ var MainLayer = cc.Layer.extend({
         this._super();
         this.scheduleUpdate();
         this.loadingGame();
+
         return true;
     },
 
     update:function(dt) {
+//        GC.Total_Time = 310;
+        if(GC.Total_Time>=GC.Pass_All_Time){
+            GC.Game_Current = GC.Game_Over;
+        }
+
         if (GC.Game_Current == GC.Game_Loading) {
             this.startReadyGo();
             return;
@@ -311,6 +317,7 @@ var ProspectLayer = cc.Layer.extend({
     //游戏结束
     sloganSprite:null,
     word1Sprite:null,
+    word2Sprite:null,
     timeSprite:0,
     lineSprite:null,
     menuSprite:null,
@@ -440,10 +447,45 @@ var ProspectLayer = cc.Layer.extend({
 //        cc.log("Game over!");
         this.addMaskLayer(GC.Mask_Layer_Main);
         this.addSlogan();
-        this.addWord();
-        this.addTime(GC.Total_Time.toFixed(2));
+        if(GC.Total_Time >=GC.Pass_All_Time){
+            //通关显示
+            this.addWord2();
+            this.addShareSuccess();
+        }else{
+            this.addWord();
+            this.addTime(GC.Total_Time.toFixed(2));
+            this.addMenu(this.addReplay(), this.addShare());
+        }
         this.addLine();
-        this.addMenu(this.addReplay(), this.addShare());
+    },
+
+
+    addShareSuccess:function(){
+        var shareItem = new cc.MenuItemImage(
+            cc.spriteFrameCache.getSpriteFrame("end_btn_share.png"),
+            cc.spriteFrameCache.getSpriteFrame("end_btn_share_sel.png"),
+            function () {
+                if (GC.Game_Current == GC.Game_Over) {
+                    GC.Game_Current = GC.Game_Pause;
+                    document.title = window.wxData.desc = "我在超耐力赛车游戏中通关了，来挑战我吧！";
+                    document.title = window.wxFriend.desc = "我在超耐力赛车游戏中通关了，来挑战我吧！";
+                    window.shareMessage();
+                    this.addMaskLayer(GC.Mask_Layer_Share);
+                    this.addArrow();
+                }
+            }, this);
+
+        shareItem.attr({
+            x:GC.w_2,
+            y:150,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+
+        this.menuSprite = new cc.Menu(shareItem);
+        this.menuSprite.x = 0;
+        this.menuSprite.y = 150;
+        this.addChild(this.menuSprite, GC.Menu_Sprite);
     },
 
     removeProspect:function () {
@@ -458,6 +500,7 @@ var ProspectLayer = cc.Layer.extend({
             this.removeSprite(this.maskLayerSprite);
             this.removeSprite(this.sloganSprite);
             this.removeSprite(this.word1Sprite);
+            this.removeSprite(this.word2Sprite);
             this.removeSprite(this.timeSprite);
             this.removeSprite(this.lineSprite);
             this.removeSprite(this.menuSprite);
@@ -516,6 +559,18 @@ var ProspectLayer = cc.Layer.extend({
         });
         this.addChild(this.word1Sprite, GC.Word1_Sprite);
     },
+    //恭喜通关
+    addWord2:function () {
+        this.word2Sprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("end_icon_word2.png"));
+        this.word2Sprite.attr({
+            x:GC.w_2,
+            y:605,
+            anchorX : 0.5,
+            anchorY : 0.5
+        });
+        this.addChild(this.word2Sprite, GC.Word2_Sprite);
+    },
+
 
     //时间
     addTime:function (counter) {
@@ -659,7 +714,12 @@ var ProspectLayer = cc.Layer.extend({
     gameOverMusic:function () {
         if (GC.SOUND_ON){
             this.stopBgMusic();
-            cc.audioEngine.playMusic(res.Game_Over, false);
+            if(GC.Total_Time >=GC.Pass_All_Time){
+                cc.audioEngine.playMusic(res.Game_All, false);
+            }else{
+                cc.audioEngine.playMusic(res.Game_Over, false);
+            }
+
         }
     }
 });
