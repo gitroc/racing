@@ -12,7 +12,7 @@
  ****************************************************************************/
 var TimerSprite = cc.Sprite.extend({
     timerLabel:null,
-    timerX:100,
+    timerX:400,
     timerY:GC.h - 40,
     onEnter:function () {
         this._super();
@@ -29,20 +29,29 @@ var TimerSprite = cc.Sprite.extend({
         if (GC.Game_Current == GC.Game_Running) {
             GC.Total_Time += dt;
             this.timerLabel.attr({
-                x:this.timerX,
+                x:this.timerX+20,
                 y:this.timerY
             });
-            this.timerLabel.setString("Time : " + GC.Total_Time.toFixed(2));
+            this.timerLabel.setString(GC.Total_Time.toFixed(2)+"s");
         }
     },
 
     initTimer:function () {
-        this.timerLabel = new cc.LabelTTF("Time : " + GC.Total_Time.toFixed(2), "Tahoma", 32);
-        this.timerLabel.attr({
+//        this.setTexture(res.Timer_png);
+//        this.setSpriteFrame(res.Timer_png);
+        this.bgSprite = new cc.Sprite(res.Timer_png);
+        this.bgSprite.attr({
             x:this.timerX,
             y:this.timerY
         });
-        this.timerLabel.setFontFillColor(cc.color(0,0,255));
+        this.addChild(this.bgSprite, 0);
+
+        this.timerLabel = new cc.LabelTTF(GC.Total_Time.toFixed(2)+"s", "Tahoma", 24);
+        this.timerLabel.attr({
+            x:this.timerX+20,
+            y:this.timerY
+        });
+        this.timerLabel.setFontFillColor(cc.color(232,115,20));
         this.addChild(this.timerLabel, GC.Timer_Sprite);
 
         this.scheduleUpdate();
