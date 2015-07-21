@@ -423,7 +423,7 @@ var ProspectLayer = cc.Layer.extend({
     //初始化计时精灵
     addTimer:function () {
         this.removeProspect();
-        this.counterSprite = new TimerSprite(res.Timer_png);
+        this.counterSprite = new TimerSprite();
         this.addChild(this.counterSprite, GC.Timer_Sprite);
     },
 

@@ -12,7 +12,7 @@
  ****************************************************************************/
 var TimerSprite = cc.Sprite.extend({
     timerLabel:null,
-    timerX:400,
+    timerX:320,
     timerY:GC.h - 40,
     onEnter:function () {
         this._super();
