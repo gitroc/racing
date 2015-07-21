@@ -309,8 +309,10 @@ var BarrierSprite = cc.Sprite.extend({
         if (time > GC.Game_Normal_To_Hard){
             this.LoadingMaps(GC.Game_Level_Hard, isSpeed);
         } else if (time > GC.Game_Easy_To_Normal) {
+            this.verticalMoveTime = GC.Vertical_Move_Time / 2;
             this.LoadingMaps(GC.Game_Level_Normal, isSpeed);
         } else {
+            this.verticalMoveTime = GC.Vertical_Move_Time / 3;
             this.LoadingMaps(GC.Game_Level_Easy, isSpeed);
         }
     },
