@@ -18,7 +18,7 @@
         "src/HomePageScene.js",
         "src/MainScene.js",
 
-        "src/sprite/CounterSprite.js",
+        "src/sprite/TimerSprite.js",
         "src/sprite/BarrierSprite.js",
         "src/sprite/CarSprite.js",
         "src/sprite/StoneSprite.js",

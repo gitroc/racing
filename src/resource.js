@@ -1,4 +1,5 @@
 var res = {
+
     LoadingBg_Png : "res/image/loading_bg.jpg",
     LoadingBtOn_Png : "res/image/loading_btn_on.png",
     LoadingBtOff_Png : "res/image/loading_btn_off.png",
@@ -8,6 +9,7 @@ var res = {
     Car_plist : "res/main/main_car.plist",
     Barrier_plist : "res/main/main_road_barrier.plist",
     Background_plist : "res/main/main_bg_road.plist",
+    Timer_png:"res/main/main_icon_stopwatch.png",
     ReadyGo_plist : "res/image/loading_guide.plist",
     Game_Start : "res/music/start.mp3",
     Game_Music : "res/music/music.mp3",
