@@ -21,7 +21,6 @@ var BarrierSprite = cc.Sprite.extend({
     crashTypeArrays:null,
     speedListener:null,
     verticalMoveTime:0,
-    timeTotal:0,
     onEnter:function () {
         this._super();
         this.initSprites();
@@ -248,15 +247,13 @@ var BarrierSprite = cc.Sprite.extend({
     resetSpeed:function (gameStatus, target) {
         switch (gameStatus) {
             case GC.Game_Slow_Down:
-                this.verticalMoveTime = GC.Vertical_Move_Time * 2;
                 GC.Music_Playing = true;
                 cc.audioEngine.playMusic(res.Game_Music, true);
 //                target.removeFromParent();
             break;
 
             case GC.Game_Speed_Up:
-                this.verticalMoveTime = GC.Vertical_Move_Time / 2;
-                this.autoAdjustMaps(target.timeTotal, true);
+                this.speedUp(GC.Total_Time, true);
                 GC.Music_Playing = true;
                 cc.audioEngine.playMusic(res.Game_Music, true);
 //                target.removeFromParent();
@@ -291,9 +288,8 @@ var BarrierSprite = cc.Sprite.extend({
                         this.spriteArrays[i].visible = true;
                         this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
                     } else if (this.oneMapTime > GC.Game_Easy_To_Normal){
-                        this.timeTotal += this.oneMapTime;
-//                        cc.log("timeTotal = ", this.timeTotal);
-                        this.autoAdjustMaps(this.timeTotal, true);
+                        cc.log("GC.Total_Time = ", GC.Total_Time);
+                        this.autoSpeedUp(GC.Total_Time, true);
                         return;
                     }
 
@@ -304,16 +300,27 @@ var BarrierSprite = cc.Sprite.extend({
     },
 
     //自动调整速度
-    autoAdjustMaps:function (time, isSpeed) {
+    speedUp:function (time, isSpeed) {
 //        cc.log("time = ", time);
-        if (time > GC.Game_Normal_To_Hard){
+        if (time > GC.Game_Normal_To_Hard) {
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.2;
             this.LoadingMaps(GC.Game_Level_Hard, isSpeed);
         } else if (time > GC.Game_Easy_To_Normal) {
-            this.verticalMoveTime = GC.Vertical_Move_Time / 2;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.6;
             this.LoadingMaps(GC.Game_Level_Normal, isSpeed);
         } else {
-            this.verticalMoveTime = GC.Vertical_Move_Time / 3;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.8;
             this.LoadingMaps(GC.Game_Level_Easy, isSpeed);
+        }
+    },
+
+    autoSpeedUp:function (time, isSpeed) {
+        if (time > GC.Game_Normal_To_Hard) {
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.6;
+            this.LoadingMaps(GC.Game_Level_Hard, isSpeed);
+        } else if (time > GC.Game_Easy_To_Normal) {
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.8;
+            this.LoadingMaps(GC.Game_Level_Normal, isSpeed);
         }
     },
 
