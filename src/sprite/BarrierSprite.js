@@ -30,7 +30,7 @@ var BarrierSprite = cc.Sprite.extend({
 
     onExit:function () {
         this.removeListener();
-	this.unschedule(this.setBarrier);
+	    this.unschedule(this.setBarrier);
         this._super();
     },
 
@@ -184,7 +184,9 @@ var BarrierSprite = cc.Sprite.extend({
                     }
                     this.timeLineArrays.push(timeS);
 
-                    if (type == GC.Barrier_Type6) { //加速图片
+                    if (type == GC.Barrier_Type8 || type == GC.Barrier_Type7) {
+                        this.crashTypeArrays.push(GC.Crash_Bonus);
+                    } else if (type == GC.Barrier_Type6) { //加速图片
                         this.crashTypeArrays.push(GC.Crash_Speed_Up);
                     } else if (type == GC.Barrier_Type5) { //减速图片
                         this.crashTypeArrays.push(GC.Crash_Slow_Down);
@@ -260,6 +262,11 @@ var BarrierSprite = cc.Sprite.extend({
 //                target.removeFromParent();
             break;
 
+            case GC.Game_Bonus:
+                GC.Music_Playing = true;
+                cc.audioEngine.playMusic(res.Game_Music, true);
+            break;
+
             case GC.Game_Over:
                 GC.Game_Current = GC.Game_Over;
                 GC.Music_Playing = true;
@@ -310,7 +317,8 @@ var BarrierSprite = cc.Sprite.extend({
 
     //移动障碍物
     moveSprite:function (sprite, time, track, scale) {
-        var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
+//        var spawn = cc.spawn(cc.catmullRomTo(time, track), cc.scaleTo(time, scale));
+        var spawn = cc.spawn(cc.cardinalSplineTo(time, track, 0), cc.scaleTo(time, scale));
         var seq = cc.sequence(
             spawn,
             cc.callFunc(function () {
@@ -356,6 +364,11 @@ var BarrierSprite = cc.Sprite.extend({
                 case GC.Crash_Slow_Down: //减速
                     effect = this.getSpeedChangeEffect(target, rect);
                     eventData = GC.Game_Slow_Down;
+                break;
+
+                case GC.Crash_Bonus:
+                    effect = this.getBonusEffect(target, rect);
+                    eventData = GC.Game_Bonus;
                 break;
 
                 case GC.Crash_Unknown: //未知
@@ -472,6 +485,20 @@ var BarrierSprite = cc.Sprite.extend({
             spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.moveBy(0.5, cc.p(50, 0)));
         } else {
             spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5));
+        }
+        return spawn;
+    },
+
+    //得分特效算法
+    getBonusEffect:function (target, rect) {
+        var spawn = null;
+        var barrierRect = target.getBoundingBox();
+        if (cc.rectGetMidX(rect) > GC.Car_Center_X + GC.Car_Range) {
+           spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.Blink(0.5, 2), cc.moveBy(0.5, cc.p(-50, 0)));
+        } else if (cc.rectGetMidX(rect) < GC.Car_Center_X - GC.Car_Range){
+           spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.Blink(0.5, 2), cc.moveBy(0.5, cc.p(50, 0)));
+        } else {
+           spawn = cc.spawn(cc.jumpBy(0.5, cc.p(0, 100), 100, 1), cc.fadeOut(0.5), cc.Blink(0.5, 2));
         }
         return spawn;
     },

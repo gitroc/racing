@@ -197,12 +197,14 @@ GC.stoneScale = [
 ];
 
 //障碍物类型
-GC.Barrier_Type1 = 1;
-GC.Barrier_Type2 = 2;
-GC.Barrier_Type3 = 3;
-GC.Barrier_Type4 = 4;
+GC.Barrier_Type1 = 1; //锥形
+GC.Barrier_Type2 = 2; //栅栏
+GC.Barrier_Type3 = 3; //纸箱
+GC.Barrier_Type4 = 4; //木箱
 GC.Barrier_Type5 = 5; // 减速
 GC.Barrier_Type6 = 6; // 加速
+GC.Barrier_Type7 = 7; // 金币
+GC.Barrier_Type8 = 8; // 星星
 
 //障碍物速度 xxx/s 像素每秒
 GC.Barrier_Speed = 300;
@@ -235,6 +237,7 @@ GC.Crash_Shut_Down = 1; //停车
 GC.Crash_Only_Hit  = 2; //碰撞
 GC.Crash_Speed_Up  = 3; //加速
 GC.Crash_Slow_Down = 4; //减速
+GC.Crash_Bonus     = 5; //奖励
 
 //游戏主界面状态机
 GC.Game_Loading   = 1;
@@ -246,6 +249,7 @@ GC.Game_Slow_Down = 6;
 GC.Game_Over      = 7;
 GC.Game_Pause     = 8;
 GC.Game_Share     = 9;
+GC.Game_Bonus     = 10;
 
 //游戏难度
 GC.Game_Level_Easy   = 1;
