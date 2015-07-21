@@ -306,20 +306,20 @@ var BarrierSprite = cc.Sprite.extend({
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.2;
             this.LoadingMaps(GC.Game_Level_Hard, isSpeed);
         } else if (time > GC.Game_Easy_To_Normal) {
-            this.verticalMoveTime = GC.Vertical_Move_Time * 0.6;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.5;
             this.LoadingMaps(GC.Game_Level_Normal, isSpeed);
         } else {
-            this.verticalMoveTime = GC.Vertical_Move_Time * 0.8;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.7;
             this.LoadingMaps(GC.Game_Level_Easy, isSpeed);
         }
     },
 
     autoSpeedUp:function (time, isSpeed) {
         if (time > GC.Game_Normal_To_Hard) {
-            this.verticalMoveTime = GC.Vertical_Move_Time * 0.6;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.5;
             this.LoadingMaps(GC.Game_Level_Hard, isSpeed);
         } else if (time > GC.Game_Easy_To_Normal) {
-            this.verticalMoveTime = GC.Vertical_Move_Time * 0.8;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.7;
             this.LoadingMaps(GC.Game_Level_Normal, isSpeed);
         }
     },
