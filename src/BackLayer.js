@@ -53,6 +53,7 @@ var BackLayer = cc.Layer.extend({
         if (GC.Game_Current == GC.Game_Start){
             this.startMoveTree();
             this.startMoveStone();
+            this.playBgMusic();
             GC.Game_Current = GC.Game_Running;
             return;
         }
@@ -236,6 +237,13 @@ var BackLayer = cc.Layer.extend({
             return cc.spriteFrameCache.getSpriteFrame("main_car_right.png");
         } else {
             return cc.spriteFrameCache.getSpriteFrame("main_car_back.png");
+        }
+    },
+
+    //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
+    playBgMusic:function(){
+        if (GC.SOUND_ON){
+            cc.audioEngine.playMusic(res.Game_Music, true);
         }
     }
 });

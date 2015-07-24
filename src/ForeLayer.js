@@ -121,6 +121,7 @@ var ForeLayer = cc.Layer.extend({
             break;
 
             case GC.Game_Over:
+                this.unscheduleUpdate();
                 this.showGameOver();
             break;
 
@@ -142,8 +143,6 @@ var ForeLayer = cc.Layer.extend({
     },
 
     showRunning:function () {
-        this.playBgMusic();
-
         this.addTimer();
     },
 
@@ -546,7 +545,6 @@ var ForeLayer = cc.Layer.extend({
     //播放背景音乐，true代表循环无限次播放，false表示只播放一次。
     playBgMusic:function(){
         if (GC.SOUND_ON){
-            this.stopBgMusic();
             cc.audioEngine.playMusic(res.Game_Music, true);
         }
     },
@@ -554,7 +552,6 @@ var ForeLayer = cc.Layer.extend({
     //停止背景音乐
     stopBgMusic:function () {
         if (cc.audioEngine.isMusicPlaying()){
-            cc.audioEngine.stopAllEffects();
             cc.audioEngine.stopMusic();
         }
     },
@@ -562,7 +559,6 @@ var ForeLayer = cc.Layer.extend({
     //倒计时音乐
     readyGoMusic:function () {
         if (GC.SOUND_ON){
-            this.stopBgMusic();
             cc.audioEngine.playMusic(res.Ready_Go, false);
         }
     },
@@ -570,7 +566,7 @@ var ForeLayer = cc.Layer.extend({
     gameOverMusic:function () {
         if (GC.SOUND_ON){
             this.stopBgMusic();
-            if(GC.Total_Time >=GC.Pass_All_Time){
+            if(GC.Total_Time >=  GC.Pass_All_Time){
                 cc.audioEngine.playMusic(res.Game_All, false);
             }else{
                 cc.audioEngine.playMusic(res.Game_Over, false);

@@ -1,1 +1,1 @@
-cocos compile -p android -m release
+cocos compile -p android -m debug

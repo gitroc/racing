@@ -50,7 +50,7 @@ var HomePageLayer = cc.Layer.extend({
         this.startAnimation();
     },
 
-    startAnimation:function(){
+    startAnimation:function() {
         var frames =[];
         var frameOn = new cc.SpriteFrame(res.LoadingBtOn_Png, cc.rect(0, 0, 290, 160));
         var frameOff = new cc.SpriteFrame(res.LoadingBtOff_Png, cc.rect(0, 0, 290, 160));

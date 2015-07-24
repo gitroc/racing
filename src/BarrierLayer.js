@@ -68,6 +68,8 @@ var BarrierLayer = cc.Layer.extend({
 
             case GC.Game_Over:
                 GC.Game_Current = GC.Game_Over;
+                this.getActionManager().pauseAllRunningActions();
+                this.unscheduleUpdate();
                 GC.Music_Playing = true;
             break;
 
@@ -81,12 +83,15 @@ var BarrierLayer = cc.Layer.extend({
         if (time > GC.Game_Normal_To_Hard) {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.3;
             this.LoadingMaps(GC.Game_Level_Hard);
+            cc.log("speedUp Game_Level_Hard");
         } else if (time > GC.Game_Easy_To_Normal) {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.4;
             this.LoadingMaps(GC.Game_Level_Normal);
+            cc.log("speedUp Game_Level_Normal");
         } else {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.6;
             this.LoadingMaps(GC.Game_Level_Easy);
+            cc.log("speedUp Game_Level_Easy");
         }
     },
 
@@ -95,12 +100,15 @@ var BarrierLayer = cc.Layer.extend({
         if (time > GC.Game_Normal_To_Hard) {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.5;
             this.LoadingMaps(GC.Game_Level_Hard);
+            cc.log("autoSpeedUp Game_Level_Hard");
         } else if (time > GC.Game_Easy_To_Normal) {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.7;
             this.LoadingMaps(GC.Game_Level_Normal);
+            cc.log("autoSpeedUp Game_Level_Normal");
         } else {
             this.verticalMoveTime = GC.Vertical_Move_Time;
             this.LoadingMaps(GC.Game_Level_Easy);
+            cc.log("autoSpeedUp Game_Level_Easy");
         }
     },
 
@@ -119,7 +127,7 @@ var BarrierLayer = cc.Layer.extend({
             this.barrierSprites.push(frame);
         }
 
-        this.autoSpeedUp(GC.Total_Time, true);
+        this.autoSpeedUp(GC.Total_Time);
     },
 
     getEasyIndex:function () {
@@ -284,9 +292,9 @@ var BarrierLayer = cc.Layer.extend({
                         this.spriteArrays[i].active = false;
                         cc.log("move i = ", i);
                         this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
-                    } else if (this.oneMapTime > GC.Game_Easy_To_Normal){
+                    } else if (this.oneMapTime > GC.Game_Easy_To_Normal && GC.Total_Time > GC.Game_Easy_To_Normal){
                         cc.log("GC.Total_Time = ", GC.Total_Time);
-                        this.autoSpeedUp(GC.Total_Time, true);
+                        this.autoSpeedUp(GC.Total_Time);
                         return;
                     }
 
