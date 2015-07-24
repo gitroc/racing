@@ -77,7 +77,7 @@ var HomePageLayer = cc.Layer.extend({
                 if (cc.rectContainsPoint(rect, locationInNode)) {     // 点击范围判断检测
                     cc.eventManager.removeListener(this.touchListener);
                     cc.audioEngine.stopMusic();
-                    cc.director.runScene(new cc.TransitionFade(1.2, new MainScene()));
+                    cc.director.runScene(new cc.TransitionFade(1.2, new PlayScene()));
                     target.opacity = 180;
                     return true;
                 }

@@ -79,7 +79,7 @@ GC.Car_Right_X = 600;
 GC.Car_Right_Y = 275;
 
 //游戏内部timer间隔
-GC.Game_Timer_Interval = 0.05;
+GC.Game_Timer_Interval = 0.01;
 
 //随机出现左边树位置
 GC.Tree_Show_Left_X = 150;
@@ -94,7 +94,7 @@ GC.Tree_Show_Left_scale = 0.1;
 GC.Tree_Show_Right_scale = 0.2;
 
 //随机出现树的最终缩放大小
-GC.Tree_Goal_scale = 2;
+GC.Tree_Goal_scale = 2.2;
 
 
 //五棵树的时间轴
@@ -156,7 +156,7 @@ GC.Stone_Show_Left_scale = 0.1;
 GC.Stone_Show_Right_scale = 0.2;
 
 //随机出现石头的最终缩放大小
-GC.Stone_Goal_scale = 2;
+GC.Stone_Goal_scale = 2.2;
 
 GC.Stone_Time_Line = [
     5, 3, 1, 2
@@ -164,18 +164,18 @@ GC.Stone_Time_Line = [
 
 //第一棵石头初始化缩放大小及位置
 GC.Stone_01_Scale = 0.5;
-GC.Stone_01_X = 190;
+GC.Stone_01_X = 180;
 GC.Stone_01_Y = 685;
 
 //第二棵石头初始化缩放大小及位置
 GC.Stone_02_Scale = 1;
-GC.Stone_02_X = 115;
+GC.Stone_02_X = 105;
 GC.Stone_02_Y = 655;
 
 //第三棵石头初始化缩放大小及位置
 GC.Stone_03_Scale = 1;
-GC.Stone_03_X = 5;
-GC.Stone_03_Y = 485;
+GC.Stone_03_X = -25;
+GC.Stone_03_Y = 495;
 
 //第四棵石头初始化缩放大小及位置
 GC.Stone_04_Scale = 1;
@@ -222,7 +222,7 @@ GC.Barrier_Org_Position = [
 
 //障碍物结束缩放大小及位置坐标
 GC.Barrier_Goal_Scale = [
-    2.2, 2.2, 2.2
+    1.2, 1.2, 1.2
 ];
 
 GC.Barrier_Goal_Position = [
@@ -247,9 +247,10 @@ GC.Game_Running   = 4;
 GC.Game_Speed_Up  = 5;
 GC.Game_Slow_Down = 6;
 GC.Game_Over      = 7;
-GC.Game_Pause     = 8;
+GC.Game_Share_Mark= 8;
 GC.Game_Share     = 9;
 GC.Game_Bonus     = 10;
+GC.Game_Complete  = 11;
 
 //游戏难度
 GC.Game_Level_Easy   = 1;

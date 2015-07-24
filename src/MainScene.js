@@ -466,7 +466,7 @@ var ProspectLayer = cc.Layer.extend({
             cc.spriteFrameCache.getSpriteFrame("end_btn_share_sel.png"),
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
-                    GC.Game_Current = GC.Game_Pause;
+                    GC.Game_Current = GC.Game_Share_Mark;
                     document.title = window.wxData.desc = "我在超耐力赛车游戏中通关了，来挑战我吧！";
                     document.title = window.wxFriend.desc = "我在超耐力赛车游戏中通关了，来挑战我吧！";
                     window.shareMessage();
@@ -620,7 +620,7 @@ var ProspectLayer = cc.Layer.extend({
             cc.spriteFrameCache.getSpriteFrame("end_btn_share_sel.png"),
             function () {
                 if (GC.Game_Current == GC.Game_Over) {
-                    GC.Game_Current = GC.Game_Pause;
+                    GC.Game_Current = GC.Game_Share_Mark;
                     document.title = window.wxData.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     document.title = window.wxFriend.desc = "我在超耐力赛车游戏中跑了" +  GC.Total_Time.toFixed(2) + "秒，快来试试吧";
                     window.shareMessage();

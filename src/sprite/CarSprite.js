@@ -84,15 +84,9 @@ var CarSprite = cc.Sprite.extend({
 
             if (positionX < targetX) {// 向左
                 if (targetX > GC.Car_Center_X) {
-                //测试碰到加速道具道路的变化
-//                    cc.log("test--到左道");
-//                    this.getParent().newBgSprite.updateAction(0.05,0.2);
                     BgX = GC.Bg_Center_Offset_X;
                     carX = GC.Car_Center_X;
                 } else {
-                //测试碰到加速道具道路的变化
-//                    cc.log("test--道中道");
-//                    this.getParent().newBgSprite.updateAction(0.25,1);
                     BgX = GC.Bg_Left_Offset_X;
                     carX = GC.Car_Left_X;
                 }
@@ -112,7 +106,7 @@ var CarSprite = cc.Sprite.extend({
             target.runAction(actionCar);
 
             var actionBg = cc.moveTo(GC.Horizontal_Move_Time, cc.p(BgX, 0));
-            this.getParent().runAction(actionBg);
+            target.getParent().runAction(actionBg);
 
         }
     }

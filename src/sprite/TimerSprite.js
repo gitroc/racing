@@ -20,7 +20,7 @@ var TimerSprite = cc.Sprite.extend({
     },
 
     onExit:function () {
-
+        this.unscheduleUpdate();
         this._super();
     },
 
@@ -28,23 +28,27 @@ var TimerSprite = cc.Sprite.extend({
     update:function (dt) {
         if (GC.Game_Current == GC.Game_Running) {
             GC.Total_Time += dt;
-            this.timerLabel.attr({
-                x:this.timerX+20,
-                y:this.timerY
-            });
-            this.timerLabel.setString(GC.Total_Time.toFixed(2)+"s");
+
+            if (GC.Total_Time > GC.Pass_All_Time) {
+                GC.Game_Current = GC.Game_Complete;
+                this.unscheduleUpdate();
+            } else {
+                this.timerLabel.attr({
+                    x:this.timerX+20,
+                    y:this.timerY
+                });
+                this.timerLabel.setString(GC.Total_Time.toFixed(2)+"s");
+            }
         }
     },
 
     initTimer:function () {
-//        this.setTexture(res.Timer_png);
-//        this.setSpriteFrame(res.Timer_png);
-        this.bgSprite = new cc.Sprite(res.Timer_png);
-        this.bgSprite.attr({
+        var timerSprite = new cc.Sprite(res.Timer_png);
+        timerSprite.attr({
             x:this.timerX,
             y:this.timerY
         });
-        this.addChild(this.bgSprite, 0);
+        this.addChild(timerSprite, 0);
 
         this.timerLabel = new cc.LabelTTF(GC.Total_Time.toFixed(2)+"s", "Tahoma", 24);
         this.timerLabel.attr({
