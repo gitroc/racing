@@ -251,7 +251,7 @@ var BarrierLayer = cc.Layer.extend({
 
     //清理一张地图的障碍物
     clearBarrier:function () {
-        this.clearSprite();
+//        this.clearSprite();
         if (this.spriteArrays.length > 0) {
             for (var i = 0; i < this.spriteArrays.length; i++) {
                 this.clearBarrierArray(this.spriteArrays, i);
