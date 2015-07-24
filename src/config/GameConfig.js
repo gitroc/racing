@@ -260,6 +260,7 @@ GC.Game_Level_Hard   = 3;
 //游戏难度调整时间 秒
 GC.Game_Easy_To_Normal = 20;
 GC.Game_Normal_To_Hard = 40;
+GC.Game_Top_Level      = 60;
 
 GC.Total_Time = 0;//显示总时间
 GC.Speed_Normal_Once = 0.1;

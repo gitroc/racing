@@ -97,12 +97,15 @@ var BarrierLayer = cc.Layer.extend({
 
     //自动调整速度
     autoSpeedUp:function (time) {
-        if (time > GC.Game_Normal_To_Hard) {
-            this.verticalMoveTime = GC.Vertical_Move_Time * 0.5;
+        if (time > GC.Game_Top_Level) {
+            this.LoadingMaps(GC.Game_Level_Hard);
+            cc.log("autoSpeedUp Game_Top_Level");
+        } else if (time > GC.Game_Normal_To_Hard) {
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.4;
             this.LoadingMaps(GC.Game_Level_Hard);
             cc.log("autoSpeedUp Game_Level_Hard");
         } else if (time > GC.Game_Easy_To_Normal) {
-            this.verticalMoveTime = GC.Vertical_Move_Time * 0.7;
+            this.verticalMoveTime = GC.Vertical_Move_Time * 0.6;
             this.LoadingMaps(GC.Game_Level_Normal);
             cc.log("autoSpeedUp Game_Level_Normal");
         } else {
@@ -287,7 +290,8 @@ var BarrierLayer = cc.Layer.extend({
             if (this.spriteArrays.length > 0) {
                 for (var i = 0; i < this.spriteArrays.length; i++) {
                     if ((this.oneMapTime.toFixed(1) == this.timeLineArrays[i].toFixed(1))
-                        &&(this.spriteArrays[i].active)) {
+                        &&(this.spriteArrays[i].active)
+                        &&(this.oneMapTime <= GC.Game_Easy_To_Normal)) {
                         this.spriteArrays[i].visible = true;
                         this.spriteArrays[i].active = false;
                         cc.log("move i = ", i);
