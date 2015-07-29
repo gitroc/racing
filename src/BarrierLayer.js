@@ -284,6 +284,12 @@ var BarrierLayer = cc.Layer.extend({
 
     //根据地图画障碍物
     update:function(dt) {
+        if(GC.Total_Time>=GC.Pass_All_Time){
+                     this.getActionManager().pauseAllRunningActions();
+                     this.unscheduleUpdate();
+                     GC.Music_Playing = true;
+                    return;
+         }
         if (GC.Game_Current == GC.Game_Running) {
             this.oneMapTime += dt;
 

@@ -29,8 +29,9 @@ var TimerSprite = cc.Sprite.extend({
         if (GC.Game_Current == GC.Game_Running) {
             GC.Total_Time += dt;
 
-            if (GC.Total_Time > GC.Pass_All_Time) {
-                GC.Game_Current = GC.Game_Complete;
+            if (GC.Total_Time >= GC.Pass_All_Time) {
+            cc.log("TimeSprite:Complete");
+                GC.Game_Current = GC.Game_Over;
                 this.unscheduleUpdate();
             } else {
                 this.timerLabel.attr({
