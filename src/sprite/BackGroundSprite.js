@@ -41,7 +41,7 @@ var BackGroundSprite = cc.Sprite.extend({
         this.unschedule(this.update);
         this.onceTime = oTime;
         this.allTime=aTime;
-        cc.log("Once:"+this.onceTime+"--All:"+this.allTime);
+//        cc.log("Once:"+this.onceTime+"--All:"+this.allTime);
         this.schedule(this.update, this.allTime, cc.REPEAT_FOREVER, 0);
 //        this.runAction(cc.Sequence.create( cc.DelayTime.create(3), cc.CallFunc.create(function () {
 //            object.origin();

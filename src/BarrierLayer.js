@@ -83,15 +83,15 @@ var BarrierLayer = cc.Layer.extend({
         if (time > GC.Game_Normal_To_Hard) {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.3;
             this.LoadingMaps(GC.Game_Level_Hard);
-            cc.log("speedUp Game_Level_Hard");
+//            cc.log("speedUp Game_Level_Hard");
         } else if (time > GC.Game_Easy_To_Normal) {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.4;
             this.LoadingMaps(GC.Game_Level_Normal);
-            cc.log("speedUp Game_Level_Normal");
+//            cc.log("speedUp Game_Level_Normal");
         } else {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.6;
             this.LoadingMaps(GC.Game_Level_Easy);
-            cc.log("speedUp Game_Level_Easy");
+//            cc.log("speedUp Game_Level_Easy");
         }
     },
 
@@ -99,19 +99,19 @@ var BarrierLayer = cc.Layer.extend({
     autoSpeedUp:function (time) {
         if (time > GC.Game_Top_Level) {
             this.LoadingMaps(GC.Game_Level_Hard);
-            cc.log("autoSpeedUp Game_Top_Level");
+//            cc.log("autoSpeedUp Game_Top_Level");
         } else if (time > GC.Game_Normal_To_Hard) {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.4;
             this.LoadingMaps(GC.Game_Level_Hard);
-            cc.log("autoSpeedUp Game_Level_Hard");
+//            cc.log("autoSpeedUp Game_Level_Hard");
         } else if (time > GC.Game_Easy_To_Normal) {
             this.verticalMoveTime = GC.Vertical_Move_Time * 0.6;
             this.LoadingMaps(GC.Game_Level_Normal);
-            cc.log("autoSpeedUp Game_Level_Normal");
+//            cc.log("autoSpeedUp Game_Level_Normal");
         } else {
             this.verticalMoveTime = GC.Vertical_Move_Time;
             this.LoadingMaps(GC.Game_Level_Easy);
-            cc.log("autoSpeedUp Game_Level_Easy");
+//            cc.log("autoSpeedUp Game_Level_Easy");
         }
     },
 
@@ -190,7 +190,7 @@ var BarrierLayer = cc.Layer.extend({
             break;
         }
 
-        cc.log("LoadingMaps = ", index);
+//        cc.log("LoadingMaps = ", index);
 
         barrierMap = GC.Barrier_Map[index][0];
         timeLine = GC.Barrier_Map[index][1];
@@ -201,8 +201,8 @@ var BarrierLayer = cc.Layer.extend({
 
     //生成障碍物
     LoadOneMap:function (Barrier_Map, Time_Line) {
-        cc.log("MapTotalTime = ", Time_Line[Time_Line.length - 1]);
-        cc.log("Barrier_Map.length = ", Barrier_Map.length);
+//        cc.log("MapTotalTime = ", Time_Line[Time_Line.length - 1]);
+//        cc.log("Barrier_Map.length = ", Barrier_Map.length);
         for (var i = 0; i < Barrier_Map.length ; i++) { //按列查询
             for (var j = 0; j < Barrier_Map[i].length; j++) {
                 var type = Barrier_Map[i][j];
@@ -300,10 +300,10 @@ var BarrierLayer = cc.Layer.extend({
                         &&(this.oneMapTime <= GC.Game_Easy_To_Normal)) {
                         this.spriteArrays[i].visible = true;
                         this.spriteArrays[i].active = false;
-                        cc.log("move i = ", i);
+//                        cc.log("move i = ", i);
                         this.moveSprite(this.spriteArrays[i], this.verticalMoveTime, this.trackArrays[i], this.goalScaleArrays[i]);
                     } else if (this.oneMapTime > GC.Game_Easy_To_Normal && GC.Total_Time > GC.Game_Easy_To_Normal){
-                        cc.log("GC.Total_Time = ", GC.Total_Time);
+//                        cc.log("GC.Total_Time = ", GC.Total_Time);
                         this.autoSpeedUp(GC.Total_Time);
                         return;
                     }
