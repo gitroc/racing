@@ -22,7 +22,7 @@
         "src/ForeLayer.js",
 
         "src/sprite/TimerSprite.js",
-        "src/sprite/Barrier.js",
+        "src/sprite/BarrierSprite.js",
         "src/sprite/CarSprite.js",
         "src/sprite/StoneSprite.js",
         "src/sprite/TreeSprite.js",

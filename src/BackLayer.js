@@ -62,11 +62,13 @@ var BackLayer = cc.Layer.extend({
     //初始化游戏场景
     loadingGame:function () {
         this.addBackground();
+        this.addRoad();
         this.addStone();
         this.addTree();
         this.addCar();
         this.addBarrierLayer();
     },
+
 
     addBarrierLayer:function () {
         var barrierLayer = new BarrierLayer();
@@ -74,6 +76,17 @@ var BackLayer = cc.Layer.extend({
     },
 
     addBackground:function(){
+        this._sptBg = new cc.Sprite("res/main/main_bg.png");
+        this._sptBg.attr({
+            anchorX : 0.5,
+            anchorY : 0.5,
+            x: GC.w_2,
+            y: GC.h_2
+        });
+        this.addChild(this._sptBg);
+    },
+
+    addRoad:function(){
         this.bgSprite = new BackGroundSprite(cc.spriteFrameCache.getSpriteFrame("main_bg_road1.png"));
         this.bgSprite.attr({
             x:GC.w_2,
@@ -83,7 +96,6 @@ var BackLayer = cc.Layer.extend({
         });
         this.addChild(this.bgSprite, GC.BackGround_Sprite);
     },
-
     addStone:function () {
         this.buriedFourStone();
 

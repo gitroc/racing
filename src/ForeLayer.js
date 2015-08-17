@@ -478,7 +478,7 @@ var ForeLayer = cc.Layer.extend({
         this.addArrow();
     },
 
-    //分项说明
+    //分享说明
     addExplain:function () {
         if (this.explain == null) {
             this.explain = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("end_icon_word.png"));

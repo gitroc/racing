@@ -208,7 +208,7 @@ var BarrierLayer = cc.Layer.extend({
                 var type = Barrier_Map[i][j];
 
                 if (type > 0) {
-                    var sprite = new Barrier(this.getBarrierFrame(type));
+                    var sprite = new BarrierSprite(this.getBarrierFrame(type));
                     var x = GC.Barrier_Org_Position[j].x;
                     var y = GC.Barrier_Org_Position[j].y;
 
